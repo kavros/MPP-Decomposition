@@ -51,7 +51,7 @@ int main (void)
         
         printf("Processing %d x %d image\n", M, N);
         printf("Number of iterations = %d\n", MAXITER);
-
+        
         filename = "edgenew192x128.pgm";
         
         printf("\nReading <%s>\n", filename);
@@ -63,40 +63,22 @@ int main (void)
     //printf("before p%d buf[0][0] = %f\n",worldRank,masterbuf[0][0]);
     MPI_Bcast(&masterbuf,(M*N),MPI_DOUBLE,0,MPI_COMM_WORLD);
     //printf("after p%d buf[0][0] = %f\n",worldRank,masterbuf[0][0]);
-    /*
-    if(worldRank == 0)
-    {
-        for( i =0; i < Mp; i++)
-        {
-            for( j=0; j < Np; j++)
-            {
-                buf[i][j] = masterbuf[i][j];
-            }
-        }
-     
-    }
     
-    if(worldRank == 1)
-    {
-        for( i =0; i <Mp; i++)
-        {
-            
-            for( j=0; j < Np; j++)
-            {
-                buf[i][j] = masterbuf[i+Mp][j];
-                
-            }       
-        }     
-    }*/
     for( i =0; i <Mp; i++)
-    {
-
+    {    
         for( j=0; j < Np; j++)
         {
             buf[i][j] = masterbuf[i+(Mp*worldRank)][j];
-
-        }       
+            
+        } 
+        
     }
+    /*
+    if(worldRank == 1)
+    {
+        printf("Mp = %d,Np=%d",Mp,Np);
+        pgmwrite("aaa.pgm", buf, Mp, Np);
+    }*/
     
     
     
@@ -107,7 +89,7 @@ int main (void)
     if(left == -1) left =MPI_PROC_NULL;
     //printf("p%d left=%d right=%d \n",worldRank,left,right);
     //printf("Mp = %d\n",Mp);
-   
+    
     for (i=1;i<Mp+1;i++)
     {
         for (j=1;j<Np+1;j++)
@@ -137,7 +119,6 @@ int main (void)
         old[Mp+1][j] = (int)(255.0*val);
     }
     
-    //computeImage((double**)old,(double**)new,(double**)edge,Np,Mp);
     
     for (iter=1;iter<=MAXITER; iter++)
     {
@@ -149,16 +130,14 @@ int main (void)
         // Implement periodic boundary conditions on bottom and top sides 
         MPI_Isend(&old[Mp][1],Np,MPI_DOUBLE,right,0,MPI_COMM_WORLD,&request);
         MPI_Irecv(&old[0][1],Np,MPI_DOUBLE,left,0,MPI_COMM_WORLD,&request);
-        MPI_Wait(&request,&status);
-         
         
         //printf("p%d send to %d \n",worldRank,left);
         MPI_Isend(&old[1][1],Np,MPI_DOUBLE,left,0,MPI_COMM_WORLD,&request2);
         MPI_Irecv(&old[Mp+1][1],Np,MPI_DOUBLE,right,0,MPI_COMM_WORLD,&request2);
         
-        
+        MPI_Wait(&request,&status);
         MPI_Wait(&request2,&status);
-
+        
         
         for (i=1; i < Mp+1; i++)
         {
@@ -193,20 +172,22 @@ int main (void)
             buf[i-1][j-1]=old[i][j];
         }
     }
+    
     if(worldRank !=0)
     {
         MPI_Isend(&buf[0][0],Mp*Np,MPI_DOUBLE,0,0,MPI_COMM_WORLD,&request);
     }
-
-            
+    
+    
     if(worldRank == 0)
     {
-         for( i = 1 ; i < worldSize; i++)
+        for( i = 1 ; i < worldSize; i++)
         {
-            
-            MPI_Irecv(&masterbuf[i*Mp][0],Mp*Np,MPI_DOUBLE,i,0,MPI_COMM_WORLD,&request);
+            int col = i*Mp;
+            MPI_Irecv(&masterbuf[col][0],Mp*Np,MPI_DOUBLE,i,0,MPI_COMM_WORLD,&request);
             MPI_Wait(&request,&status);
         }
+        
         
         for( i=0; i <Mp;i++ )
         {
