@@ -63,7 +63,7 @@ int main (void)
     //printf("before p%d buf[0][0] = %f\n",worldRank,masterbuf[0][0]);
     MPI_Bcast(&masterbuf,(M*N),MPI_DOUBLE,0,MPI_COMM_WORLD);
     //printf("after p%d buf[0][0] = %f\n",worldRank,masterbuf[0][0]);
-    
+    /*
     if(worldRank == 0)
     {
         for( i =0; i < Mp; i++)
@@ -73,29 +73,32 @@ int main (void)
                 buf[i][j] = masterbuf[i][j];
             }
         }
-        pgmwrite("abb.pgm", buf, Mp, Np);
+     
     }
     
     if(worldRank == 1)
     {
-        
-        
-        for( i =Mp; i <M; i++)
+        for( i =0; i <Mp; i++)
         {
             
             for( j=0; j < Np; j++)
             {
-                buf[i-Mp][j] = masterbuf[i][j];
-                //masterbuf[i][j]=255;
-                //masterbuf[i-Mp][j] = masterbuf[i][j];
+                buf[i][j] = masterbuf[i+Mp][j];
                 
-            }
-            
-        }
-        
-        pgmwrite("aaa.pgm", buf, Mp, Np);
+            }       
+        }     
+    }*/
+    for( i =0; i <Mp; i++)
+    {
+
+        for( j=0; j < Np; j++)
+        {
+            buf[i][j] = masterbuf[i+(Mp*worldRank)][j];
+
+        }       
     }
-   
+    
+    
     
     int right,left;
     right = worldRank+1;
@@ -190,14 +193,21 @@ int main (void)
             buf[i-1][j-1]=old[i][j];
         }
     }
-    MPI_Isend(&buf[0][0],Mp*Np,MPI_DOUBLE,left,0,MPI_COMM_WORLD,&request);
-    MPI_Irecv(&masterbuf[Mp][0],Mp*Np,MPI_DOUBLE,right,0,MPI_COMM_WORLD,&request);
-    MPI_Wait(&request,&status);
-    
+    if(worldRank !=0)
+    {
+        MPI_Isend(&buf[0][0],Mp*Np,MPI_DOUBLE,0,0,MPI_COMM_WORLD,&request);
+    }
 
             
     if(worldRank == 0)
     {
+         for( i = 1 ; i < worldSize; i++)
+        {
+            
+            MPI_Irecv(&masterbuf[i*Mp][0],Mp*Np,MPI_DOUBLE,i,0,MPI_COMM_WORLD,&request);
+            MPI_Wait(&request,&status);
+        }
+        
         for( i=0; i <Mp;i++ )
         {
             for( j=0; j <Np;j++ )
@@ -210,6 +220,7 @@ int main (void)
         printf("\nWriting <%s>\n", filename); 
         pgmwrite(filename, masterbuf, M, N);
     }
+    
     MPI_Finalize();
     return 0;
 } 
