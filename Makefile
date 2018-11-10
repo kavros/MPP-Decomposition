@@ -1,7 +1,7 @@
 MF=	Makefile
 
-CC=	icc
-CFLAGS= -O3
+CC=	mpicc
+CFLAGS= -O3 -g
 
 LFLAGS=	-lm
 
