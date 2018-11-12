@@ -9,7 +9,7 @@
 #include <math.h>
 #include <mpi.h>
 #include "pgmio.h"
-
+#include<assert.h>
 #define M 192
 #define N 128
 
@@ -37,11 +37,18 @@ int main (void)
     int Np = N;
     int Mp = M/worldSize;
     
+    if(worldSize%2 == 0)
+    {
+        Np = N/2;
+        Mp = (M/2);
+        printf("Np = %d, Mp=%d\n",Np,Mp);
+    }
+    
     double masterbuf[M][N];
     double old[Mp+2][Np+2], new[Mp+2][Np+2], edge[Mp+2][Np+2];   
     double buf[Mp][Np];
     
-    int i, j, iter, maxiter;
+    int r, c, iter, maxiter;
     char *filename;
     double val;
     
@@ -63,24 +70,34 @@ int main (void)
     //printf("before p%d buf[0][0] = %f\n",worldRank,masterbuf[0][0]);
     MPI_Bcast(&masterbuf,(M*N),MPI_DOUBLE,0,MPI_COMM_WORLD);
     //printf("after p%d buf[0][0] = %f\n",worldRank,masterbuf[0][0]);
-    
-    for( i =0; i <Mp; i++)
+    int x =0;
+    printf("++++p%d,(%d,%d) ",worldRank,(Mp*(worldRank/2)),Np*(worldRank%2));
+    for( r =0; r <Mp; r++)
     {    
-        for( j=0; j < Np; j++)
-        {
-            buf[i][j] = masterbuf[i+(Mp*worldRank)][j];
-            
+        for( c=0; c < Np; c++)
+        {       
+            buf[r][c] = masterbuf[r+(Mp*(worldRank/2))][c+(Np*(worldRank%2))];   
         } 
         
     }
-    /*
+    
+    if(worldRank == 0)
+    {
+        pgmwrite("x0.pgm", buf, Mp, Np);
+    }
     if(worldRank == 1)
     {
-        printf("Mp = %d,Np=%d",Mp,Np);
-        pgmwrite("aaa.pgm", buf, Mp, Np);
-    }*/
-    
-    
+        pgmwrite("x1.pgm", buf, Mp, Np);
+    }
+    if(worldRank == 2)
+    {
+        pgmwrite("x2.pgm", buf, Mp, Np);
+    }
+    if(worldRank == 3)
+    {
+        pgmwrite("x3.pgm", buf, Mp, Np);
+    }
+   /* 
     
     int right,left;
     right = worldRank+1;
@@ -172,34 +189,114 @@ int main (void)
             buf[i-1][j-1]=old[i][j];
         }
     }
+    */
     
     if(worldRank !=0)
     {
+        //printf("--->p%d buf[0][0]=%f\n",worldRank,buf[0][0]);
         MPI_Isend(&buf[0][0],Mp*Np,MPI_DOUBLE,0,0,MPI_COMM_WORLD,&request);
     }
     
     
     if(worldRank == 0)
     {
-        for( i = 1 ; i < worldSize; i++)
-        {
-            int col = i*Mp;
-            MPI_Irecv(&masterbuf[col][0],Mp*Np,MPI_DOUBLE,i,0,MPI_COMM_WORLD,&request);
-            MPI_Wait(&request,&status);
-        }
+        double masterbuf2[M][N];
+        double buf1[Mp][Np];
+        double buf2[Mp][Np];
+        double buf3[Mp][Np];
+        MPI_Request request01;
+        MPI_Request request02;
+        MPI_Request request03;
         
         
-        for( i=0; i <Mp;i++ )
+        for( r = 1 ; r < worldSize; r++)
         {
-            for( j=0; j <Np;j++ )
+            //int col = (r/2)*Mp;
+            //int row = (r%2)*Np;
+            if(  r ==1)
             {
-                masterbuf[i][j] = buf[i][j];
+                MPI_Irecv(&buf1[0][0],Mp*Np,MPI_DOUBLE,r,0,MPI_COMM_WORLD,&request01);
+            }
+            else if( r==2)
+            {
+                MPI_Irecv(&buf2[0][0],Mp*Np,MPI_DOUBLE,r,0,MPI_COMM_WORLD,&request02);
+            }
+            else if(r==3)
+            {
+                MPI_Irecv(&buf3[0][0],Mp*Np,MPI_DOUBLE,r,0,MPI_COMM_WORLD,&request03);
+            }
+            
+            
+        /*    printf("---p%d (%d,%d)\n",i,col,row);
+            //printf("p%d masterbuf2[0][0] = %f \n",i,masterbuf2[0][0]);
+         
+            MPI_Irecv(&masterbuf2[col][row],Mp*Np,MPI_DOUBLE,i,0,MPI_COMM_WORLD,&request2);
+            MPI_Wait(&request2,&status);
+         */   
+            //printf("p%d masterbuf2 = %f \n",i,masterbuf2[col][row]);
+
+        }
+        MPI_Wait(&request01,&status);
+        MPI_Wait(&request02,&status);
+        MPI_Wait(&request03,&status);
+
+        //int r,c;
+        for( r=0; r <M;r++ )
+        {
+            for( c=0; c <N;c++ )
+            {
+                if(r >=0 && r <M/2  )
+                {
+                    if(c<N/2)
+                    {
+                        masterbuf2[r][c] = buf[r][c];
+                    }
+                    else
+                    {
+                        masterbuf2[r][c] = buf1[r][c-Np];
+                    }
+                }
+                else if(r >= M/2)
+                {
+                    if(c<N/2)
+                    {
+                        
+                        assert((r-Mp)>= 0 );
+                        assert((r-Mp)< Mp  );
+                        
+                        masterbuf2[r][c] = buf2[r-Mp][c];
+                    }
+                    else
+                    {
+                        assert((r-Mp)>= 0 );
+                        assert((r-Mp)< Mp  );
+                        assert((c-Np) >= 0);
+                        assert((c-Np) < Np);
+                        
+                        
+                        masterbuf2[r][c] = buf3[r-Mp][c-Np];
+                    }
+                }
+                
             }
         }
         
+        int cnt;
+        for(r =0; r < M; r++){
+            for(c=0; c< N; c++)
+            {
+                if((masterbuf2[r][c] != masterbuf[r][c]))
+                {
+                    cnt++;  
+                }
+            }
+        }
+        printf("cnt=%d\n",cnt);
+        
         filename="imagenew192x128.pgm";
         printf("\nWriting <%s>\n", filename); 
-        pgmwrite(filename, masterbuf, M, N);
+        pgmwrite(filename, masterbuf2, M, N);
+        
     }
     
     MPI_Finalize();
