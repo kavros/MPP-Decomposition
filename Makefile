@@ -9,10 +9,12 @@ EXE=	image
 
 SRC= \
 	imagenew.c \
-	pgmio.c
+	pgmio.c\
+	arralloc.c
 
 INC=\
-	pgmio.h
+	pgmio.h\
+	arralloc.h
 
 #
 # No need to edit below this line
