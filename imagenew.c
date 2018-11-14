@@ -194,12 +194,12 @@ void computeSawtooth(decompositionType decomp,double** old,int Np,int Mp)
 void computeSawtoothHorizontal(double** old,int Np,int Mp)
 {
     double val;
-    int j;
-    
+    int j,worldRank;
+    MPI_Comm_rank(MPI_COMM_WORLD,&worldRank);
     for (j=1; j < Np+1; j++)
     {
         // compute sawtooth value    
-        val = boundaryval(j, Np);
+        val = boundaryval(j+(worldRank*Np), N);
         
         old[0][j]   = (int)(255.0*(1.0-val));
         old[Mp+1][j] = (int)(255.0*val);
@@ -235,6 +235,7 @@ void computeSawtoothVertical(double** old,int Np,int Mp)
         {
             // compute sawtooth value    
             val = boundaryval(j, Np);
+            
             
             old[Mp+1][j] = (int)(255.0*val);
         }
