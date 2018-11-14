@@ -30,21 +30,8 @@ OBJ=\
 $(EXE):$(OBJ)
 	$(CC) $(CFLAGS) -o $@ $(OBJ) $(LFLAGS)
 
-#OBJ=	$(SRC:.c=.o)
 build/%.o: src/%.c 
 	$(CC) $(CFLAGS) -c $< -o $@
-	 
-#.c.o:
-#	$(CC) $(CFLAGS) -c $<
-
-#all:	$(EXE)
-
-#$(EXE):	$(OBJ)
-#	$(CC) $(CFLAGS) -o $@ $(OBJ) $(LFLAGS)
-
-#$(OBJ):	$(INC)
-
-#$(OBJ):	$(MF)
 
 clean:
 	rm -f $(OBJ) $(EXE) 
