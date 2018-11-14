@@ -3,18 +3,22 @@ MF=	Makefile
 CC=	mpicc
 CFLAGS= -O3 -g -Wall
 
-LFLAGS=	-lm
+LFLAGS=	-lm 
 
-EXE=	image
+EXE=	build/image
 
 SRC= \
-	imagenew.c \
-	pgmio.c\
-	arralloc.c
+	src/imagenew.c \
+	src/pgmio.c\
+	src/arralloc.c
 
 INC=\
-	pgmio.h\
-	arralloc.h
+	include/pgmio.h\
+	include/arralloc.h
+OBJ=\
+	build/imagenew.o\
+	build/pgmio.o\
+	build/arralloc.o
 
 #
 # No need to edit below this line
@@ -23,19 +27,24 @@ INC=\
 .SUFFIXES:
 .SUFFIXES: .c .o
 
-OBJ=	$(SRC:.c=.o)
-
-.c.o:
-	$(CC) $(CFLAGS) -c $<
-
-all:	$(EXE)
-
-$(EXE):	$(OBJ)
+$(EXE):$(OBJ)
 	$(CC) $(CFLAGS) -o $@ $(OBJ) $(LFLAGS)
 
-$(OBJ):	$(INC)
+#OBJ=	$(SRC:.c=.o)
+build/%.o: src/%.c 
+	$(CC) $(CFLAGS) -c $< -o $@
+	 
+#.c.o:
+#	$(CC) $(CFLAGS) -c $<
 
-$(OBJ):	$(MF)
+#all:	$(EXE)
+
+#$(EXE):	$(OBJ)
+#	$(CC) $(CFLAGS) -o $@ $(OBJ) $(LFLAGS)
+
+#$(OBJ):	$(INC)
+
+#$(OBJ):	$(MF)
 
 clean:
-	rm -f $(OBJ) $(EXE) core
+	rm -f $(OBJ) $(EXE) 

@@ -8,9 +8,9 @@
 #include <stdlib.h>
 #include <math.h>
 #include <mpi.h>
-#include "pgmio.h"
+#include "../include/pgmio.h"
 #include<assert.h>
-#include "arralloc.h"
+#include "../include/arralloc.h"
 //#define M 192
 //#define N 128
 #define MAXITER   1500
@@ -59,7 +59,7 @@ int main (void)
     char *filename;
     
     //initialization of width and height
-    filename = "edgenew192x128.pgm";
+    filename = "./images/input/edgenew192x128.pgm";
     pgmsize(filename,&M,&N);
     printf("M=%d,N=%d\n",M,N);
     
@@ -590,7 +590,7 @@ void composition(double** buf,double** masterbuf,int worldRank,decompositionType
         
         //validation(masterbuf,masterbuf2);
         
-        char* filename="imagenew192x128.pgm";
+        char* filename="./images/output/imagenew192x128.pgm";
         printf("\nWriting <%s>\n", filename); 
         pgmwrite(filename, &masterbuf2[0][0], M, N);
         
