@@ -11,8 +11,8 @@
 #include "pgmio.h"
 #include<assert.h>
 #include "arralloc.h"
-#define M 192
-#define N 128
+//#define M 192
+//#define N 128
 #define MAXITER   1500
 #define PRINTFREQ  200
 
@@ -38,61 +38,44 @@ void decomposition(decompositionType decomp,int worldRank,int Np,int Mp,double**
 void twoDimensionalDecomposition(int worldRank,int Np,int Mp,double** buf,double** masterbuf);
 void twoDimensionalComposition(int worldSize,double** buf,double** masterbuf2,int Np,int Mp);
 void imageRecontruction(decompositionType decomp, int worldRank,int worldSize,int Mp,int Np,double** edge,double** buf,double** old,double** new);
-void computeSawtooth(decompositionType decomp,double** old,int val,int Np,int Mp);
+void computeSawtooth(decompositionType decomp,double** old,int Np,int Mp);
 void computeSawtoothVertical(double** old,int Np,int Mp);
+void initDecompositionType(decompositionType* decomp,int* Np,int* Mp);
+void retriveImage(char* filename,double** masterbuf,double** buf,int worldRank,int worldSize);
+void computeSawtoothSerial(double** old, int Np,int Mp);
+void computeSawtoothTwoDim(double** old,int Np,int Mp);
+void computeSawtoothHorizontal(double** old,int Np,int Mp);
 
+void halloSwapsVertical(double** old,int Np,int Mp,int worldRank,int worldSize);
+void halloSwaps(decompositionType decomp,double** old,int Np,int Mp,int worldRank,int worldSize);
+void halloSwapsSerial(double** old,int Np,int Mp,int worldRank,int worldSize);
+void halloSwapsHorizontal(double** old,int Np,int Mp,int worldRank,int worldSize);
+int M,N;
 int main (void)
 {
     
     MPI_Status status;
     int worldSize,worldRank;
+    char *filename;
     
-    MPI_Request request,request2,request3,request4;
+    //initialization of width and height
+    filename = "edgenew192x128.pgm";
+    pgmsize(filename,&M,&N);
+    printf("M=%d,N=%d\n",M,N);
     
-    
-    MPI_Init(NULL,NULL);
-    
-    
+    //initialization of MPI variables
+    MPI_Request request;
+    MPI_Init(NULL,NULL);        
     MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
     MPI_Comm_rank(MPI_COMM_WORLD,&worldRank);
+    
+    //initialization of Mp,Np
     int Np,Mp;
     decompositionType decomp;
+    initDecompositionType(&decomp,&Np,&Mp);
+    printf("Mp=%d, Np=%d\n",Mp,Np);
     
-    if( worldSize == 2 )
-    {
-        Np = N/worldSize;
-        Mp = M;
-        decomp.type=HORIZONTAL;
-        printf("horizontal\n");
-    }
-    else if(worldSize == 3 )
-    {
-        Mp = M/worldSize;
-        Np = N;
-        decomp.type= VERTICAL;
-        printf("vertical\n");
-    }
-    else if(worldSize == 1)
-    {
-        Mp = M;
-        Np = N;
-        decomp.type=SERIAL;
-    }
-    else if(worldSize == 4 )
-    {
-        decomp.type = TWO_DIM;
-        Np = N/2;
-        Mp = M/2;
-        printf("2D\n");
-    }
-    else
-    {
-        printf("--------Error\n");
-        return;
-    }
-
-//    printf("Mp=%d, Np=%d\n",Mp,Np);
-        
+    //memory allocations
     double** masterbuf,**old,**new,**edge,**buf;    
     masterbuf = (double**) arralloc(sizeof(double),2,M,N);    
     old = (double**) arralloc(sizeof(double),2,Mp+2,Np+2);
@@ -100,38 +83,13 @@ int main (void)
     edge = (double**) arralloc(sizeof(double),2,Mp+2,Np+2);
     buf = (double**) arralloc(sizeof(double),2,Mp,Np);
     
-    int i, j, iter, maxiter;
-    char *filename;
-    double val;
-    
-    if(worldRank == 0)
-    {
-        
-        printf("Processing %d x %d image\n", M, N);
-        printf("Number of iterations = %d\n", MAXITER);
-        
-        filename = "edgenew192x128.pgm";
-        
-        printf("\nReading <%s>\n", filename);
-        pgmread(filename, &masterbuf[0][0], M, N);
 
-        printf("\n");
+    retriveImage(filename,masterbuf,buf,worldRank,worldSize);
+    
+    decomposition( decomp, worldRank, Np, Mp, buf, masterbuf);
+    
+    imageRecontruction(decomp,worldRank,worldSize,Mp,Np,edge,buf,old,new);
         
-    }
-    
-
-    
-    MPI_Bcast(&masterbuf[0][0],(M*N),MPI_DOUBLE,0,MPI_COMM_WORLD);
-    
-    /////////////
-     decomposition( decomp, worldRank, Np, Mp, buf, masterbuf);
-
-  
-    /**/
-     imageRecontruction(decomp,worldRank,worldSize,Mp,Np,edge,buf,old,new);
-    
-   
-    
     if(worldRank !=0)
     {
         //printf("--->p%d buf[0][0]=%f\n",worldRank,buf[0][0]);
@@ -140,7 +98,7 @@ int main (void)
     }
     
     composition(buf,masterbuf,worldRank,decomp,worldSize,Mp,Np);
-  
+    
     
     MPI_Finalize();
     free(masterbuf);
@@ -151,11 +109,93 @@ int main (void)
     return 0;
 } 
 
-
-void computeSawtooth(decompositionType decomp,double** old,int val,int Np,int Mp)
+void retriveImage(char* filename,double** masterbuf,double** buf,int worldRank,int worldSize)
 {
-    /*int j;
-    // Set fixed boundary conditions on the left and right sides 
+    if(worldRank == 0)
+    {
+        
+        printf("Processing %d x %d image\n", M, N);
+        printf("Number of iterations = %d\n", MAXITER);
+        
+        printf("\nReading <%s>\n", filename);
+        if(worldSize == 1)
+        {
+            pgmread(filename, &buf[0][0], M, N);
+        }
+        else
+        {
+            pgmread(filename, &masterbuf[0][0], M, N);
+        }
+        printf("\n");
+    }    
+    MPI_Bcast(&masterbuf[0][0],(M*N),MPI_DOUBLE,0,MPI_COMM_WORLD);
+}
+
+void initDecompositionType(decompositionType* decomp,int* Np,int* Mp)
+{
+    int worldSize;
+    MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
+    
+    
+    if( (worldSize == 4) && ((N%2)==0)  && ((M%2)==0)  )
+    {
+        decomp->type=TWO_DIM;
+        *Np = N/2;
+        *Mp = M/2;
+        printf("2D\n");
+    }
+    else if(worldSize == 1)
+    {
+        decomp->type =SERIAL;
+        *Np=N;
+        *Mp =M;
+        printf("Serial\n");
+    }
+    else if( N%worldSize == 0)
+    {
+        *Mp = M;
+        *Np = N/worldSize;
+        decomp->type=HORIZONTAL;
+        printf("horizontal\n");
+    }
+    else if(M%worldSize == 0)
+    {
+        *Np = N;
+        *Mp = M/worldSize;
+        decomp->type= VERTICAL;
+        printf("vertical\n");
+    }
+
+    
+
+}
+
+void computeSawtooth(decompositionType decomp,double** old,int Np,int Mp)
+{
+
+    if(decomp.type == VERTICAL)
+    {
+        computeSawtoothVertical(old,Np,Mp);
+    }
+    else if(decomp.type == SERIAL)
+    {
+        computeSawtoothSerial(old,Np,Mp);
+    }
+    else if(decomp.type == HORIZONTAL)
+    {
+        computeSawtoothHorizontal(old,Np,Mp);
+    }
+    else if(decomp.type == TWO_DIM)
+    {
+        computeSawtoothTwoDim(old,Np,Mp);
+    }
+}
+
+void computeSawtoothHorizontal(double** old,int Np,int Mp)
+{
+    double val;
+    int j;
+    
     for (j=1; j < Np+1; j++)
     {
         // compute sawtooth value    
@@ -163,16 +203,20 @@ void computeSawtooth(decompositionType decomp,double** old,int val,int Np,int Mp
         
         old[0][j]   = (int)(255.0*(1.0-val));
         old[Mp+1][j] = (int)(255.0*val);
-    }*/
-    if(decomp.type == VERTICAL)
-    {
-        computeSawtoothVertical(old,Np,Mp);
     }
 }
+
+void computeSawtoothTwoDim(double** old,int Np,int Mp)
+{
+    
+}
+
+
 void computeSawtoothVertical(double** old,int Np,int Mp)
 {
     
-    int worldRank,worldSize,j,val;
+    int worldRank,worldSize,j;
+    double val;
     MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
     MPI_Comm_rank(MPI_COMM_WORLD,&worldRank);
     if(worldRank == 0 )
@@ -183,31 +227,40 @@ void computeSawtoothVertical(double** old,int Np,int Mp)
             val = boundaryval(j, Np);
             
             old[0][j]   = (int)(255.0*(1.0-val));
-            //old[Mp+1][j] = (int)(255.0*val);
         }
     }
     if(worldRank == worldSize-1 )
     {
-        printf("=========p%d\n",worldRank);
         for (j=1; j < Np+1; j++)
         {
             // compute sawtooth value    
             val = boundaryval(j, Np);
             
-            //old[0][j]   = (int)(255.0*(1.0-val));
             old[Mp+1][j] = (int)(255.0*val);
         }
     }
-    
-    
 }
+
+void computeSawtoothSerial(double** old, int Np,int Mp)
+{
+    int j;
+    double val;
+    for (j=1; j < Np+1; j++)
+    {
+        // compute sawtooth value    
+        val = boundaryval(j, Np);
+        
+        old[0][j]   = (int)(255.0*(1.0-val));
+        old[Mp+1][j] = (int)(255.0*val);
+    }
+}
+
 
 
 void imageRecontruction(decompositionType decomp, int worldRank,int worldSize,int Mp,int Np,double** edge,double** buf,double** old,double** new)
 {
-    int i,j,val,iter;
-    MPI_Status status;
-    MPI_Request request,request1,request2,request3,request4;
+    int i,j,iter;
+
     for (i=1;i<Mp+1;i++)
     {
         for (j=1;j<Np+1;j++)
@@ -225,15 +278,8 @@ void imageRecontruction(decompositionType decomp, int worldRank,int worldSize,in
     }
  
     
-    computeSawtooth(decomp,old,val,Np,Mp);
+    computeSawtooth(decomp,old,Np,Mp);
     
-    
-    int right = worldRank+1;
-    int left  = worldRank-1;
-    if(right == worldSize) right=MPI_PROC_NULL;
-    if(left == -1) left =MPI_PROC_NULL;
-    
-    int k,l;
     for (iter=1;iter<=MAXITER; iter++)
     {
         if(iter%PRINTFREQ==0)
@@ -242,53 +288,12 @@ void imageRecontruction(decompositionType decomp, int worldRank,int worldSize,in
         }
         
         // Implement periodic boundary conditions on bottom and top sides 
-        
-        //vertical
-        MPI_Isend(&old[Mp][1],Np,MPI_DOUBLE,right,0,MPI_COMM_WORLD,&request);
-        MPI_Isend(&old[1][1],Np,MPI_DOUBLE,left,0,MPI_COMM_WORLD,&request2);
-        
-        MPI_Wait(&request,&status);
-        MPI_Wait(&request2,&status);
-        
-        MPI_Irecv(&old[0][1],Np,MPI_DOUBLE,left,0,MPI_COMM_WORLD,&request3);
-        MPI_Irecv(&old[Mp+1][1],Np,MPI_DOUBLE,right,0,MPI_COMM_WORLD,&request4);
-        
-        MPI_Wait(&request3,&status);
-        MPI_Wait(&request4,&status);
-       
-        /*
-        for(k=1; k < Mp; k++)
-        {
-            send1[k-1]=old[k][1];  //first row
-        }
-        
-        for(k=1; k < Mp; k++)
-        {
-            send2[k-1]=old[k][Np];  //last row
-        }
-
-        
-     
-        //horizontal
-        MPI_Isend(&send1[0],Mp,MPI_DOUBLE,up,0,MPI_COMM_WORLD,&request);
-        MPI_Isend(&send2[0],Mp,MPI_DOUBLE,down,0,MPI_COMM_WORLD,&request2);
-        MPI_Wait(&request,&status);
-        MPI_Wait(&request2,&status);
-        
-        
-        MPI_Irecv(&old[1][Np+1],Mp,MPI_DOUBLE,up,0,MPI_COMM_WORLD,&request4);
-        MPI_Irecv(&old[1][0],Mp,MPI_DOUBLE,down,0,MPI_COMM_WORLD,&request3);
-        
-        MPI_Wait(&request3,&status);
-        MPI_Wait(&request4,&status);
-       
-        */
-         
-//        for (i=1; i < Mp+1; i++)
-//        {
-//            old[i][0]   = old[i][Np];
-//            old[i][Np+1] = old[i][1];
-//        }
+        halloSwaps(decomp,old,Np,Mp,worldRank,worldSize);
+      
+        //if(decomp.type== SERIAL)
+        //{
+            
+        //}
         
         for (i=1;i<Mp+1;i++)
         {
@@ -317,7 +322,117 @@ void imageRecontruction(decompositionType decomp, int worldRank,int worldSize,in
             buf[i-1][j-1]=old[i][j];
         }
     }
-   
+
+}
+
+void halloSwaps(decompositionType decomp,double** old,int Np,int Mp,int worldRank,int worldSize)
+{
+    if(decomp.type == VERTICAL)
+    {
+        halloSwapsVertical(old,Np,Mp,worldRank,worldSize);
+    }
+    else if(decomp.type == HORIZONTAL)
+    {
+        halloSwapsHorizontal(old, Np,Mp, worldRank, worldSize);
+    }
+    else if(decomp.type == TWO_DIM)
+    {
+        
+    }
+    else if(decomp.type==SERIAL)
+    {
+        halloSwapsSerial(old,Np,Mp,worldRank,worldSize);
+    }
+}
+
+void halloSwapsSerial(double** old,int Np,int Mp,int worldRank,int worldSize)
+{
+    int i;
+    for (i=1; i < Mp+1; i++)
+    {
+        old[i][0]   = old[i][Np];
+        old[i][Np+1] = old[i][1];
+    }
+}
+
+void halloSwapsVertical(double** old,int Np,int Mp,int worldRank,int worldSize)
+{
+    
+    MPI_Request request,request2,request3,request4;
+    MPI_Status status;
+    
+    
+    int right = worldRank+1;
+    int left  = worldRank-1;
+    if(right == worldSize) right=MPI_PROC_NULL;
+    if(left == -1) left =MPI_PROC_NULL;
+    
+    MPI_Isend(&old[Mp][1],Np,MPI_DOUBLE,right,0,MPI_COMM_WORLD,&request);
+    MPI_Isend(&old[1][1],Np,MPI_DOUBLE,left,0,MPI_COMM_WORLD,&request2);
+
+    MPI_Wait(&request,&status);
+    MPI_Wait(&request2,&status);
+
+    MPI_Irecv(&old[0][1],Np,MPI_DOUBLE,left,0,MPI_COMM_WORLD,&request3);
+    MPI_Irecv(&old[Mp+1][1],Np,MPI_DOUBLE,right,0,MPI_COMM_WORLD,&request4);
+
+    MPI_Wait(&request3,&status);
+    MPI_Wait(&request4,&status);
+    halloSwapsSerial(old,Np,Mp,worldRank,worldSize);
+}
+
+void halloSwapsHorizontal(double** old,int Np,int Mp,int worldRank,int worldSize)
+{
+    
+    int i;
+    double lastRow[Mp];
+    double firstRow[Mp];
+
+    
+    int down = worldRank-1;
+    int up = worldRank+1;
+    
+    if(up == worldSize) up = 0;
+    if(down == -1) down=worldSize-1;
+    
+    //printf("p%d up=%d down=%d \n",worldRank,up,down);
+    
+    for(i=0; i < Mp; i++)
+    {
+        lastRow[i] = old[i+1][Np];
+    }
+    
+    for(i=0; i < Mp; i++)
+    {
+        firstRow[i] = old[i+1][1];
+    }
+    
+    MPI_Request request,request2,request3,request4;
+    MPI_Status status;
+    MPI_Isend(&firstRow[0],Mp,MPI_DOUBLE,down,0,MPI_COMM_WORLD,&request);
+    MPI_Isend(&lastRow[0],Mp,MPI_DOUBLE,up,0,MPI_COMM_WORLD,&request2);
+    MPI_Wait(&request,&status);
+    MPI_Wait(&request2,&status);
+    
+    
+    MPI_Irecv(&firstRow[0],Mp,MPI_DOUBLE,up,0,MPI_COMM_WORLD,&request4);
+    MPI_Irecv(&lastRow[0],Mp,MPI_DOUBLE,down,0,MPI_COMM_WORLD,&request3);
+    
+    MPI_Wait(&request3,&status);
+    MPI_Wait(&request4,&status);
+    
+    for(i=0; i < Mp; i++)
+    {
+        old[i+1][Np+1] = firstRow[i];
+    }
+    
+    
+    for(i=0; i < Mp; i++)
+    {
+        old[i+1][0] = lastRow[i];
+    }
+    
+    
 }
 
 void decomposition(decompositionType decomp,int worldRank,int Np,int Mp,double** buf,double** masterbuf)
@@ -334,7 +449,14 @@ void decomposition(decompositionType decomp,int worldRank,int Np,int Mp,double**
     {
         twoDimensionalDecomposition( worldRank, Np, Mp, buf,masterbuf);
     }
+    else if(decomp.type == SERIAL)
+    {
+        //nothing to do here
+        
+    }
 }
+
+
 
 void twoDimensionalDecomposition(int worldRank,int Np,int Mp,double** buf,double** masterbuf)
 {
@@ -437,13 +559,17 @@ void composition(double** buf,double** masterbuf,int worldRank,decompositionType
 {
     if(worldRank == 0)
     {
-        //double buf1[Mp][Np];
-        //double masterbuf2[M][N];
 
-        double** buf1;
-        double** masterbuf2;
-        buf1 = (double**) arralloc(sizeof(double),2,Mp,Np);
-        masterbuf2 = (double**) arralloc(sizeof(double),2,M,N);
+        double** buf1=NULL;
+        double** masterbuf2=NULL;
+
+        if(decomp.type != SERIAL)
+        {
+            buf1 = (double**) arralloc(sizeof(double),2,Mp,Np);
+            masterbuf2 = (double**) arralloc(sizeof(double),2,M,N);        
+        }
+        
+        
         if(decomp.type == HORIZONTAL)
         {
             horizontalComposition( masterbuf2, buf1, buf, worldSize,Mp, Np);
@@ -452,9 +578,13 @@ void composition(double** buf,double** masterbuf,int worldRank,decompositionType
         {
             verticalComposition(masterbuf2,buf,worldSize,Mp,Np);
         }
-        else if(decomp.type = TWO_DIM )
+        else if(decomp.type == TWO_DIM )
         {
             twoDimensionalComposition(worldSize,buf,masterbuf2,Np,Mp);
+        }else if( decomp.type == SERIAL )
+        {
+            printf("serial composition\n");
+            masterbuf2 = buf;
         }
         
         //validation(masterbuf,masterbuf2);
@@ -462,9 +592,12 @@ void composition(double** buf,double** masterbuf,int worldRank,decompositionType
         char* filename="imagenew192x128.pgm";
         printf("\nWriting <%s>\n", filename); 
         pgmwrite(filename, &masterbuf2[0][0], M, N);
-     
-        free(masterbuf2);
-        free(buf1);
+        
+        if(decomp.type != SERIAL)
+        {
+            free(masterbuf2); 
+            free(buf1);
+        }
     }
    
 }
@@ -587,6 +720,59 @@ double boundaryval(int i, int m)
     
     return val;
 }
+
+void communication()
+{
+      //vertical
+        /*
+         * 
+         *     int right = worldRank+1;
+    int left  = worldRank-1;
+    if(right == worldSize) right=MPI_PROC_NULL;
+    if(left == -1) left =MPI_PROC_NULL;
+         * 
+         * 
+         MPI_Isend(&old[Mp][1],Np,MPI_DOUBLE,right,0,MPI_COMM_WORLD,&request);
+        MPI_Isend(&old[1][1],Np,MPI_DOUBLE,left,0,MPI_COMM_WORLD,&request2);
+        
+        MPI_Wait(&request,&status);
+        MPI_Wait(&request2,&status);
+        
+        MPI_Irecv(&old[0][1],Np,MPI_DOUBLE,left,0,MPI_COMM_WORLD,&request3);
+        MPI_Irecv(&old[Mp+1][1],Np,MPI_DOUBLE,right,0,MPI_COMM_WORLD,&request4);
+        
+        MPI_Wait(&request3,&status);
+        MPI_Wait(&request4,&status);
+       */
+        /*
+        for(k=1; k < Mp; k++)
+        {
+            send1[k-1]=old[k][1];  //first row
+        }
+        
+        for(k=1; k < Mp; k++)
+        {
+            send2[k-1]=old[k][Np];  //last row
+        }
+
+        
+     
+        //horizontal
+        MPI_Isend(&send1[0],Mp,MPI_DOUBLE,up,0,MPI_COMM_WORLD,&request);
+        MPI_Isend(&send2[0],Mp,MPI_DOUBLE,down,0,MPI_COMM_WORLD,&request2);
+        MPI_Wait(&request,&status);
+        MPI_Wait(&request2,&status);
+        
+        
+        MPI_Irecv(&old[1][Np+1],Mp,MPI_DOUBLE,up,0,MPI_COMM_WORLD,&request4);
+        MPI_Irecv(&old[1][0],Mp,MPI_DOUBLE,down,0,MPI_COMM_WORLD,&request3);
+        
+        MPI_Wait(&request3,&status);
+        MPI_Wait(&request4,&status);
+       
+        */
+}
+
 
     /*if(worldRank == 0)
     {
