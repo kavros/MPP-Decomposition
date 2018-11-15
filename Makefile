@@ -8,7 +8,7 @@ LFLAGS=	-lm
 EXE=	build/image
 
 SRC= \
-	src/imagenew.c \
+	src/imagenew_v2.c \
 	src/pgmio.c\
 	src/arralloc.c
 
@@ -16,7 +16,7 @@ INC=\
 	include/pgmio.h\
 	include/arralloc.h
 OBJ=\
-	build/imagenew.o\
+	build/imagenew_v2.o\
 	build/pgmio.o\
 	build/arralloc.o
 
