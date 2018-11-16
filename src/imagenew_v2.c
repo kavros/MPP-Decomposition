@@ -28,21 +28,20 @@ typedef struct topology
 }topology;
 
 double boundaryval(int i, int m);
-void imageRecontruction(int Mp,int Np,double** edge,double** buf,double** old,double** new);
+void imageRecontruction(topology topo,double** edge,double** buf,double** old,double** new,int N,int* dims);
 bool isNumberPrime(int num);
-void initialization(topology* topo,int worldSize,int M,int N,MPI_Comm* comm2d);
+void initialization(topology* topo,int worldSize,int M,int N,MPI_Comm* comm2d,int* dims);
 void scatter(double** masterbuf,double** buf,topology topo,int worldSize,char* input,MPI_Comm comm2d,MPI_Datatype masterbufType,MPI_Datatype vectorMpxNp,int M,int N);
-void gather(topology topo,double** masterbuf,double** buf,MPI_Datatype vectorMpxNp,MPI_Datatype masterbufType,int M,int N,MPI_Comm comm2d,char** output,int worldSize);
+void gather(topology topo,double** masterbuf,double** buf,MPI_Datatype vectorMpxNp,MPI_Datatype masterbufType,int M,int N,MPI_Comm comm2d,char* output,int worldSize);
 void createDataTypes(topology topo,MPI_Datatype* vectorMpxNp,MPI_Datatype* masterbufType,int N);
+void computeBoundaryConditions(topology topo,int *dims,double **old,int N);
 
 int main (void)
 {
-    MPI_Request request;
-    MPI_Status status;
+    
     MPI_Comm comm2d;
     int worldSize;
     topology topo;
-    int i,j;
     int M,N;
     char *input,*output;
     input = "./images/input/edgenew192x128.pgm";
@@ -51,12 +50,11 @@ int main (void)
     MPI_Init(NULL,NULL);        
     MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
     
-    
     pgmsize(input,&M,&N);
+    int dims[2];
+    dims[0]=0;dims[1]=0;
     
-    
-    
-    initialization(&topo,worldSize,M,N,&comm2d);
+    initialization(&topo,worldSize,M,N,&comm2d,dims);
     //printf("p%d left=%d,right=%d up=%d down=%d \n",topo.rank,topo.left,topo.right,topo.up,topo.down);
     //printf("p%d Mp=%d, Np=%d\n",topo.rank,topo.Mp,topo.Np);
     //printf("M=%d,N=%d\n",M,N);
@@ -78,11 +76,9 @@ int main (void)
     
     scatter( masterbuf, buf, topo, worldSize, input, comm2d, masterbufType,vectorMpxNp ,M, N);
     
-    imageRecontruction( topo.Mp, topo.Np, edge, buf, old, new);
+    imageRecontruction( topo, edge, buf, old, new,N,dims);
     
     gather( topo, masterbuf,buf,vectorMpxNp,masterbufType, M, N, comm2d,output,worldSize);
-    
-    //pgmwrite(output, &masterbuf[0][0], M, N);
     
     MPI_Finalize();
     
@@ -111,7 +107,7 @@ void createDataTypes(topology topo,MPI_Datatype* vectorMpxNp,MPI_Datatype* maste
     
 }
 
-void gather(topology topo,double** masterbuf,double** buf,MPI_Datatype vectorMpxNp,MPI_Datatype masterbufType,int M,int N,MPI_Comm comm2d,char** output,int worldSize)
+void gather(topology topo,double** masterbuf,double** buf,MPI_Datatype vectorMpxNp,MPI_Datatype masterbufType,int M,int N,MPI_Comm comm2d,char* output,int worldSize)
 {
     MPI_Request request;
     MPI_Status status;
@@ -213,12 +209,12 @@ bool isNumberPrime(int num)
     return true;
 }
 
-void initialization(topology* topo,int worldSize,int M,int N,MPI_Comm* comm2d)
+void initialization(topology* topo,int worldSize,int M,int N,MPI_Comm* comm2d,int* dims)
 {
     
     int disp;
     const int ndims =2;
-    int dims[ndims];
+    
     int period[ndims];
     int reorder;
     MPI_Comm comm;
@@ -312,10 +308,12 @@ double boundaryval(int i, int m)
     return val;
 }
 
-void imageRecontruction(int Mp,int Np,double** edge,double** buf,double** old,double** new)
+void imageRecontruction(topology topo,double** edge,double** buf,double** old,double** new,int N,int* dims)
 {
     int i,j,iter;
-    double val;
+    int Np = topo.Np;
+    int Mp = topo.Mp;
+    bool isSerialExecution = (dims[0] == 1)&& (dims[1]==1);
     
     for (i=1;i<Mp+1;i++)
     {
@@ -334,15 +332,8 @@ void imageRecontruction(int Mp,int Np,double** edge,double** buf,double** old,do
     }
     
     /* Set fixed boundary conditions on the left and right sides */
+    computeBoundaryConditions(topo,dims,old,N);
     
-    for (j=1; j < Np+1; j++)
-    {
-        
-        val = boundaryval(j, Np);
-        
-        old[0][j]   = (int)(255.0*(1.0-val));
-        old[Mp+1][j] = (int)(255.0*val);
-    }
     
     for (iter=1;iter<=MAXITER; iter++)
     {
@@ -353,12 +344,13 @@ void imageRecontruction(int Mp,int Np,double** edge,double** buf,double** old,do
         
         /* Implement periodic boundary conditions on bottom and top sides */
         
-        for (i=1; i < Mp+1; i++)
-	{
-            old[i][0]   = old[i][Np];
-            old[i][Np+1] = old[i][1];
-	}
-        
+        if(isSerialExecution == true){
+            for (i=1; i < Mp+1; i++)
+            {
+                old[i][0]   = old[i][Np];
+                old[i][Np+1] = old[i][1];
+            }
+        }
         for (i=1;i<Mp+1;i++)
 	{
             for (j=1;j<Np+1;j++)
@@ -389,89 +381,26 @@ void imageRecontruction(int Mp,int Np,double** edge,double** buf,double** old,do
     
     
 }
-
-
-void test()
+void computeBoundaryConditions(topology topo,int *dims,double **old,int N)
 {
-    /*int rank, size, i;
-    MPI_Datatype type;
-    int buffer[24];
-    MPI_Status status;
-    
-    
-    MPI_Comm_size(MPI_COMM_WORLD, &size);
-    if (size != 2)
+    int j;
+    double val;
+    int Np = topo.Np;
+    int Mp = topo.Mp;
+    for (j=1; j < Np+1; j++)
     {
-        printf("Please run with 2 processes.\n");
-        MPI_Finalize();
+        val = boundaryval(j+(topo.coords[1]), N);
+        int myXCoord = topo.coords[0];
+        int lastXCoord = (dims[0]-1);
+        
+        if(myXCoord == 0)
+        {
+            old[0][j]   = (int)(255.0*(1.0-val));
+        }
+        
+        if(myXCoord == lastXCoord )
+        {
+            old[Mp+1][j] = (int)(255.0*val);
+        }
     }
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    
-    
-    
-    int count = 4;
-    int blocklength=2;
-    int stride = 6;
-    MPI_Type_vector(count, blocklength, stride, MPI_INT, &type);
-    MPI_Type_commit(&type);
-    
-    if (rank == 0)
-    {
-        for (i=0; i<24; i++)
-            buffer[i] = i;
-        MPI_Send(buffer, 1, type, 1, 123, MPI_COMM_WORLD);
-        
-    }
-    
-    if (rank == 1)
-    {
-        for (i=0; i<24; i++)
-            buffer[i] = -1;
-        MPI_Recv(buffer, 1, type, 0, 123, MPI_COMM_WORLD, &status);
-        for (i=0; i<24; i++)
-            printf("buffer[%d] = %d\n", i, buffer[i]);
-        fflush(stdout);
-    }*/
-     
-    int N=3;
-    int M=2;
-    int buffer[2][3] = {{1,2,3},{4,5,6}};
-    int count = N;          
-    int blocklength=1;
-    int stride = N;
-    int i,j;
-    MPI_Datatype type;
-    MPI_Status status;
-    int rank;
-    
-    
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    MPI_Type_vector(count, blocklength, stride, MPI_INT, &type);
-    MPI_Type_commit(&type);
-    
-    if (rank == 0)
-    {
-        
-        
-        for(i=0;i<M;i++)
-            for(j=0;j<N;j++)
-                printf(" %d \n",buffer[i][j]);
-        printf("\n");
-        MPI_Send(buffer, 1, type, 1, 123, MPI_COMM_WORLD);
-        
-    }
-    
-    if (rank == 1)
-    {
-        int buffer2[3][3] = {{0,0,0},{0,0,0}};
-        MPI_Recv(buffer2, 1, type, 0, 123, MPI_COMM_WORLD, &status);
-        
-        for(i=0;i<M;i++)
-            for(j=0;j<N;j++)
-                printf(" %d \n",buffer2[i][j]);
-        fflush(stdout);
-    }
-    
-    
-    
 }
