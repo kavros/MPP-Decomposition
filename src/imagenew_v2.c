@@ -46,8 +46,8 @@ int main (void)
     topology topo;
     int M,N;
     char *input,*output;
-    input = "./images/input/edgenew192x128.pgm";
-    output="./images/output/imagenew192x128.pgm";
+    input = "./data/input/edgenew192x128.pgm";
+    output="./data/output/imagenew192x128.pgm";
     
     MPI_Init(NULL,NULL);        
     MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
