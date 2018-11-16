@@ -214,6 +214,7 @@ bool isNumberPrime(int num)
 void initialization(topology* topo,int worldSize,int M,int N,MPI_Comm* comm2d,int* dims)
 {
     
+    
     int disp;
     const int ndims =2;
     
@@ -420,7 +421,12 @@ void halloSwapsHorizontal(double** old,topology topo)
     double lastRow[Mp];
     double firstRow[Mp];
 
-    
+    MPI_Datatype vectorMpxNp;
+    int count = topo.Mp;
+    int blocklength = topo.Np;
+    int stride = topo.Np;
+    MPI_Type_vector(count, blocklength, stride, MPI_DOUBLE, &vectorMpxNp);
+    MPI_Type_commit(&vectorMpxNp);
     
     for(i=0; i < Mp; i++)
     {
@@ -435,15 +441,19 @@ void halloSwapsHorizontal(double** old,topology topo)
     MPI_Request request,request2,request3,request4;
     MPI_Status status;
     
+    //MPI_Isend(&old[1][1],1,vectorMpxNp,topo.down,0,MPI_COMM_WORLD,&request);
     MPI_Isend(&firstRow[0],Mp,MPI_DOUBLE,topo.down,0,MPI_COMM_WORLD,&request);
     MPI_Isend(&lastRow[0],Mp,MPI_DOUBLE,topo.up,0,MPI_COMM_WORLD,&request2);
-    MPI_Irecv(&firstRow[0],Mp,MPI_DOUBLE,topo.up,0,MPI_COMM_WORLD,&request4);
+    
+     MPI_Irecv(&firstRow[0],Mp,MPI_DOUBLE,topo.up,0,MPI_COMM_WORLD,&request4);
+    //MPI_Irecv(&old[1][Np+1],1,vectorMpxNp,topo.up,0,MPI_COMM_WORLD,&request4);
     MPI_Irecv(&lastRow[0],Mp,MPI_DOUBLE,topo.down,0,MPI_COMM_WORLD,&request3);
 
     MPI_Wait(&request,&status);
     MPI_Wait(&request2,&status);    
     MPI_Wait(&request3,&status);
     MPI_Wait(&request4,&status);
+    
     
     for(i=0; i < Mp; i++)
     {
