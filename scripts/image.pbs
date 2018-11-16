@@ -22,7 +22,7 @@
 #PBS -l walltime=00:01:00
 #PBS -l place=scatter:excl
 #PBS -l select=1:ncpus=36
-
+#PBS -o ./data/qsub
 #----------------------------------------------------------------------#
 # You should only have to change the following parameter NPROC, unless #
 # running on more than 36 processes when "select=1" must be increased  #
