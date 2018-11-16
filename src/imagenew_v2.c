@@ -37,7 +37,8 @@ void createDataTypes(topology topo,MPI_Datatype* vectorMpxNp,MPI_Datatype* maste
 void computeBoundaryConditions(topology topo,int *dims,double **old,int N);
 void halloSwapsHorizontal(double** old,topology topo);
 void halloSwapsVertical(double** old,topology topo);
-
+void printAverages(int iter,double **old,topology topo,int targetIter );
+bool isTheLastIteration(topology topo,double maxDelta,int iter);
 int main (void)
 {
     
@@ -316,9 +317,13 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
     int i,j,iter;
     int Np = topo.Np;
     int Mp = topo.Mp;
+    int targetIter=1000;
+    double delta,globalMaxDelta,maxDelta;
+    delta=globalMaxDelta=maxDelta=-1;
     
     bool isSerialExecution = (dims[0] == 1)&& (dims[1]==1);
     bool isVerticalDecomposition = (dims[1] ==1 );
+    
     
     for (i=1;i<Mp+1;i++)
     {
@@ -344,7 +349,7 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
     {
         if(iter%PRINTFREQ==0)
 	{
-            printf("Iteration %d\n", iter);
+            //printf("Iteration %d\n", iter);
 	}
         
         /* Implement periodic boundary conditions on bottom and top sides */
@@ -370,6 +375,12 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
                 new[i][j]=0.25*(old[i-1][j]+old[i+1][j]+old[i][j-1]+old[i][j+1]
                         - edge[i][j]);
 	    }
+            delta = abs(new[i][j] - old[i][j]);
+            if(maxDelta < delta)
+            {
+                maxDelta  = delta;
+            }
+
 	}
 	
         for (i=1;i<Mp+1;i++)
@@ -379,9 +390,20 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
                 old[i][j]=new[i][j];
 	    }
 	}
+        
+        //print averages at specified iteration number
+        printAverages(iter,old,topo,targetIter );
+        
+        //terminate based on delta
+        /*if( isTheLastIteration(topo,maxDelta,iter) ) 
+        {
+            //break;
+        }*/
+            
+       
     }
     
-    printf("\nFinished %d iterations\n", iter-1);
+    //printf("\nFinished %d iterations\n", iter-1);
     
     for (i=1;i<Mp+1;i++)
     {
@@ -393,6 +415,50 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
     
     
 }
+
+bool isTheLastIteration(topology topo,double maxDelta,int iter)
+{
+    double globalMaxDelta = -1.0f;
+    MPI_Allreduce(&maxDelta,&globalMaxDelta,1,MPI_DOUBLE,MPI_MAX,MPI_COMM_WORLD);
+    /*if(topo.rank==0)
+    {
+        printf("p%d  maxDelta=%f globalMaxDelta=%f \n",topo.rank,maxDelta,globalMaxDelta);
+    }*/
+    
+    if(globalMaxDelta < 0.1 )
+    {
+        printf(" my_rank = %d, globalMaxDelta= %f, iterations = %d \n",topo.rank,globalMaxDelta,iter );
+        return true;
+    }
+    maxDelta =-10;
+    return false;
+}
+
+void printAverages(int iter,double **old,topology topo,int targetIter )
+{
+    int i,j;
+    if(targetIter == iter)
+        {
+            double sum = 0;
+            double totalSum;
+            for (i=1;i<topo.Mp+1;i++)
+            {
+                for (j=1;j<topo.Np+1;j++)
+                {
+                    sum=+old[i][j];
+                }
+            }
+            //printf("p%d sum=%f\n",topo.rank,sum);
+            MPI_Reduce(&sum,&totalSum,1,MPI_DOUBLE,MPI_SUM,0,MPI_COMM_WORLD);
+            if(topo.rank == 0)
+            {
+                int worldSize;
+                MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
+                printf("average value of pixels is =%f\n",(totalSum/(double)worldSize));
+            }
+        }
+}
+ 
 void halloSwapsVertical(double** old,topology topo)
 {
     MPI_Request request,request2,request3,request4;
