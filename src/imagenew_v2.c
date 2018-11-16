@@ -36,6 +36,7 @@ void gather(topology topo,double** masterbuf,double** buf,MPI_Datatype vectorMpx
 void createDataTypes(topology topo,MPI_Datatype* vectorMpxNp,MPI_Datatype* masterbufType,int N);
 void computeBoundaryConditions(topology topo,int *dims,double **old,int N);
 void halloSwapsHorizontal(double** old,topology topo);
+void halloSwapsVertical(double** old,topology topo);
 
 int main (void)
 {
@@ -314,8 +315,7 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
     int i,j,iter;
     int Np = topo.Np;
     int Mp = topo.Mp;
-    MPI_Request request,request2,request3,request4;
-    MPI_Status status;
+    
     bool isSerialExecution = (dims[0] == 1)&& (dims[1]==1);
     bool isVerticalDecomposition = (dims[1] ==1 );
     
@@ -347,18 +347,8 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
 	}
         
         /* Implement periodic boundary conditions on bottom and top sides */
-        
         //vertical
-        MPI_Isend(&old[Mp][1],Np,MPI_DOUBLE,topo.right,0,MPI_COMM_WORLD,&request);
-        MPI_Isend(&old[1][1],Np,MPI_DOUBLE,topo.left,0,MPI_COMM_WORLD,&request2);
-        MPI_Irecv(&old[0][1],Np,MPI_DOUBLE,topo.left,0,MPI_COMM_WORLD,&request3);
-        MPI_Irecv(&old[Mp+1][1],Np,MPI_DOUBLE,topo.right,0,MPI_COMM_WORLD,&request4);
-      
-        MPI_Wait(&request,&status);
-        MPI_Wait(&request2,&status);
-        MPI_Wait(&request3,&status);
-        MPI_Wait(&request4,&status);
-        
+        halloSwapsVertical(old,topo);
         
         //horizontal
         halloSwapsHorizontal(old,topo);
@@ -366,7 +356,6 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
         
         if(isSerialExecution || isVerticalDecomposition)
         {
-            
             for (i=1; i < Mp+1; i++)
             {
                 old[i][0]   = old[i][Np];
@@ -403,6 +392,23 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
     
     
 }
+void halloSwapsVertical(double** old,topology topo)
+{
+    MPI_Request request,request2,request3,request4;
+    MPI_Status status;
+    int Np = topo.Np;
+    int Mp = topo.Mp;
+    
+    MPI_Isend(&old[topo.Mp][1],Np,MPI_DOUBLE,topo.right,0,MPI_COMM_WORLD,&request);
+    MPI_Isend(&old[1][1],Np,MPI_DOUBLE,topo.left,0,MPI_COMM_WORLD,&request2);
+    MPI_Irecv(&old[0][1],Np,MPI_DOUBLE,topo.left,0,MPI_COMM_WORLD,&request3);
+    MPI_Irecv(&old[Mp+1][1],Np,MPI_DOUBLE,topo.right,0,MPI_COMM_WORLD,&request4);
+    
+    MPI_Wait(&request,&status);
+    MPI_Wait(&request2,&status);
+    MPI_Wait(&request3,&status);
+    MPI_Wait(&request4,&status);
+}
 
 void halloSwapsHorizontal(double** old,topology topo)
 {
@@ -428,15 +434,14 @@ void halloSwapsHorizontal(double** old,topology topo)
     
     MPI_Request request,request2,request3,request4;
     MPI_Status status;
+    
     MPI_Isend(&firstRow[0],Mp,MPI_DOUBLE,topo.down,0,MPI_COMM_WORLD,&request);
     MPI_Isend(&lastRow[0],Mp,MPI_DOUBLE,topo.up,0,MPI_COMM_WORLD,&request2);
-    MPI_Wait(&request,&status);
-    MPI_Wait(&request2,&status);
-    
-    
     MPI_Irecv(&firstRow[0],Mp,MPI_DOUBLE,topo.up,0,MPI_COMM_WORLD,&request4);
     MPI_Irecv(&lastRow[0],Mp,MPI_DOUBLE,topo.down,0,MPI_COMM_WORLD,&request3);
-    
+
+    MPI_Wait(&request,&status);
+    MPI_Wait(&request2,&status);    
     MPI_Wait(&request3,&status);
     MPI_Wait(&request4,&status);
     
@@ -451,12 +456,6 @@ void halloSwapsHorizontal(double** old,topology topo)
         old[i+1][0] = lastRow[i];
     }
     
-    
-}
-
-
-void haloSwaps()
-{
     
 }
 
