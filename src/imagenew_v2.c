@@ -24,69 +24,66 @@ typedef struct topology
     int left;
     int up;
     int down;
+    int coords[2];
 }topology;
 
 double boundaryval(int i, int m);
 void imageRecontruction(int Mp,int Np,double** edge,double** buf,double** old,double** new);
 bool isNumberPrime(int num);
-void initialization(topology* topo,int worldSize,int M,int N);
+void initialization(topology* topo,int worldSize,int M,int N,MPI_Comm* comm2d);
+void scatter(double** masterbuf,double** buf,topology topo,int worldSize,char* input,MPI_Comm comm2d,MPI_Datatype masterbufType,MPI_Datatype vectorMpxNp,int M,int N);
+void gather(topology topo,double** masterbuf,double** buf,MPI_Datatype vectorMpxNp,MPI_Datatype masterbufType,int M,int N,MPI_Comm comm2d,char** output,int worldSize);
+void createDataTypes(topology topo,MPI_Datatype* vectorMpxNp,MPI_Datatype* masterbufType,int N);
 
 int main (void)
 {
-    
+    MPI_Request request;
+    MPI_Status status;
+    MPI_Comm comm2d;
     int worldSize;
+    topology topo;
+    int i,j;
+    int M,N;
+    char *input,*output;
+    input = "./images/input/edgenew192x128.pgm";
+    output="./images/output/imagenew192x128.pgm";
+    
     MPI_Init(NULL,NULL);        
     MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
     
     
-    int M,N;
-    char *filename;
-    filename = "./images/input/edgenew192x128.pgm";
-    pgmsize(filename,&M,&N);
+    pgmsize(input,&M,&N);
     
-    topology topo;
     
-    int Mp =M;
-    int Np=N;
-    initialization(&topo,worldSize,M,N);
-    printf("p%d left=%d,right=%d up=%d down=%d \n",topo.rank,topo.left,topo.right,topo.up,topo.down);
-    printf("p%d Mp=%d, Np=%d\n",topo.rank,topo.Mp,topo.Np);
-    printf("M=%d,N=%d\n",M,N);
     
+    initialization(&topo,worldSize,M,N,&comm2d);
+    //printf("p%d left=%d,right=%d up=%d down=%d \n",topo.rank,topo.left,topo.right,topo.up,topo.down);
+    //printf("p%d Mp=%d, Np=%d\n",topo.rank,topo.Mp,topo.Np);
+    //printf("M=%d,N=%d\n",M,N);
+    //printf("p%d (%d,%d)\n",topo.rank,topo.coords[0],topo.coords[1]);
     
     double **old,**new,**edge;
     double **buf,**masterbuf;
     masterbuf = (double**) arralloc(sizeof(double),2,M,N);
-    old = (double**) arralloc(sizeof(double),2,Mp+2,Np+2);
-    new = (double**) arralloc(sizeof(double),2,Mp+2,Np+2);
-    edge = (double**) arralloc(sizeof(double),2,Mp+2,Np+2);
-    buf = (double**) arralloc(sizeof(double),2,Mp,Np);
+    old = (double**) arralloc(sizeof(double),2,topo.Mp+2,topo.Np+2);
+    new = (double**) arralloc(sizeof(double),2,topo.Mp+2,topo.Np+2);
+    edge = (double**) arralloc(sizeof(double),2,topo.Mp+2,topo.Np+2);
+    buf = (double**) arralloc(sizeof(double),2,topo.Mp,topo.Np);
+    
+    MPI_Datatype vectorMpxNp;    
+    MPI_Datatype masterbufType;    
     
     
-   /* 
-    printf("Processing %d x %d image\n", M, N);
-    printf("Number of iterations = %d\n", MAXITER);
+    createDataTypes(topo,&vectorMpxNp,&masterbufType, N);
     
-    printf("\nReading <%s>\n", filename);
-    pgmread(filename, &buf[0][0], M, N);
-    printf("\n");
+    scatter( masterbuf, buf, topo, worldSize, input, comm2d, masterbufType,vectorMpxNp ,M, N);
     
+    imageRecontruction( topo.Mp, topo.Np, edge, buf, old, new);
     
-    imageRecontruction(Mp,Np,edge,buf,old,new);
+    gather( topo, masterbuf,buf,vectorMpxNp,masterbufType, M, N, comm2d,output,worldSize);
     
-    int i;
-    for(i=1; i < 50;i++)
-    {
-        if(isNumberPrime(i))
-        {
-            printf("%d,",i);
-        }
-    }
+    //pgmwrite(output, &masterbuf[0][0], M, N);
     
-    filename="./images/output/imagenew192x128.pgm";
-    printf("\nWriting <%s>\n", filename); 
-    pgmwrite(filename, &buf[0][0], M, N);
-    */
     MPI_Finalize();
     
     free(masterbuf);
@@ -95,9 +92,108 @@ int main (void)
     free(edge);
     free(buf);
     return 0;
-    
-    
 } 
+
+void createDataTypes(topology topo,MPI_Datatype* vectorMpxNp,MPI_Datatype* masterbufType,int N)
+{
+    int count =topo.Mp;          
+    int blocklength=topo.Np;
+    int stride = topo.Np;
+    MPI_Type_vector(count, blocklength, stride, MPI_DOUBLE, vectorMpxNp);
+    MPI_Type_commit(vectorMpxNp);
+    
+    
+    int count_1 =topo.Mp;          
+    int blocklength_1=topo.Np;
+    int stride_1 = N;
+    MPI_Type_vector(count_1, blocklength_1, stride_1, MPI_DOUBLE, masterbufType);
+    MPI_Type_commit(masterbufType);
+    
+}
+
+void gather(topology topo,double** masterbuf,double** buf,MPI_Datatype vectorMpxNp,MPI_Datatype masterbufType,int M,int N,MPI_Comm comm2d,char** output,int worldSize)
+{
+    MPI_Request request;
+    MPI_Status status;
+    int i,j;
+     if(topo.rank!=0)
+    {
+        
+        MPI_Isend(&buf[0][0],1,vectorMpxNp,0,0,MPI_COMM_WORLD,&request);
+        MPI_Wait(&request,&status);
+    }
+    
+    
+    if(topo.rank==0)
+    {
+        for(i=0;i<M;i++)
+            for(j=0;j<N;j++)
+                masterbuf[i][j]=0;                  //clean masterbuf for testing
+        
+        int coords[2];
+        for(i=1;i<worldSize;i++)
+        {
+            MPI_Cart_coords(comm2d, i, 2, coords);
+            int startY = coords[1]*topo.Np;
+            int startX = coords[0]*topo.Mp;
+            //printf("p %d, coords[0]=%d,coords[1]=%d ,startY=%d, startX=%d\n",i,coords[0],coords[1],startY,startX);                             
+            
+            MPI_Irecv(&masterbuf[startX][startY],1,masterbufType,i,0,MPI_COMM_WORLD,&request);
+            MPI_Wait(&request,&status);
+        }
+        
+        for(i=0;i<topo.Mp;i++)
+            for(j=0;j<topo.Np;j++)
+                masterbuf[i][j] = buf[i][j];
+        
+        pgmwrite(output, &masterbuf[0][0], M, N);
+    }
+}
+
+
+void scatter(double** masterbuf,double** buf,topology topo,int worldSize,char* input,MPI_Comm comm2d,MPI_Datatype masterbufType,MPI_Datatype vectorMpxNp,int M,int N)
+{
+    int i,j;
+    MPI_Request request;
+    MPI_Status status;
+    if(topo.rank == 0)
+    {
+        //printf("---master\n");
+        //printf("Processing %d x %d image\n", M, N);
+        //printf("Number of iterations = %d\n", MAXITER);
+        
+        printf("\nReading <%s>\n", input);
+        pgmread(input, &masterbuf[0][0], M, N);
+        
+        
+        int coords[2];
+        
+        for(i=1; i < worldSize; i++)
+        {
+            MPI_Cart_coords(comm2d, i, 2, coords);
+            int startY = coords[1]*topo.Np;
+            int startX = coords[0]*topo.Mp;
+            //printf("p %d, startY=%d, startX=%d\n",i,startY,startX);
+            
+            MPI_Isend(&masterbuf[ startX][startY], 1, masterbufType, i, 0, MPI_COMM_WORLD,&request);
+            
+            MPI_Wait(&request,&status);
+        }
+        for(i=0;i<topo.Mp;i++)
+            for(j=0;j<topo.Np;j++)
+                buf[i][j] = masterbuf[i][j];
+    }
+    
+    
+    
+    if(topo.rank !=0)
+    {
+        MPI_Irecv(&buf[0][0], 1, vectorMpxNp, 0, 0, MPI_COMM_WORLD, &request); 
+        MPI_Wait(&request,&status);
+        
+    }
+    
+}
 
 bool isNumberPrime(int num)
 {
@@ -117,7 +213,7 @@ bool isNumberPrime(int num)
     return true;
 }
 
-void initialization(topology* topo,int worldSize,int M,int N)
+void initialization(topology* topo,int worldSize,int M,int N,MPI_Comm* comm2d)
 {
     
     int disp;
@@ -126,7 +222,7 @@ void initialization(topology* topo,int worldSize,int M,int N)
     int period[ndims];
     int reorder;
     MPI_Comm comm;
-    MPI_Comm comm2d;
+
     comm  = MPI_COMM_WORLD;          
     reorder = false;
     disp = 1;                   
@@ -164,10 +260,10 @@ void initialization(topology* topo,int worldSize,int M,int N)
             exit(1);
         }
         MPI_Dims_create(worldSize,ndims,dims);
-        MPI_Cart_create(comm,ndims,dims,period,reorder,&comm2d);
-        MPI_Cart_shift(comm2d,0,disp,&(topo->left),&(topo->right));
-        MPI_Cart_shift(comm2d,1,disp,&(topo->down),&(topo->up));
-        MPI_Comm_rank(comm2d,&(topo->rank));
+        MPI_Cart_create(comm,ndims,dims,period,reorder,comm2d);
+        MPI_Cart_shift(*comm2d,0,disp,&(topo->left),&(topo->right));
+        MPI_Cart_shift(*comm2d,1,disp,&(topo->down),&(topo->up));
+        MPI_Comm_rank(*comm2d,&(topo->rank));
         
     }
     else
@@ -182,10 +278,10 @@ void initialization(topology* topo,int worldSize,int M,int N)
         //TODO:find a smart way for assignment of dims[0] and dims[1]
         
         MPI_Dims_create(worldSize,ndims,dims);
-        MPI_Cart_create(comm,ndims,dims,period,reorder,&comm2d);
-        MPI_Cart_shift(comm2d,0,disp,&(topo->left),&(topo->right));
-        MPI_Cart_shift(comm2d,1,disp,&(topo->down),&(topo->up));
-        MPI_Comm_rank(comm2d,&(topo->rank));
+        MPI_Cart_create(comm,ndims,dims,period,reorder,comm2d);
+        MPI_Cart_shift(*comm2d,0,disp,&(topo->left),&(topo->right));
+        MPI_Cart_shift(*comm2d,1,disp,&(topo->down),&(topo->up));
+        MPI_Comm_rank(*comm2d,&(topo->rank));
         printf("2d (%dx%d) \n",dims[0],dims[1]);
         bool isTopologyDivisible = ( (N%dims[0]) == 0) && ( (M % dims[1]) ==0 );
         if(  isTopologyDivisible   )
@@ -198,11 +294,11 @@ void initialization(topology* topo,int worldSize,int M,int N)
             printf("Combination of image and thread number is not supported.\n");
             MPI_Finalize();
             exit(1);
-        }
-        
-        
+        } 
         
     }
+    MPI_Cart_coords(*comm2d, topo->rank, 2, topo->coords);
+    
 }
 
 
@@ -290,6 +386,92 @@ void imageRecontruction(int Mp,int Np,double** edge,double** buf,double** old,do
             buf[i-1][j-1]=old[i][j];
 	}
     }
+    
+    
+}
+
+
+void test()
+{
+    /*int rank, size, i;
+    MPI_Datatype type;
+    int buffer[24];
+    MPI_Status status;
+    
+    
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+    if (size != 2)
+    {
+        printf("Please run with 2 processes.\n");
+        MPI_Finalize();
+    }
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    
+    
+    
+    int count = 4;
+    int blocklength=2;
+    int stride = 6;
+    MPI_Type_vector(count, blocklength, stride, MPI_INT, &type);
+    MPI_Type_commit(&type);
+    
+    if (rank == 0)
+    {
+        for (i=0; i<24; i++)
+            buffer[i] = i;
+        MPI_Send(buffer, 1, type, 1, 123, MPI_COMM_WORLD);
+        
+    }
+    
+    if (rank == 1)
+    {
+        for (i=0; i<24; i++)
+            buffer[i] = -1;
+        MPI_Recv(buffer, 1, type, 0, 123, MPI_COMM_WORLD, &status);
+        for (i=0; i<24; i++)
+            printf("buffer[%d] = %d\n", i, buffer[i]);
+        fflush(stdout);
+    }*/
+     
+    int N=3;
+    int M=2;
+    int buffer[2][3] = {{1,2,3},{4,5,6}};
+    int count = N;          
+    int blocklength=1;
+    int stride = N;
+    int i,j;
+    MPI_Datatype type;
+    MPI_Status status;
+    int rank;
+    
+    
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Type_vector(count, blocklength, stride, MPI_INT, &type);
+    MPI_Type_commit(&type);
+    
+    if (rank == 0)
+    {
+        
+        
+        for(i=0;i<M;i++)
+            for(j=0;j<N;j++)
+                printf(" %d \n",buffer[i][j]);
+        printf("\n");
+        MPI_Send(buffer, 1, type, 1, 123, MPI_COMM_WORLD);
+        
+    }
+    
+    if (rank == 1)
+    {
+        int buffer2[3][3] = {{0,0,0},{0,0,0}};
+        MPI_Recv(buffer2, 1, type, 0, 123, MPI_COMM_WORLD, &status);
+        
+        for(i=0;i<M;i++)
+            for(j=0;j<N;j++)
+                printf(" %d \n",buffer2[i][j]);
+        fflush(stdout);
+    }
+    
     
     
 }
