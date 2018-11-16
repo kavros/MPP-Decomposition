@@ -35,3 +35,9 @@ build/%.o: src/%.c
 
 clean:
 	rm -f $(OBJ) $(EXE) 
+
+run: 
+	mpirun -n 4 ./build/image
+
+qsub:
+	qsub scripts/image.pbs
