@@ -7,6 +7,7 @@
 #include <mpi.h>
 #include <stdbool.h> 
 #include <assert.h>
+#include <string.h>
 #define MAXITER   1500
 #define PRINTFREQ  200
 
@@ -38,38 +39,40 @@ void createDataTypes(topology topo,int N);
 void computeBoundaryConditions(topology topo,int *dims,double **old,int N);
 void halloSwapsHorizontal(double** old,topology topo);
 void halloSwapsVertical(double** old,topology topo);
-void printAverages(int iter,double **old,topology topo,int targetIter );
+void printAverages(int iter,double **old,topology topo );
 bool isTheLastIteration(topology topo,double maxDelta,int iter);
 void loadImage(topology topo,double** masterbuf,char* input,int M,int N);
 void allocations(topology topo,int M,int N,double ***masterbuf,double ***buf,double ***old,double ***new, double ***edge);
 void deallocations(double **masterbuf,double **buf,double **old,double **new, double **edge);
 void cmdLineParser(int argc, char *argv[]);
+void setInputOuptut(char** input,char** output);
 
+void calculateMaxDelta(int i,int j,double** new,double** old,double* maxDelta);
 MPI_Datatype vectorMpxNp;    
 MPI_Datatype vectorMpxNP_N;    
 MPI_Datatype vectorMpx1;
 
 
-struct arg_lit *help;
-struct arg_int *delta, *targetIter;
-struct arg_file *input, *output;
-struct arg_end *end;
+char *input,*output;
+bool isDeltaActivated = false;
+int targetIter = MAXITER;
 
 int main (int argc, char *argv[])
 {
+    input = "./data/input/edgenew192x128.pgm";
+    output="./data/output/imagenew192x128.pgm";
+    
     cmdLineParser(argc,argv);
-
+    
     MPI_Comm comm2d;
     int worldSize;
     topology topo;
     int M,N;
-    char *input,*output;
+    //char *input,*output;
     double **old,**new,**edge,**buf,**masterbuf;
     int dims[2];
     double start,end;
     
-    input = "./data/input/edgenew192x128.pgm";
-    output="./data/output/imagenew192x128.pgm";
     
     MPI_Init(NULL,NULL);        
     MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
@@ -81,8 +84,8 @@ int main (int argc, char *argv[])
     //printf("p%d left=%d,right=%d up=%d down=%d \n",topo.rank,topo.left,topo.right,topo.up,topo.down);
     //printf("p%d Mp=%d, Np=%d\n",topo.rank,topo.Mp,topo.Np);
     //printf("M=%d,N=%d\n",M,N);
-    printf("p%d (%d,%d)\n",topo.rank,topo.coords[0],topo.coords[1]);
-
+    //printf("p%d (%d,%d)\n",topo.rank,topo.coords[0],topo.coords[1]);
+    //printf("is delta activated = %d\n",isDeltaActivated);
    
     allocations( topo, M, N,&masterbuf,&buf,&old,&new,&edge);
     
@@ -107,17 +110,23 @@ int main (int argc, char *argv[])
     return 0;
 } 
 
+
 void cmdLineParser(int argc, char *argv[])
 {
-    void *argtable[] = {
+    struct arg_lit *help;
+    struct arg_int *deltaArg, *targetIterArg;
+    struct arg_file *inputArg, *outputArg;
+    struct arg_end *end;
+
+   void* argtable[] = {
         help    = arg_litn("h", "help", 0, 1, "display this help and exit"),
-        delta   = arg_intn("d","delta","0 or 1",0,1,"activates delta"),
-        targetIter = arg_intn("t","target"," must be less than 1500",0,1,"select when to print average value"),
-        input   = arg_filen("i", NULL, "<file>", 0, 100, "input file"),
-        output  = arg_filen("o", NULL, "<file>", 0, 100, "output file"),
+        deltaArg   = arg_intn("d","delta"," please set -d 1 to activate delta termination",0,1,"activates delta"),
+        targetIterArg = arg_intn("t","target"," must be less than 1500",0,1,"select when to print average value"),
+        inputArg   = arg_filen("i", NULL, "<file>", 0, 100, "input file"),
+        outputArg  = arg_filen("o", NULL, "<file>", 0, 100, "output file"),
         end     = arg_end(20),
     };
-     
+    
 
     char progname[] = "coursework";
     
@@ -132,7 +141,7 @@ void cmdLineParser(int argc, char *argv[])
         printf("Demonstrate command-line parsing in argtable3.\n\n");
         arg_print_glossary(stdout, argtable, "  %-25s %s\n");
 
-        goto exit;
+        
     }
 
     /* If the parser returned any errors then display them and exit */
@@ -142,31 +151,29 @@ void cmdLineParser(int argc, char *argv[])
         arg_print_errors(stdout, end, progname);
         printf("Try '%s --help' for more information.\n", progname);
 
-        goto exit;
+        
     }
-    if(input->count > 0 )
+    if(inputArg->count > 0 )
     {
-        printf("input= %s\n",input->filename[0]);
+        input = (char*)inputArg->filename[0];
+        //printf("input= %s\n",inputArg->filename[0]);
     }
-    if (output->count > 0 )
+    if (outputArg->count > 0 )
     {
-        printf("output= %s\n",output->filename[0]);
+        output =(char*) outputArg->filename[0];
+        //printf("output= %s\n",outputArg->filename[0]);
     }
-    if (targetIter->count > 0 )
+    if (targetIterArg->count > 0 )
     {
-        printf("targetIter= %d\n",*(targetIter->ival));
+        targetIter = *(targetIterArg->ival);
+        //printf("targetIter= %d\n",*(targetIterArg->ival));
     }
-    if(delta->count > 0 )
+    if(deltaArg->count > 0 )
     {
-        printf("delta= %d\n",*(delta->ival));
+        isDeltaActivated = *(deltaArg->ival);
+        //printf("delta= %d\n",*(deltaArg->ival));
     }
-    
-    
-exit:
-    /* deallocate each non-null entry in argtable[] */
-    arg_freetable(argtable, sizeof(argtable) / sizeof(argtable[0]));
-    return;
-    
+    //arg_freetable(argtable, sizeof(argtable) / sizeof(argtable[0]));
 }
 
 
@@ -187,6 +194,7 @@ void deallocations(double **masterbuf,double **buf,double **old,double **new, do
     free(new);
     free(edge);
     free(buf);
+    
 }
 
 void createDataTypes(topology topo,int N)
@@ -436,9 +444,9 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
     int i,j,iter;
     int Np = topo.Np;
     int Mp = topo.Mp;
-    int targetIter=1000;
-    double delta,globalMaxDelta,maxDelta;
-    delta=globalMaxDelta=maxDelta=-1;
+    
+    double maxDelta=-1;     //set maxDelta to -1 in order to take the value of delta at the first iteration 
+    
     
     bool isSerialExecution = (dims[0] == 1)&& (dims[1]==1);
     bool isVerticalDecomposition = (dims[1] ==1 );
@@ -493,15 +501,11 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
 	    {
                 new[i][j]=0.25*(old[i-1][j]+old[i+1][j]+old[i][j-1]+old[i][j+1]
                         - edge[i][j]);
-	    }
-            delta = abs(new[i][j] - old[i][j]);
-            if(maxDelta < delta)
-            {
-                maxDelta  = delta;
+                calculateMaxDelta(i,j,new,old,&maxDelta);
             }
-
+            
 	}
-	
+	//printf("maxDelta = %f\n",maxDelta);
         for (i=1;i<Mp+1;i++)
 	{
             for (j=1;j<Np+1;j++)
@@ -511,15 +515,15 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
 	}
         
         //print averages at specified iteration number
-        printAverages(iter,old,topo,targetIter );
+        printAverages(iter,old,topo);
         
         //terminate based on delta
-        /*if( isTheLastIteration(topo,maxDelta,iter) ) 
+        if( isTheLastIteration(topo,maxDelta,iter) ) 
         {
-            //break;
-        }*/
+            break;
+        }
             
-       
+        maxDelta = -1; //set maxDelta to -1 in order to take the value of delta at the first iteration 
     }
     
     //printf("\nFinished %d iterations\n", iter-1);
@@ -533,27 +537,41 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
     }
     
     
+} 
+
+void calculateMaxDelta(int i,int j,double** new,double** old,double* maxDelta)
+{   
+    if(isDeltaActivated)
+    {
+        
+        double delta = fabs( (new[i][j] - old[i][j]) );
+        if( (*maxDelta) < delta)
+        {
+            ///printf("delta = %f\n",*maxDelta);
+            *maxDelta  = delta;
+        }
+    }
 }
 
 bool isTheLastIteration(topology topo,double maxDelta,int iter)
 {
+    if (isDeltaActivated == false)
+    {
+        return false;
+    }
     double globalMaxDelta = -1.0f;
     MPI_Allreduce(&maxDelta,&globalMaxDelta,1,MPI_DOUBLE,MPI_MAX,MPI_COMM_WORLD);
-    /*if(topo.rank==0)
-    {
-        printf("p%d  maxDelta=%f globalMaxDelta=%f \n",topo.rank,maxDelta,globalMaxDelta);
-    }*/
     
     if(globalMaxDelta < 0.1 )
     {
         printf(" my_rank = %d, globalMaxDelta= %f, iterations = %d \n",topo.rank,globalMaxDelta,iter );
         return true;
     }
-    maxDelta =-10;
     return false;
+    
 }
 
-void printAverages(int iter,double **old,topology topo,int targetIter )
+void printAverages(int iter,double **old,topology topo )
 {
     int i,j;
     if(targetIter == iter)
@@ -573,7 +591,7 @@ void printAverages(int iter,double **old,topology topo,int targetIter )
             {
                 int worldSize;
                 MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
-                printf("average value of pixels is =%f\n",(totalSum/(double)worldSize));
+                printf("average value of pixels  is =%f, iteration=%d \n",(totalSum/(double)worldSize),targetIter);
             }
         }
 }
