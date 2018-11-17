@@ -31,14 +31,19 @@ double boundaryval(int i, int m);
 void imageRecontruction(topology topo,double** edge,double** buf,double** old,double** new,int N,int* dims);
 bool isNumberPrime(int num);
 void initialization(topology* topo,int worldSize,int M,int N,MPI_Comm* comm2d,int* dims);
-void scatter(double** masterbuf,double** buf,topology topo,int worldSize,char* input,MPI_Comm comm2d,MPI_Datatype masterbufType,MPI_Datatype vectorMpxNp,int M,int N);
-void gather(topology topo,double** masterbuf,double** buf,MPI_Datatype vectorMpxNp,MPI_Datatype masterbufType,int M,int N,MPI_Comm comm2d,char* output,int worldSize);
-void createDataTypes(topology topo,MPI_Datatype* vectorMpxNp,MPI_Datatype* masterbufType,int N);
+void scatter(double** masterbuf,double** buf,topology topo,int worldSize,char* input,MPI_Comm comm2d,int M,int N);
+void gather(topology topo,double** masterbuf,double** buf,int M,int N,MPI_Comm comm2d,char* output,int worldSize);
+void createDataTypes(topology topo,int N);
 void computeBoundaryConditions(topology topo,int *dims,double **old,int N);
 void halloSwapsHorizontal(double** old,topology topo);
 void halloSwapsVertical(double** old,topology topo);
 void printAverages(int iter,double **old,topology topo,int targetIter );
 bool isTheLastIteration(topology topo,double maxDelta,int iter);
+
+MPI_Datatype vectorMpxNp;    
+MPI_Datatype masterbufType;    
+MPI_Datatype vectorMpx1;
+
 int main (void)
 {
     
@@ -71,17 +76,16 @@ int main (void)
     edge = (double**) arralloc(sizeof(double),2,topo.Mp+2,topo.Np+2);
     buf = (double**) arralloc(sizeof(double),2,topo.Mp,topo.Np);
     
-    MPI_Datatype vectorMpxNp;    
-    MPI_Datatype masterbufType;    
+
+
     
+    createDataTypes(topo, N);
     
-    createDataTypes(topo,&vectorMpxNp,&masterbufType, N);
-    
-    scatter( masterbuf, buf, topo, worldSize, input, comm2d, masterbufType,vectorMpxNp ,M, N);
+    scatter( masterbuf, buf, topo, worldSize, input, comm2d,M, N);
     
     imageRecontruction( topo, edge, buf, old, new,N,dims);
     
-    gather( topo, masterbuf,buf,vectorMpxNp,masterbufType, M, N, comm2d,output,worldSize);
+    gather( topo, masterbuf,buf, M, N, comm2d,output,worldSize);
     
     MPI_Finalize();
     
@@ -93,24 +97,31 @@ int main (void)
     return 0;
 } 
 
-void createDataTypes(topology topo,MPI_Datatype* vectorMpxNp,MPI_Datatype* masterbufType,int N)
+void createDataTypes(topology topo,int N)
 {
     int count =topo.Mp;          
     int blocklength=topo.Np;
     int stride = topo.Np;
-    MPI_Type_vector(count, blocklength, stride, MPI_DOUBLE, vectorMpxNp);
-    MPI_Type_commit(vectorMpxNp);
+    MPI_Type_vector(count, blocklength, stride, MPI_DOUBLE, &vectorMpxNp);
+    MPI_Type_commit(&vectorMpxNp);
     
     
     int count_1 =topo.Mp;          
     int blocklength_1=topo.Np;
     int stride_1 = N;
-    MPI_Type_vector(count_1, blocklength_1, stride_1, MPI_DOUBLE, masterbufType);
-    MPI_Type_commit(masterbufType);
+    MPI_Type_vector(count_1, blocklength_1, stride_1, MPI_DOUBLE, &masterbufType);
+    MPI_Type_commit(&masterbufType);
+    
+    
+    count = topo.Mp;
+    blocklength = 1;
+    stride = topo.Np+2;
+    MPI_Type_vector(count, blocklength, stride, MPI_DOUBLE, &vectorMpx1);
+    MPI_Type_commit(&vectorMpx1);
     
 }
 
-void gather(topology topo,double** masterbuf,double** buf,MPI_Datatype vectorMpxNp,MPI_Datatype masterbufType,int M,int N,MPI_Comm comm2d,char* output,int worldSize)
+void gather(topology topo,double** masterbuf,double** buf,int M,int N,MPI_Comm comm2d,char* output,int worldSize)
 {
     MPI_Request request;
     MPI_Status status;
@@ -150,7 +161,7 @@ void gather(topology topo,double** masterbuf,double** buf,MPI_Datatype vectorMpx
 }
 
 
-void scatter(double** masterbuf,double** buf,topology topo,int worldSize,char* input,MPI_Comm comm2d,MPI_Datatype masterbufType,MPI_Datatype vectorMpxNp,int M,int N)
+void scatter(double** masterbuf,double** buf,topology topo,int worldSize,char* input,MPI_Comm comm2d,int M,int N)
 {
     int i,j;
     MPI_Request request;
@@ -481,56 +492,20 @@ void halloSwapsHorizontal(double** old,topology topo)
 {
     
     int Np = topo.Np;
-    int Mp = topo.Mp;
-    
-    int i;
-    double lastRow[Mp];
-    double firstRow[Mp];
-
-    MPI_Datatype vectorMpxNp;
-    int count = topo.Mp;
-    int blocklength = topo.Np;
-    int stride = topo.Np;
-    MPI_Type_vector(count, blocklength, stride, MPI_DOUBLE, &vectorMpxNp);
-    MPI_Type_commit(&vectorMpxNp);
-    
-    for(i=0; i < Mp; i++)
-    {
-        lastRow[i] = old[i+1][Np];
-    }
-    
-    for(i=0; i < Mp; i++)
-    {
-        firstRow[i] = old[i+1][1];
-    }
-    
+   
     MPI_Request request,request2,request3,request4;
     MPI_Status status;
     
-    //MPI_Isend(&old[1][1],1,vectorMpxNp,topo.down,0,MPI_COMM_WORLD,&request);
-    MPI_Isend(&firstRow[0],Mp,MPI_DOUBLE,topo.down,0,MPI_COMM_WORLD,&request);
-    MPI_Isend(&lastRow[0],Mp,MPI_DOUBLE,topo.up,0,MPI_COMM_WORLD,&request2);
+    MPI_Isend(&old[1][1],1,vectorMpx1,topo.down,0,MPI_COMM_WORLD,&request);
+    MPI_Isend(&old[1][Np],1,vectorMpx1,topo.up,0,MPI_COMM_WORLD,&request2);
+    MPI_Irecv(&old[1][Np+1],1,vectorMpx1,topo.up,0,MPI_COMM_WORLD,&request4);
+    MPI_Irecv(&old[1][0],1,vectorMpx1,topo.down,0,MPI_COMM_WORLD,&request3);
     
-     MPI_Irecv(&firstRow[0],Mp,MPI_DOUBLE,topo.up,0,MPI_COMM_WORLD,&request4);
-    //MPI_Irecv(&old[1][Np+1],1,vectorMpxNp,topo.up,0,MPI_COMM_WORLD,&request4);
-    MPI_Irecv(&lastRow[0],Mp,MPI_DOUBLE,topo.down,0,MPI_COMM_WORLD,&request3);
-
     MPI_Wait(&request,&status);
     MPI_Wait(&request2,&status);    
     MPI_Wait(&request3,&status);
     MPI_Wait(&request4,&status);
     
-    
-    for(i=0; i < Mp; i++)
-    {
-        old[i+1][Np+1] = firstRow[i];
-    }
-    
-    
-    for(i=0; i < Mp; i++)
-    {
-        old[i+1][0] = lastRow[i];
-    }
     
     
 }
