@@ -20,7 +20,7 @@ OBJ=\
 	build/pgmio.o\
 	build/arralloc.o
 
-nThreads=1
+n=1
 #
 # No need to edit below this line
 #
@@ -38,7 +38,7 @@ clean:
 	rm -f $(OBJ) $(EXE) 
 
 run: 
-	mpirun -n ${nThreads} ./build/image
+	mpirun -n ${n} ./build/image
 
 qsub:
 	qsub scripts/image.pbs
