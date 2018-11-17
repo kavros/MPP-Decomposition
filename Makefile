@@ -20,6 +20,7 @@ OBJ=\
 	build/pgmio.o\
 	build/arralloc.o
 
+nThreads=1
 #
 # No need to edit below this line
 #
