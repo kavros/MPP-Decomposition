@@ -37,7 +37,10 @@ clean:
 	rm -f $(OBJ) $(EXE) 
 
 run: 
-	mpirun -n 4 ./build/image
+	mpirun -n ${nThreads} ./build/image
 
 qsub:
 	qsub scripts/image.pbs
+
+validation:
+	diff data/output/imagenew192x128_expectedOutput.pgm  data/output/imagenew192x128.pgm
