@@ -1,7 +1,9 @@
 MF=	Makefile
 
 CC=	./mpich/bin/mpicc
-CFLAGS= -O3 -g -Wall
+CFLAGS+=-I./mpich/include -O3 -g -Wall
+LDFLAGS+=-L./mpich/lib -Wl,-rpath,./mpich/lib
+LDLIBS+=-lmpi
 
 LFLAGS=	-lm 
 
@@ -29,7 +31,7 @@ nThreads=1
 .SUFFIXES: .c .o
 
 $(EXE):$(OBJ)
-	$(CC) $(CFLAGS) -o $@ $(OBJ) $(LFLAGS)
+	$(CC) $(CFLAGS) -o $@ $(OBJ) $(LFLAGS) $(LDFLAGS) $(LDLIBS)
 
 build/%.o: src/%.c 
 	$(CC) $(CFLAGS) -c $< -o $@
