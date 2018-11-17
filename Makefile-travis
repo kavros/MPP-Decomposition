@@ -12,15 +12,18 @@ EXE=	build/image
 SRC= \
 	src/imagenew_v2.c \
 	src/pgmio.c\
-	src/arralloc.c
+	src/arralloc.c\
+	src/argtable3.c
 
 INC=\
 	include/pgmio.h\
-	include/arralloc.h
+	include/arralloc.h\
+	include/argtable3.h
 OBJ=\
 	build/imagenew_v2.o\
 	build/pgmio.o\
-	build/arralloc.o
+	build/arralloc.o\
+	build/argtable3.o
 
 nThreads=1
 #
