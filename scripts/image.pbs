@@ -19,7 +19,7 @@
 
 #PBS -A d167-s1891388
 #PBS -j oe
-#PBS -l walltime=00:01:00
+#PBS -l walltime=00:60:00
 #PBS -l place=scatter:excl
 #PBS -l select=1:ncpus=36
 #PBS -o ./data/qsub
@@ -43,7 +43,7 @@ module load intel-compilers-17
 cd $PBS_O_WORKDIR
 
 MPIPROG=`basename $PBS_JOBNAME .pbs`
-MPISIZE=$NPROC
+#MPISIZE=$NPROC
 pwd
 
 # Spread the processes as evenly as possible across the nodes
