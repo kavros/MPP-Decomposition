@@ -6,6 +6,4 @@ cache:
 before_install:
   - sh ./scripts/get_mpich.sh
 script:
-  - ls ./mpich/bin
-  - alias mpicc='./mpich/bin/mpicc'
-  - make
+  - make -f Makefile-travis
