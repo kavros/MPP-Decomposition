@@ -6,4 +6,5 @@ cache:
 before_install:
   - sh ./scripts/get_mpich.sh
 script:
+        alias mpicc='./mpich/bin/mpicc'
         make
