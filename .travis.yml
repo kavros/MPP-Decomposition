@@ -7,5 +7,5 @@ before_install:
   - sh ./scripts/get_mpich.sh
 script:
   - make -f Makefile-travis
-  - make run nThreads=4
-  - make validation
+  - make -f Makefile-travis run nThreads=4
+  - make -f Makefile-travis validation
