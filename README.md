@@ -15,7 +15,7 @@
 * totalNumber: is the total number that we are going to print average value of the pixels
 * 0or1: we can use 0 or 1 to disable or enable delta correspondingly.By default is disabled.
 
-# Scripts Description
+## Scripts Description
 * run.sh: 
 * image.pbs:
 * get_mpich.sh:
@@ -23,20 +23,15 @@
 * validateOutput.sh:
 
 
-# Scripts Instructions
+## Scripts Instructions
 * Before running any script or the project make sure that your current directory is MPP-Decomposition.
 * Run experiments at the backend of cirrus and generate graphs(located at ./data/graphs using the following commands:
-```
-./scripts/run.sh
+```./scripts/run.sh
 python  scripts/generateGraphs.py 
 ```
 
-# Testing
-* Continuous integration 
-* Output validation usin scripts
+## Testing
+* For testing I used continuous integration(travis) and output validation using scripts.
 
-# Validation
-* Validate output image using an expected image ( delta need to be disabled) using: ```make validation```
-
-# Acknowledgement
+## Acknowledgement
 * I use the following tutorial in order to setup [travis-mpi](https://d-meiser.github.io/2016/01/10/mpi-travis.html)
