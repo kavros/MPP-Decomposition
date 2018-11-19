@@ -18,7 +18,7 @@ def GetAxis(dictionary):
 
 
 
-def GenerateLineChart(dict1,dict2,dict3,imageName1,imageName2,imageName3,fileName):
+def GenerateLineChart(dict1,dict2,dict3,imageName1,imageName2,imageName3,xAxisLabel,yAxisLabel,fileName):
 	x1,y1 = GetAxis(dict1)
 	x2,y2 = GetAxis(dict2)
 	x3,y3 = GetAxis(dict3)
@@ -27,9 +27,9 @@ def GenerateLineChart(dict1,dict2,dict3,imageName1,imageName2,imageName3,fileNam
 	plt.plot(x1,y1,marker="x")
 	plt.plot(x2,y2,marker="x")
 	plt.plot(x3,y3,marker="x")
-	ax.set(xlabel="number of processes", ylabel="total time in secs")	
+	ax.set(xlabel=xAxisLabel, ylabel=yAxisLabel)	
 	ax.grid()
-	plt.legend([imageName1, imageName2,imageName3], loc=1)
+	plt.legend([imageName1, imageName2,imageName3], loc=2)
 	plt.show()
 	#path="../results/graphs/"
 	#plt.savefig((path+fileName), format='eps', dpi=1000)
@@ -37,7 +37,7 @@ def GenerateLineChart(dict1,dict2,dict3,imageName1,imageName2,imageName3,fileNam
 
 
 def initDictionary(dictionary, path):
-	print path
+	#print path
 	# read all files and create a hashtable 
 	# with key equals  to the number of threads
 	# and values equals to list with the times
@@ -55,11 +55,16 @@ def initDictionary(dictionary, path):
 	# sort  time measurments
 	for key in dictionary.keys():
 		dictionary[key] = sorted(dictionary[key])
-	print dictionary
+	#print dictionary
 	# update hash table value for each key with median time instead of list of times
 	for key in dictionary.keys():
 		medianTime = (dictionary[key])[len(dictionary[key])/2]
 		dictionary[key] =  medianTime
+
+def InitSpeedUpDictionary(target,src):
+
+	for key in src.keys():
+		target[key] = src[1]/src[key]
 
 
 
@@ -68,10 +73,23 @@ def main():
 	initDictionary(small_np_to_time,"./data/qsub/small/")
 	initDictionary(medium_np_to_time,"./data/qsub/medium/")
 	initDictionary(large_np_to_time,"./data/qsub/large/")
-	print small_np_to_time
-	print medium_np_to_time
-	print large_np_to_time
-	GenerateLineChart(small_np_to_time,medium_np_to_time,large_np_to_time,"192x128","512x384","768x768","test.eps")
+	#print small_np_to_time
+	#print medium_np_to_time
+	#print large_np_to_time
+	GenerateLineChart(small_np_to_time,medium_np_to_time,large_np_to_time,"192x128","512x384","768x768","number of processes","total time in (sec)","test.eps")
+
+	small_speedup = dict()
+	medium_speedup = dict()
+	large_speedup = dict()
+
+	InitSpeedUpDictionary(small_speedup,small_np_to_time)
+	InitSpeedUpDictionary(medium_speedup,medium_np_to_time)
+	InitSpeedUpDictionary(large_speedup,large_np_to_time)
+
+	print small_speedup
+	print medium_speedup
+	print large_speedup
+	GenerateLineChart(small_speedup,medium_speedup,large_speedup,"192x128","512x384","768x768","number of processes","Speedup","test.eps")
 
 if __name__ == "__main__":
 	main()
