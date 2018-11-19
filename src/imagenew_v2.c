@@ -71,7 +71,7 @@ int main (int argc, char *argv[])
     //char *input,*output;
     double **old,**new,**edge,**buf,**masterbuf;
     int dims[2];
-    double start,end;
+    double start=0,end=0;
     
     
     MPI_Init(NULL,NULL);        
@@ -93,15 +93,18 @@ int main (int argc, char *argv[])
     
     loadImage(topo,masterbuf,input, M, N);
     
-    start = MPI_Wtime();
+    if(topo.rank == 0)
+        start = MPI_Wtime();
+    
     scatter( masterbuf, buf, topo, worldSize, comm2d);
     
     imageRecontruction( topo, edge, buf, old, new,N,M,dims);
     
     gather( topo, masterbuf,buf, M, N, comm2d,output,worldSize);
+    
     end = MPI_Wtime();
     if(topo.rank == 0)
-        fprintf(stdout,"total time is %f(sec), woldSize=%d \n",end-start,worldSize);
+        fprintf(stdout,"total time is %f (sec), woldSize is %d \n",end-start,worldSize);
     
     MPI_Finalize();
     
@@ -123,7 +126,7 @@ void cmdLineParser(int argc, char *argv[])
         deltaArg   = arg_intn("d","delta"," please set -d 1 to activate delta termination",0,1,"activates delta"),
         targetIterArg = arg_intn("t","target"," must be less than 1500",0,1,"select when to print average value"),
         inputArg   = arg_filen("i", NULL, "<file>", 0, 100, "input file"),
-        outputArg  = arg_filen("o", NULL, "<file>", 0, 100, "output file"),
+        outputArg  = arg_filen("e", NULL, "<file>", 0, 100, "output file"),
         end     = arg_end(20),
     };
     
