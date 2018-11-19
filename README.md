@@ -26,7 +26,8 @@
 ## Scripts Instructions
 * Before running any script or the project make sure that your current directory is MPP-Decomposition.
 * Run experiments at the backend of cirrus and generate graphs(located at ./data/graphs using the following commands:
-```./scripts/run.sh
+```
+./scripts/run.sh 
 python  scripts/generateGraphs.py 
 ```
 
