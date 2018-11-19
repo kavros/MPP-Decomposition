@@ -30,10 +30,9 @@ def GenerateLineChart(dict1,dict2,dict3,imageName1,imageName2,imageName3,xAxisLa
 	ax.set(xlabel=xAxisLabel, ylabel=yAxisLabel)	
 	ax.grid()
 	plt.legend([imageName1, imageName2,imageName3], loc=2)
-	plt.show()
-	#path="../results/graphs/"
-	#plt.savefig((path+fileName), format='eps', dpi=1000)
-
+	path="./data/graphs/"
+	plt.savefig((path+fileName), format='eps', dpi=1000)
+	#plt.show()
 
 
 def initDictionary(dictionary, path):
@@ -76,7 +75,7 @@ def main():
 	#print small_np_to_time
 	#print medium_np_to_time
 	#print large_np_to_time
-	GenerateLineChart(small_np_to_time,medium_np_to_time,large_np_to_time,"192x128","512x384","768x768","number of processes","total time in (sec)","test.eps")
+	GenerateLineChart(small_np_to_time,medium_np_to_time,large_np_to_time,"192x128","512x384","768x768","number of processes","total time in (sec)","time.eps")
 
 	small_speedup = dict()
 	medium_speedup = dict()
@@ -89,7 +88,7 @@ def main():
 	print small_speedup
 	print medium_speedup
 	print large_speedup
-	GenerateLineChart(small_speedup,medium_speedup,large_speedup,"192x128","512x384","768x768","number of processes","Speedup","test.eps")
+	GenerateLineChart(small_speedup,medium_speedup,large_speedup,"192x128","512x384","768x768","number of processes","Speedup","speedup.eps")
 
 if __name__ == "__main__":
 	main()
