@@ -1,0 +1,98 @@
+/lustre/home/d167/s1891388/MPI/coursework
+--------------------------------------------------------------------------------
+Running image on 1 processes over 1 node(s)
+Issuing command: mpiexec_mpt -n 1 -ppn 1 ./image
+Started at Mon Nov 19 18:02:57 GMT 2018
+--------------------------------------------------------------------------------
+
+Reading <./data/input/edgenew512x384.pgm>
+average value of pixels  is 252.778719, iteration=1500 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
+total time is 0.707389 (sec), woldSize is 1 
+
+real	0m0.810s
+user	0m0.010s
+sys	0m0.033s
+
+Reading <./data/input/edgenew512x384.pgm>
+average value of pixels  is 252.778719, iteration=1500 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
+total time is 0.708889 (sec), woldSize is 1 
+
+real	0m0.814s
+user	0m0.011s
+sys	0m0.036s
+
+Reading <./data/input/edgenew512x384.pgm>
+average value of pixels  is 252.778719, iteration=1500 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
+total time is 0.707548 (sec), woldSize is 1 
+
+real	0m0.812s
+user	0m0.011s
+sys	0m0.035s
+
+Reading <./data/input/edgenew512x384.pgm>
+average value of pixels  is 252.778719, iteration=1500 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
+total time is 0.707866 (sec), woldSize is 1 
+
+real	0m0.811s
+user	0m0.012s
+sys	0m0.034s
+
+Reading <./data/input/edgenew512x384.pgm>
+average value of pixels  is 252.778719, iteration=1500 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
+total time is 0.708194 (sec), woldSize is 1 
+
+real	0m0.813s
+user	0m0.011s
+sys	0m0.033s
+
+Reading <./data/input/edgenew512x384.pgm>
+average value of pixels  is 252.778719, iteration=1500 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
+total time is 0.708190 (sec), woldSize is 1 
+
+real	0m0.802s
+user	0m0.017s
+sys	0m0.028s
+
+Reading <./data/input/edgenew512x384.pgm>
+average value of pixels  is 252.778719, iteration=1500 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
+total time is 0.719148 (sec), woldSize is 1 
+
+real	0m0.842s
+user	0m0.009s
+sys	0m0.037s
+
+Reading <./data/input/edgenew512x384.pgm>
+average value of pixels  is 252.778719, iteration=1500 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
+total time is 0.708736 (sec), woldSize is 1 
+
+real	0m0.809s
+user	0m0.012s
+sys	0m0.033s
+
+Reading <./data/input/edgenew512x384.pgm>
+average value of pixels  is 252.778719, iteration=1500 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
+total time is 0.707691 (sec), woldSize is 1 
+
+real	0m0.811s
+user	0m0.012s
+sys	0m0.034s
+
+Reading <./data/input/edgenew512x384.pgm>
+average value of pixels  is 252.778719, iteration=1500 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
+total time is 0.708081 (sec), woldSize is 1 
+
+real	0m0.811s
+user	0m0.012s
+sys	0m0.034s
+--------------------------------------------------------------------------------
+Finished at Mon Nov 19 18:03:06 GMT 2018

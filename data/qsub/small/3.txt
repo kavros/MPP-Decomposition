@@ -1,0 +1,98 @@
+/lustre/home/d167/s1891388/MPI/coursework
+--------------------------------------------------------------------------------
+Running image on 3 processes over 1 node(s)
+Issuing command: mpiexec_mpt -n 3 -ppn 3 ./image
+Started at Mon Nov 19 18:03:56 GMT 2018
+--------------------------------------------------------------------------------
+
+Reading <./data/input/edgenew192x128.pgm>
+average value of pixels  is 221.763650, iteration=1500 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_3.pgm
+total time is 0.043809 (sec), woldSize is 3 
+
+real	0m0.126s
+user	0m0.003s
+sys	0m0.037s
+
+Reading <./data/input/edgenew192x128.pgm>
+average value of pixels  is 221.763650, iteration=1500 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_3.pgm
+total time is 0.056423 (sec), woldSize is 3 
+
+real	0m0.127s
+user	0m0.010s
+sys	0m0.031s
+
+Reading <./data/input/edgenew192x128.pgm>
+average value of pixels  is 221.763650, iteration=1500 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_3.pgm
+total time is 0.056687 (sec), woldSize is 3 
+
+real	0m0.127s
+user	0m0.010s
+sys	0m0.029s
+
+Reading <./data/input/edgenew192x128.pgm>
+average value of pixels  is 221.763650, iteration=1500 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_3.pgm
+total time is 0.056720 (sec), woldSize is 3 
+
+real	0m0.129s
+user	0m0.008s
+sys	0m0.032s
+
+Reading <./data/input/edgenew192x128.pgm>
+average value of pixels  is 221.763650, iteration=1500 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_3.pgm
+total time is 0.057124 (sec), woldSize is 3 
+
+real	0m0.127s
+user	0m0.008s
+sys	0m0.032s
+
+Reading <./data/input/edgenew192x128.pgm>
+average value of pixels  is 221.763650, iteration=1500 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_3.pgm
+total time is 0.054030 (sec), woldSize is 3 
+
+real	0m0.126s
+user	0m0.007s
+sys	0m0.033s
+
+Reading <./data/input/edgenew192x128.pgm>
+average value of pixels  is 221.763650, iteration=1500 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_3.pgm
+total time is 0.034347 (sec), woldSize is 3 
+
+real	0m0.104s
+user	0m0.012s
+sys	0m0.027s
+
+Reading <./data/input/edgenew192x128.pgm>
+average value of pixels  is 221.763650, iteration=1500 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_3.pgm
+total time is 0.033858 (sec), woldSize is 3 
+
+real	0m0.103s
+user	0m0.007s
+sys	0m0.031s
+
+Reading <./data/input/edgenew192x128.pgm>
+average value of pixels  is 221.763650, iteration=1500 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_3.pgm
+total time is 0.036171 (sec), woldSize is 3 
+
+real	0m0.105s
+user	0m0.009s
+sys	0m0.029s
+
+Reading <./data/input/edgenew192x128.pgm>
+average value of pixels  is 221.763650, iteration=1500 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_3.pgm
+total time is 0.034769 (sec), woldSize is 3 
+
+real	0m0.106s
+user	0m0.006s
+sys	0m0.033s
+--------------------------------------------------------------------------------
+Finished at Mon Nov 19 18:03:57 GMT 2018
