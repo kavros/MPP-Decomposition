@@ -30,7 +30,7 @@ typedef struct topology
 }topology;
 
 double boundaryval(int i, int m);
-void imageRecontruction(topology topo,double** edge,double** buf,double** old,double** new,int N,int* dims);
+void imageRecontruction(topology topo,double** edge,double** buf,double** old,double** new,int N,int M,int* dims);
 bool isNumberPrime(int num);
 void initialization(topology* topo,int worldSize,int M,int N,MPI_Comm* comm2d,int* dims);
 void scatter(double** masterbuf,double** buf,topology topo,int worldSize,MPI_Comm comm2d);
@@ -39,7 +39,7 @@ void createDataTypes(topology topo,int N);
 void computeBoundaryConditions(topology topo,int *dims,double **old,int N);
 void halloSwapsHorizontal(double** old,topology topo);
 void halloSwapsVertical(double** old,topology topo);
-void printAverages(int iter,double **old,topology topo );
+void printAverages(int iter,double **old,topology topo,int N,int M );
 bool isTheLastIteration(topology topo,double maxDelta,int iter);
 void loadImage(topology topo,double** masterbuf,char* input,int M,int N);
 void allocations(topology topo,int M,int N,double ***masterbuf,double ***buf,double ***old,double ***new, double ***edge);
@@ -96,7 +96,7 @@ int main (int argc, char *argv[])
     start = MPI_Wtime();
     scatter( masterbuf, buf, topo, worldSize, comm2d);
     
-    imageRecontruction( topo, edge, buf, old, new,N,dims);
+    imageRecontruction( topo, edge, buf, old, new,N,M,dims);
     
     gather( topo, masterbuf,buf, M, N, comm2d,output,worldSize);
     end = MPI_Wtime();
@@ -439,7 +439,7 @@ double boundaryval(int i, int m)
     return val;
 }
 
-void imageRecontruction(topology topo,double** edge,double** buf,double** old,double** new,int N,int* dims)
+void imageRecontruction(topology topo,double** edge,double** buf,double** old,double** new,int N,int M,int* dims)
 {
     int i,j,iter;
     int Np = topo.Np;
@@ -515,7 +515,7 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
 	}
         
         //print averages at specified iteration number
-        printAverages(iter,old,topo);
+        printAverages(iter,old,topo,N,M);
         
         //terminate based on delta
         if( isTheLastIteration(topo,maxDelta,iter) ) 
@@ -571,7 +571,7 @@ bool isTheLastIteration(topology topo,double maxDelta,int iter)
     
 }
 
-void printAverages(int iter,double **old,topology topo )
+void printAverages(int iter,double **old,topology topo,int N,int M )
 {
     int i,j;
     if(targetIter == iter)
@@ -582,7 +582,7 @@ void printAverages(int iter,double **old,topology topo )
             {
                 for (j=1;j<topo.Np+1;j++)
                 {
-                    sum=+old[i][j];
+                    sum=sum+old[i][j];
                 }
             }
             //printf("p%d sum=%f\n",topo.rank,sum);
@@ -591,7 +591,8 @@ void printAverages(int iter,double **old,topology topo )
             {
                 int worldSize;
                 MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
-                printf("average value of pixels  is =%f, iteration=%d \n",(totalSum/(double)worldSize),targetIter);
+                int totalPixels =N*M;
+                printf("average value of pixels  is %f, iteration=%d \n",(totalSum/(double)totalPixels),targetIter);
             }
         }
 }
