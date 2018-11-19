@@ -10,10 +10,10 @@
 * We can run the project in 2 ways:
 * without command line arguments using :```mpirun -n numberOfprocesses ./build/image ```
 * and wih command line arguments using: ```mpirun -n numberOfprocesses ./build/image -i inputImagePath -e outputImagePath -t totalNumber -d 0or1 ``` 
-* inputImagePath: is the edge image path.
-* outputImagePath: is the output image after the calculations
-* totalNumber: is the total number that we are going to print average value of the pixels
-* 0or1: we can use 0 or 1 to disable or enable delta correspondingly.By default is disabled.
+  * inputImagePath: is the edge image path. 
+  * outputImagePath: is the output image after the calculations
+  * totalNumber: is the total number that we are going to print average value of the pixels
+  * 0or1: we can use 0 or 1 to disable or enable delta correspondingly.By default is disabled.
 
 ## Scripts Description
 * run.sh: 
