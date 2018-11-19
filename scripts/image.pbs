@@ -79,7 +79,7 @@ echo 'Started at' `date`
 echo '--------------------------------------------------------------------------------'
 for i in {1..10}
 do
-	(time mpiexec_mpt -n $MPISIZE -ppn $PPN ./build/$MPIPROG -i $IMG ) 2>&1
+	(time mpiexec_mpt -n $MPISIZE -ppn $PPN ./build/$MPIPROG -i $INPUT_IMG -e $OUTPUT_IMG ) 2>&1
 done
 
 echo '--------------------------------------------------------------------------------'
