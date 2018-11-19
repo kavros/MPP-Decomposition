@@ -39,13 +39,14 @@ void createDataTypes(topology topo,int N);
 void computeBoundaryConditions(topology topo,int *dims,double **old,int N);
 void halloSwapsHorizontal(double** old,topology topo);
 void halloSwapsVertical(double** old,topology topo);
-void printAverages(int iter,double **old,topology topo,int N,int M );
+void printAverages(int iter,int targetIter,int* cnt ,double **old,topology topo,int N,int M );
 bool isTheLastIteration(topology topo,double maxDelta,int iter);
 void loadImage(topology topo,double** masterbuf,char* input,int M,int N);
 void allocations(topology topo,int M,int N,double ***masterbuf,double ***buf,double ***old,double ***new, double ***edge);
 void deallocations(double **masterbuf,double **buf,double **old,double **new, double **edge);
 void cmdLineParser(int argc, char *argv[]);
 void setInputOuptut(char** input,char** output);
+void initAvgPrints(int* printAvgAtIter);
 
 void calculateMaxDelta(int i,int j,double** new,double** old,double* maxDelta);
 MPI_Datatype vectorMpxNp;    
@@ -55,7 +56,8 @@ MPI_Datatype vectorMpx1;
 
 char *input,*output;
 bool isDeltaActivated = false;
-int targetIter = MAXITER;
+//int targetIter = MAXITER;
+int totalAveragePrints=1;
 
 int main (int argc, char *argv[])
 {
@@ -117,14 +119,14 @@ int main (int argc, char *argv[])
 void cmdLineParser(int argc, char *argv[])
 {
     struct arg_lit *help;
-    struct arg_int *deltaArg, *targetIterArg;
+    struct arg_int *deltaArg, *totalAvgPrintsArg;
     struct arg_file *inputArg, *outputArg;
     struct arg_end *end;
 
    void* argtable[] = {
         help    = arg_litn("h", "help", 0, 1, "display this help and exit"),
         deltaArg   = arg_intn("d","delta"," please set -d 1 to activate delta termination",0,1,"activates delta"),
-        targetIterArg = arg_intn("t","target"," must be less than 1500",0,1,"select when to print average value"),
+        totalAvgPrintsArg = arg_intn("t","target"," must be positive number less than 1500 ",0,1,"select when to print average value"),
         inputArg   = arg_filen("i", NULL, "<file>", 0, 100, "input file"),
         outputArg  = arg_filen("e", NULL, "<file>", 0, 100, "output file"),
         end     = arg_end(20),
@@ -166,10 +168,16 @@ void cmdLineParser(int argc, char *argv[])
         output =(char*) outputArg->filename[0];
         //printf("output= %s\n",outputArg->filename[0]);
     }
-    if (targetIterArg->count > 0 )
+    if (totalAvgPrintsArg->count > 0 )
     {
-        targetIter = *(targetIterArg->ival);
-        //printf("targetIter= %d\n",*(targetIterArg->ival));
+        totalAveragePrints = *(totalAvgPrintsArg->ival);
+        if(totalAveragePrints <= 0 )
+        {
+            totalAveragePrints =1;
+            printf("Negative or zero values are not accepted for the total prints of averages.\n");
+            printf("total prints of averages is now 1\n");
+        }
+        //printf("totalAvgPrintsArg= %d\n",*(targetIterArg->ival));
     }
     if(deltaArg->count > 0 )
     {
@@ -442,11 +450,39 @@ double boundaryval(int i, int m)
     return val;
 }
 
+void initAvgPrints(int* printAvgAtIter)
+{
+    int i;
+    if(totalAveragePrints <= 0)
+    {
+        assert(0);
+    }
+    //int printAvgAtIter[totalAveragePrints];
+    
+    for(i=0; i<totalAveragePrints; i++)
+    {
+        if(i==0)
+        {
+            printAvgAtIter[i] = 0;
+        }
+        printAvgAtIter[i] =i*(MAXITER/totalAveragePrints);
+        //printf("%d, ",printAvgAtIter[i]);
+        
+    }
+    //printf("\n");  
+}
+
+
 void imageRecontruction(topology topo,double** edge,double** buf,double** old,double** new,int N,int M,int* dims)
 {
     int i,j,iter;
     int Np = topo.Np;
     int Mp = topo.Mp;
+    int cntAvgPrints=0;
+    int printAvgAtIter[totalAveragePrints];
+    initAvgPrints( printAvgAtIter);
+    
+
     
     double maxDelta=-1;     //set maxDelta to -1 in order to take the value of delta at the first iteration 
     
@@ -518,7 +554,7 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
 	}
         
         //print averages at specified iteration number
-        printAverages(iter,old,topo,N,M);
+        printAverages((iter-1),printAvgAtIter[cntAvgPrints],&cntAvgPrints,old,topo,N,M);
         
         //terminate based on delta
         if( isTheLastIteration(topo,maxDelta,iter) ) 
@@ -565,39 +601,45 @@ bool isTheLastIteration(topology topo,double maxDelta,int iter)
     double globalMaxDelta = -1.0f;
     MPI_Allreduce(&maxDelta,&globalMaxDelta,1,MPI_DOUBLE,MPI_MAX,MPI_COMM_WORLD);
     
-    if(globalMaxDelta < 0.1 )
+    if(globalMaxDelta < 0.1  )
     {
-        printf(" my_rank = %d, globalMaxDelta= %f, iterations = %d \n",topo.rank,globalMaxDelta,iter );
+        if(topo.rank == 0)
+            printf("\n globalMaxDelta = %f at iterations = %d \n",globalMaxDelta,iter );
         return true;
     }
     return false;
     
 }
 
-void printAverages(int iter,double **old,topology topo,int N,int M )
+void printAverages(int iter,int targetIter,int* cnt ,double **old,topology topo,int N,int M )
 {
+    
+    if( (*cnt) == totalAveragePrints ) return;
+    
+    //printf("targetIter = %d\n",targetIter);
     int i,j;
     if(targetIter == iter)
+    {
+        *cnt=*cnt+1;
+        double sum = 0;
+        double totalSum;
+        for (i=1;i<topo.Mp+1;i++)
         {
-            double sum = 0;
-            double totalSum;
-            for (i=1;i<topo.Mp+1;i++)
+            for (j=1;j<topo.Np+1;j++)
             {
-                for (j=1;j<topo.Np+1;j++)
-                {
-                    sum=sum+old[i][j];
-                }
-            }
-            //printf("p%d sum=%f\n",topo.rank,sum);
-            MPI_Reduce(&sum,&totalSum,1,MPI_DOUBLE,MPI_SUM,0,MPI_COMM_WORLD);
-            if(topo.rank == 0)
-            {
-                int worldSize;
-                MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
-                int totalPixels =N*M;
-                printf("average value of pixels  is %f, iteration=%d \n",(totalSum/(double)totalPixels),targetIter);
+                sum=sum+old[i][j];
             }
         }
+        //printf("p%d sum=%f\n",topo.rank,sum);
+        MPI_Reduce(&sum,&totalSum,1,MPI_DOUBLE,MPI_SUM,0,MPI_COMM_WORLD);
+        if(topo.rank == 0)
+        {
+            int worldSize;
+            MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
+            int totalPixels =N*M;
+            printf("avg number of pixels=%f, iteration=%d \n",(totalSum/(double)totalPixels),targetIter);
+        }
+    }
 }
  
 void halloSwapsVertical(double** old,topology topo)
