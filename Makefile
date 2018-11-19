@@ -43,8 +43,11 @@ clean:
 run: 
 	mpirun -n ${n} ./build/image
 
+run_delta:
+	mpirun -n ${n} ./build/image -d 1
+
 qsub:
-	qsub scripts/image.pbs
+	qsub -v MPISIZE=${n},INPUT_IMG="./data/input/edgenew192x128.pgm",OUTPUT_IMG="./data/qsub/imagenew192x128.pgm"   scripts/image.pbs
 
 validation:
 	diff data/output/imagenew192x128_expectedOutput.pgm  data/output/imagenew192x128.pgm
