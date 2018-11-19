@@ -77,8 +77,10 @@ echo 'Running' $MPIPROG 'on' $MPISIZE 'processes over' $NNODE 'node(s)'
 echo 'Issuing command: mpiexec_mpt -n' $MPISIZE '-ppn' $PPN ./$MPIPROG
 echo 'Started at' `date`
 echo '--------------------------------------------------------------------------------'
-
-(time mpiexec_mpt -n $MPISIZE -ppn $PPN ./build/$MPIPROG) 2>&1
+for i in {1..10}
+do
+	(time mpiexec_mpt -n $MPISIZE -ppn $PPN ./build/$MPIPROG -i $IMG ) 2>&1
+done
 
 echo '--------------------------------------------------------------------------------'
 echo 'Finished at' `date`
