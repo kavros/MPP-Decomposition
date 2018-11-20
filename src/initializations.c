@@ -39,104 +39,72 @@ void initTopology(topology* topo,int worldSize,MPI_Comm* comm2d,int* dims)
 {
     
     
-    int disp;
-    const int ndims =2;
-    
+    int disp=1,reorder=false,ndims =2;
     int period[ndims];
-    int reorder;
     MPI_Comm comm;
-
-    comm  = MPI_COMM_WORLD;          
-    reorder = false;
-    disp = 1;  
-    if(worldSize == 1)
+    comm  = MPI_COMM_WORLD;   
+    
+    dims[0]=0;
+    dims[1]=0;
+    if(isNumberPrime(worldSize))
     {
-        topo->Mp = M;
-        topo->Np = N;
-        dims[0] = 0;
-        dims[1] = 0;
+        if(M%worldSize ==0)
+        {
+            dims[1]=1;
+        }
+        else if(N%worldSize ==0)
+        {
+            dims[0]=1;
+        }
+    }
+    
+    MPI_Dims_create(worldSize,ndims,dims);
+    //printf("(%d x %d) \n",dims[0],dims[1]);
+    bool isSerialDecomp = (dims[0] == 1) && (dims[1] == 1 );
+    bool isVerticalDecomp = (dims[0] > 1) && (dims[1] == 1 );
+    bool isHorizontalDecomp = (dims[0] == 1) && (dims[1] > 1 );
+    bool is2D               = (dims[0] > 1) && (dims[1] > 1 );
+    if(isSerialDecomp || isVerticalDecomp)
+    {
         period[0] =  false;
         period[1] =  false;
-        
-        MPI_Dims_create(worldSize,ndims,dims);
-        MPI_Cart_create(comm,ndims,dims,period,reorder,comm2d);
-        MPI_Cart_shift(*comm2d,0,disp,&(topo->left),&(topo->right));
-        MPI_Cart_shift(*comm2d,1,disp,&(topo->down),&(topo->up));
-        MPI_Comm_rank(*comm2d,&(topo->rank));
     }
-    else if( isNumberPrime(worldSize) == true )
-    {   
-        //finds a 1D decomposition
-        
-        //printf("1D\n");
-        if( (M % worldSize == 0) )
-        {
-            //vertical decomposition            
-            //printf("vertical\n");
-            topo->Mp = M/worldSize;
-            topo->Np = N;
-            dims[0] = 0;
-            dims[1] = 1;        //one dimension on y axis
-            period[0] = false;
-            period[1] = false;
-        }
-        else if( (N % worldSize == 0) )
-        {
-            //printf("horizontal\n");
-            //horizontal decomposition
-            topo->Mp = M;
-            topo->Np = N/worldSize;
-            dims[0] = 1;        //one dimension on x axis
-            dims[1] = 0;
-            period[0] = false;
-            period[1] = true;   //cyclic on y axis
-        }
-        else
-        {
-            //printf("Combination of image and thread number is not supported.\n");
-            MPI_Finalize();
-            exit(1);
-        }
-        MPI_Dims_create(worldSize,ndims,dims);
-        MPI_Cart_create(comm,ndims,dims,period,reorder,comm2d);
-        MPI_Cart_shift(*comm2d,0,disp,&(topo->left),&(topo->right));
-        MPI_Cart_shift(*comm2d,1,disp,&(topo->down),&(topo->up));
-        MPI_Comm_rank(*comm2d,&(topo->rank));
-        
+    else if(is2D || isHorizontalDecomp)
+    {
+        period[0] = false;
+        period[1] = true;   //cyclic on y axis
     }
     else
     {
-        //find 2D decomposition
         
-        dims[0]=0;
-        dims[1]=0;
-        period[0]=false;
-        period[1]=true;
-        
-        //TODO:find a smart way for assignment of dims[0] and dims[1]
-        
-        MPI_Dims_create(worldSize,ndims,dims);
-        MPI_Cart_create(comm,ndims,dims,period,reorder,comm2d);
-        MPI_Cart_shift(*comm2d,0,disp,&(topo->left),&(topo->right));
-        MPI_Cart_shift(*comm2d,1,disp,&(topo->down),&(topo->up));
-        MPI_Comm_rank(*comm2d,&(topo->rank));
-        //printf("2d (%dx%d) \n",dims[0],dims[1]);
-        bool isTopologyDivisible = ( (N%dims[0]) == 0) && ( (M % dims[1]) ==0 );
-        if(  isTopologyDivisible   )
-        {
-            topo->Mp=M/dims[0];
-            topo->Np=N/dims[1];
-        }
-        else
-        {
-            //printf("Combination of image and thread number is not supported.\n");
-            MPI_Finalize();
-            exit(1);
-        } 
-        
+        MPI_Finalize();
+        assert(0);
     }
+    
+    MPI_Cart_create(comm,ndims,dims,period,reorder,comm2d);
+    MPI_Cart_shift(*comm2d,0,disp,&(topo->left),&(topo->right));
+    MPI_Cart_shift(*comm2d,1,disp,&(topo->down),&(topo->up));
+    MPI_Comm_rank(*comm2d,&(topo->rank));    
     MPI_Cart_coords(*comm2d, topo->rank, 2, topo->coords);
     
+    
+    //check if columns and rows are divisible
+    bool isTopologyDivisible = ( (N%dims[1]) == 0) && ( (M % dims[0]) ==0 );
+    if(isTopologyDivisible == false)
+    {
+        if(topo->rank==0)
+            printf("Error: Number of processes is not supported\n");
+        MPI_Finalize();
+        exit(-1);
+    }
+    assert(dims[0]!=0);
+    assert(dims[1]!=0);
+    int Mp = (M/dims[0]);
+    int Np = (N/dims[1]);
+    
+    topo->Mp = Mp;
+    topo->Np = Np;
+
 }
 
 
