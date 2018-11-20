@@ -10,6 +10,7 @@
 #include <string.h>
 #define MAXITER   1500
 #define PRINTFREQ  200
+#define DELTAFREQ 50
 
 //#define IGNORE_PRINTF
 #ifdef IGNORE_PRINTF
@@ -56,7 +57,6 @@ MPI_Datatype vectorMpx1;
 
 char *input,*output;
 bool isDeltaActivated = false;
-//int targetIter = MAXITER;
 int totalAveragePrints=1;
 
 int main (int argc, char *argv[])
@@ -598,6 +598,10 @@ bool isTheLastIteration(topology topo,double maxDelta,int iter)
     {
         return false;
     }
+    
+    if(iter%DELTAFREQ != 0 ) return false;
+    
+    //printf("iter = %d\n",iter);
     double globalMaxDelta = -1.0f;
     MPI_Allreduce(&maxDelta,&globalMaxDelta,1,MPI_DOUBLE,MPI_MAX,MPI_COMM_WORLD);
     
