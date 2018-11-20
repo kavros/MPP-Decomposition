@@ -2,97 +2,97 @@
 --------------------------------------------------------------------------------
 Running image on 8 processes over 1 node(s)
 Issuing command: mpiexec_mpt -n 8 -ppn 8 ./image
-Started at Mon Nov 19 18:04:35 GMT 2018
+Started at Tue Nov 20 23:38:49 GMT 2018
 --------------------------------------------------------------------------------
 
 Reading <./data/input/edgenew512x384.pgm>
-average value of pixels  is 252.778719, iteration=1500 
+avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_8.pgm
-total time is 0.156956 (sec), woldSize is 8 
+total time is 0.176196 (sec), woldSize is 8 
 
-real	0m0.261s
-user	0m0.011s
-sys	0m0.033s
+real	0m0.292s
+user	0m0.010s
+sys	0m0.025s
 
 Reading <./data/input/edgenew512x384.pgm>
-average value of pixels  is 252.778719, iteration=1500 
+avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_8.pgm
-total time is 0.157547 (sec), woldSize is 8 
+total time is 0.131544 (sec), woldSize is 8 
 
-real	0m0.255s
-user	0m0.008s
-sys	0m0.030s
-
-Reading <./data/input/edgenew512x384.pgm>
-average value of pixels  is 252.778719, iteration=1500 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_8.pgm
-total time is 0.157672 (sec), woldSize is 8 
-
-real	0m0.254s
-user	0m0.005s
-sys	0m0.033s
-
-Reading <./data/input/edgenew512x384.pgm>
-average value of pixels  is 252.778719, iteration=1500 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_8.pgm
-total time is 0.151797 (sec), woldSize is 8 
-
-real	0m0.274s
-user	0m0.005s
-sys	0m0.033s
-
-Reading <./data/input/edgenew512x384.pgm>
-average value of pixels  is 252.778719, iteration=1500 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_8.pgm
-total time is 0.157484 (sec), woldSize is 8 
-
-real	0m0.254s
+real	0m0.225s
 user	0m0.009s
-sys	0m0.029s
+sys	0m0.024s
 
 Reading <./data/input/edgenew512x384.pgm>
-average value of pixels  is 252.778719, iteration=1500 
+avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_8.pgm
-total time is 0.159374 (sec), woldSize is 8 
+total time is 0.131514 (sec), woldSize is 8 
 
-real	0m0.258s
-user	0m0.011s
+real	0m0.224s
+user	0m0.009s
+sys	0m0.023s
+
+Reading <./data/input/edgenew512x384.pgm>
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_8.pgm
+total time is 0.131494 (sec), woldSize is 8 
+
+real	0m0.225s
+user	0m0.009s
+sys	0m0.024s
+
+Reading <./data/input/edgenew512x384.pgm>
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_8.pgm
+total time is 0.130999 (sec), woldSize is 8 
+
+real	0m0.224s
+user	0m0.005s
 sys	0m0.028s
 
 Reading <./data/input/edgenew512x384.pgm>
-average value of pixels  is 252.778719, iteration=1500 
+avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_8.pgm
-total time is 0.151767 (sec), woldSize is 8 
+total time is 0.131511 (sec), woldSize is 8 
 
-real	0m0.253s
+real	0m0.224s
+user	0m0.006s
+sys	0m0.027s
+
+Reading <./data/input/edgenew512x384.pgm>
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_8.pgm
+total time is 0.131141 (sec), woldSize is 8 
+
+real	0m0.222s
 user	0m0.008s
-sys	0m0.030s
+sys	0m0.024s
 
 Reading <./data/input/edgenew512x384.pgm>
-average value of pixels  is 252.778719, iteration=1500 
+avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_8.pgm
-total time is 0.157279 (sec), woldSize is 8 
+total time is 0.131137 (sec), woldSize is 8 
 
-real	0m0.279s
-user	0m0.011s
-sys	0m0.029s
+real	0m0.223s
+user	0m0.006s
+sys	0m0.026s
 
 Reading <./data/input/edgenew512x384.pgm>
-average value of pixels  is 252.778719, iteration=1500 
+avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_8.pgm
-total time is 0.157773 (sec), woldSize is 8 
+total time is 0.130526 (sec), woldSize is 8 
 
-real	0m0.256s
-user	0m0.011s
-sys	0m0.029s
+real	0m0.223s
+user	0m0.006s
+sys	0m0.027s
 
 Reading <./data/input/edgenew512x384.pgm>
-average value of pixels  is 252.778719, iteration=1500 
+avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_8.pgm
-total time is 0.153857 (sec), woldSize is 8 
+total time is 0.130895 (sec), woldSize is 8 
 
-real	0m0.252s
+real	0m0.223s
 user	0m0.007s
-sys	0m0.031s
+sys	0m0.026s
 --------------------------------------------------------------------------------
-Finished at Mon Nov 19 18:04:37 GMT 2018
+Finished at Tue Nov 20 23:38:51 GMT 2018
