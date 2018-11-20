@@ -301,8 +301,6 @@ void printAverages(int iter,int targetIter,int* cnt ,double **old,topology topo 
         MPI_Reduce(&sum,&totalSum,1,MPI_DOUBLE,MPI_SUM,0,MPI_COMM_WORLD);
         if(topo.rank == 0)
         {
-            int worldSize;
-            MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
             int totalPixels =N*M;
             printf("avg number of pixels=%f, iteration=%d \n",(totalSum/(double)totalPixels),targetIter);
         }
