@@ -16,10 +16,6 @@
 #define printf(fmt, ...) 
 #endif
 
-
-
-
-
 void parseCmdLine(int argc, char *argv[])
 {
     struct arg_lit *help;
@@ -112,8 +108,6 @@ void deallocations(double **masterbuf,double **buf,double **old,double **new, do
     
 }
 
-
-
 bool isNumberPrime(int num)
 {
     assert(num > 0);
@@ -132,7 +126,6 @@ bool isNumberPrime(int num)
     return true;
 }
 
-
 double boundaryval(int i, int m)
 {
     double val;
@@ -142,9 +135,6 @@ double boundaryval(int i, int m)
     
     return val;
 }
-
-
-
 
 void imageRecontruction(topology topo,double** edge,double** buf,double** old,double** new,int* dims)
 {

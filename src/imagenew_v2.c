@@ -48,9 +48,11 @@ int main (int argc, char *argv[])
         fprintf(stdout,"total time is %f (sec), woldSize is %d \n",end-start,worldSize);
     }
     
+    deallocations(masterbuf,old,new,edge,buf);
+    
     MPI_Finalize();
     
-    deallocations(masterbuf,old,new,edge,buf);
+    
 
     return 0;
 } 
