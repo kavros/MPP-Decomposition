@@ -2,85 +2,31 @@
 --------------------------------------------------------------------------------
 Running image on 4 processes over 1 node(s)
 Issuing command: mpiexec_mpt -n 4 -ppn 4 ./image
-Started at Tue Nov 20 23:38:49 GMT 2018
+Started at Wed Nov 21 00:05:01 GMT 2018
 --------------------------------------------------------------------------------
 
 Reading <./data/input/edgenew768x768.pgm>
 avg number of pixels=254.944355, iteration=0 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_4.pgm
-total time is 0.652659 (sec), woldSize is 4 
+total time is 0.657730 (sec), woldSize is 4 
 
-real	0m0.847s
-user	0m0.009s
-sys	0m0.036s
-
-Reading <./data/input/edgenew768x768.pgm>
-avg number of pixels=254.944355, iteration=0 
-Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_4.pgm
-total time is 0.655334 (sec), woldSize is 4 
-
-real	0m0.802s
-user	0m0.011s
-sys	0m0.030s
-
-Reading <./data/input/edgenew768x768.pgm>
-avg number of pixels=254.944355, iteration=0 
-Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_4.pgm
-total time is 0.655905 (sec), woldSize is 4 
-
-real	0m0.801s
-user	0m0.013s
-sys	0m0.026s
-
-Reading <./data/input/edgenew768x768.pgm>
-avg number of pixels=254.944355, iteration=0 
-Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_4.pgm
-total time is 0.659505 (sec), woldSize is 4 
-
-real	0m0.803s
-user	0m0.007s
-sys	0m0.032s
-
-Reading <./data/input/edgenew768x768.pgm>
-avg number of pixels=254.944355, iteration=0 
-Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_4.pgm
-total time is 0.659878 (sec), woldSize is 4 
-
-real	0m0.814s
-user	0m0.008s
-sys	0m0.032s
-
-Reading <./data/input/edgenew768x768.pgm>
-avg number of pixels=254.944355, iteration=0 
-Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_4.pgm
-total time is 0.652705 (sec), woldSize is 4 
-
-real	0m0.796s
-user	0m0.008s
+real	0m0.807s
+user	0m0.012s
 sys	0m0.031s
 
 Reading <./data/input/edgenew768x768.pgm>
 avg number of pixels=254.944355, iteration=0 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_4.pgm
-total time is 0.655851 (sec), woldSize is 4 
+total time is 0.646744 (sec), woldSize is 4 
 
-real	0m0.801s
-user	0m0.014s
-sys	0m0.026s
-
-Reading <./data/input/edgenew768x768.pgm>
-avg number of pixels=254.944355, iteration=0 
-Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_4.pgm
-total time is 0.649351 (sec), woldSize is 4 
-
-real	0m0.792s
-user	0m0.006s
-sys	0m0.032s
+real	0m0.789s
+user	0m0.013s
+sys	0m0.028s
 
 Reading <./data/input/edgenew768x768.pgm>
 avg number of pixels=254.944355, iteration=0 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_4.pgm
-total time is 0.653734 (sec), woldSize is 4 
+total time is 0.655640 (sec), woldSize is 4 
 
 real	0m0.799s
 user	0m0.013s
@@ -89,10 +35,64 @@ sys	0m0.028s
 Reading <./data/input/edgenew768x768.pgm>
 avg number of pixels=254.944355, iteration=0 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_4.pgm
-total time is 0.658156 (sec), woldSize is 4 
+total time is 0.648637 (sec), woldSize is 4 
 
-real	0m0.803s
+real	0m0.828s
+user	0m0.008s
+sys	0m0.032s
+
+Reading <./data/input/edgenew768x768.pgm>
+avg number of pixels=254.944355, iteration=0 
+Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_4.pgm
+total time is 0.655161 (sec), woldSize is 4 
+
+real	0m0.797s
+user	0m0.009s
+sys	0m0.030s
+
+Reading <./data/input/edgenew768x768.pgm>
+avg number of pixels=254.944355, iteration=0 
+Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_4.pgm
+total time is 0.651116 (sec), woldSize is 4 
+
+real	0m0.794s
+user	0m0.009s
+sys	0m0.029s
+
+Reading <./data/input/edgenew768x768.pgm>
+avg number of pixels=254.944355, iteration=0 
+Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_4.pgm
+total time is 0.654011 (sec), woldSize is 4 
+
+real	0m0.796s
+user	0m0.011s
+sys	0m0.029s
+
+Reading <./data/input/edgenew768x768.pgm>
+avg number of pixels=254.944355, iteration=0 
+Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_4.pgm
+total time is 0.656002 (sec), woldSize is 4 
+
+real	0m0.799s
 user	0m0.012s
 sys	0m0.029s
+
+Reading <./data/input/edgenew768x768.pgm>
+avg number of pixels=254.944355, iteration=0 
+Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_4.pgm
+total time is 0.646968 (sec), woldSize is 4 
+
+real	0m0.789s
+user	0m0.009s
+sys	0m0.030s
+
+Reading <./data/input/edgenew768x768.pgm>
+avg number of pixels=254.944355, iteration=0 
+Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_4.pgm
+total time is 0.651098 (sec), woldSize is 4 
+
+real	0m0.791s
+user	0m0.010s
+sys	0m0.028s
 --------------------------------------------------------------------------------
-Finished at Tue Nov 20 23:38:57 GMT 2018
+Finished at Wed Nov 21 00:05:09 GMT 2018

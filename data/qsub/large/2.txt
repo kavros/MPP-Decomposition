@@ -2,97 +2,97 @@
 --------------------------------------------------------------------------------
 Running image on 2 processes over 1 node(s)
 Issuing command: mpiexec_mpt -n 2 -ppn 2 ./image
-Started at Tue Nov 20 23:58:52 GMT 2018
+Started at Wed Nov 21 00:04:34 GMT 2018
 --------------------------------------------------------------------------------
 
 Reading <./data/input/edgenew768x768.pgm>
 avg number of pixels=254.944355, iteration=0 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_2.pgm
-total time is 1.114366 (sec), woldSize is 2 
+total time is 1.107838 (sec), woldSize is 2 
 
-real	0m1.332s
-user	0m0.008s
-sys	0m0.035s
-
-Reading <./data/input/edgenew768x768.pgm>
-avg number of pixels=254.944355, iteration=0 
-Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_2.pgm
-total time is 1.104875 (sec), woldSize is 2 
-
-real	0m1.273s
-user	0m0.010s
-sys	0m0.033s
-
-Reading <./data/input/edgenew768x768.pgm>
-avg number of pixels=254.944355, iteration=0 
-Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_2.pgm
-total time is 1.108176 (sec), woldSize is 2 
-
-real	0m1.296s
-user	0m0.008s
-sys	0m0.034s
-
-Reading <./data/input/edgenew768x768.pgm>
-avg number of pixels=254.944355, iteration=0 
-Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_2.pgm
-total time is 1.105476 (sec), woldSize is 2 
-
-real	0m1.285s
-user	0m0.011s
+real	0m1.268s
+user	0m0.012s
 sys	0m0.031s
 
 Reading <./data/input/edgenew768x768.pgm>
 avg number of pixels=254.944355, iteration=0 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_2.pgm
-total time is 1.104663 (sec), woldSize is 2 
+total time is 1.113512 (sec), woldSize is 2 
 
-real	0m1.257s
-user	0m0.011s
-sys	0m0.031s
+real	0m1.268s
+user	0m0.013s
+sys	0m0.030s
 
 Reading <./data/input/edgenew768x768.pgm>
 avg number of pixels=254.944355, iteration=0 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_2.pgm
-total time is 1.104312 (sec), woldSize is 2 
+total time is 1.106483 (sec), woldSize is 2 
 
-real	0m1.293s
+real	0m1.280s
 user	0m0.014s
 sys	0m0.028s
 
 Reading <./data/input/edgenew768x768.pgm>
 avg number of pixels=254.944355, iteration=0 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_2.pgm
-total time is 1.108386 (sec), woldSize is 2 
+total time is 1.106209 (sec), woldSize is 2 
 
-real	0m1.303s
+real	0m1.256s
 user	0m0.010s
-sys	0m0.035s
+sys	0m0.033s
 
 Reading <./data/input/edgenew768x768.pgm>
 avg number of pixels=254.944355, iteration=0 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_2.pgm
-total time is 1.105057 (sec), woldSize is 2 
+total time is 1.107850 (sec), woldSize is 2 
 
-real	0m1.294s
+real	0m1.255s
+user	0m0.009s
+sys	0m0.037s
+
+Reading <./data/input/edgenew768x768.pgm>
+avg number of pixels=254.944355, iteration=0 
+Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_2.pgm
+total time is 1.107371 (sec), woldSize is 2 
+
+real	0m1.283s
+user	0m0.008s
+sys	0m0.034s
+
+Reading <./data/input/edgenew768x768.pgm>
+avg number of pixels=254.944355, iteration=0 
+Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_2.pgm
+total time is 1.115218 (sec), woldSize is 2 
+
+real	0m1.268s
+user	0m0.010s
+sys	0m0.033s
+
+Reading <./data/input/edgenew768x768.pgm>
+avg number of pixels=254.944355, iteration=0 
+Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_2.pgm
+total time is 1.105485 (sec), woldSize is 2 
+
+real	0m1.258s
 user	0m0.011s
 sys	0m0.032s
 
 Reading <./data/input/edgenew768x768.pgm>
 avg number of pixels=254.944355, iteration=0 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_2.pgm
-total time is 1.105306 (sec), woldSize is 2 
+total time is 1.106678 (sec), woldSize is 2 
 
-real	0m1.284s
-user	0m0.008s
-sys	0m0.036s
+real	0m1.308s
+user	0m0.013s
+sys	0m0.030s
 
 Reading <./data/input/edgenew768x768.pgm>
 avg number of pixels=254.944355, iteration=0 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_2.pgm
-total time is 1.105253 (sec), woldSize is 2 
+total time is 1.114904 (sec), woldSize is 2 
 
-real	0m1.293s
-user	0m0.006s
-sys	0m0.036s
+real	0m1.269s
+user	0m0.010s
+sys	0m0.032s
 --------------------------------------------------------------------------------
-Finished at Tue Nov 20 23:59:05 GMT 2018
+Finished at Wed Nov 21 00:04:47 GMT 2018
