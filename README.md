@@ -16,23 +16,29 @@
   * 0or1: we can use 0 or 1 to disable or enable delta correspondingly.By default is disabled.
 
 ## Scripts Description
-* run.sh: 
-* image.pbs:
-* get_mpich.sh:
-* image.pbs:
-* validateOutput.sh:
-
+* The following scripts are inside the scripts directory:
+  * run.sh: run my experiments on qsub
+  * image.pbs: qsub script
+  * get_mpich.sh: install mpi on travis
+  * runAndValidateLocal.sh: run 18 tests (with and without delta enabled) and validate that their output images are correct
+  * generateGraphs.py : generates speedup and total time graphs based on qsub results
+  * qsubResultsValidation.py: validates that the results of qsub (images + logfiles) are correct.
 
 ## Scripts Instructions
 * Before running any script or the project make sure that your current directory is MPP-Decomposition.
-* Run experiments at the backend of cirrus and generate graphs(located at ./data/graphs using the following commands:
+* Run experiments at the backend of cirrus, validate their results and generate graphs(located at ./data/graphs using the following commands:
 ```
 ./scripts/run.sh 
+python scripts/qsubResultsValidation.py
 python  scripts/generateGraphs.py 
+```
+* Run experiments and validate the results local using:
+```
+./scripts/runAndValidateLocal.sh
 ```
 
 ## Testing
-* For testing I used continuous integration(travis) and output validation using scripts.
+* For testing I used continuous integration(travis) and scripts.(see Scripts Description)
 
 ## Acknowledgement
 * I used the following tutorial in order to setup [travis-mpi](https://d-meiser.github.io/2016/01/10/mpi-travis.html)
