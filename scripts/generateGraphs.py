@@ -1,3 +1,4 @@
+
 import os
 import operator
 import numpy as np
@@ -23,13 +24,30 @@ def GenerateLineChart(dict1,dict2,dict3,imageName1,imageName2,imageName3,xAxisLa
 	x2,y2 = GetAxis(dict2)
 	x3,y3 = GetAxis(dict3)
 
+	expected_speedup = dict()
+	cnt=1
+	for key in small_np_to_time.keys():
+		expected_speedup[key] = key
+		
+
 	fig, ax = plt.subplots()
+
+
 	plt.plot(x1,y1,marker="x")
 	plt.plot(x2,y2,marker="x")
 	plt.plot(x3,y3,marker="x")
+	
+	if("speedup" in fileName):	
+		x4,y4= GetAxis(expected_speedup)
+		plt.plot(x4,y4,marker="x")
+
 	ax.set(xlabel=xAxisLabel, ylabel=yAxisLabel)	
 	ax.grid()
-	plt.legend([imageName1, imageName2,imageName3], loc=2)
+	if("speedup" in fileName):	
+		plt.legend([imageName1, imageName2,imageName3,"expected"], loc=2)
+	else:	
+		plt.legend([imageName1, imageName2,imageName3], loc=2)
+
 	path="./data/graphs/"
 	plt.savefig((path+fileName), format='eps', dpi=1000)
 	#plt.show()
@@ -84,6 +102,8 @@ def main():
 	InitSpeedUpDictionary(small_speedup,small_np_to_time)
 	InitSpeedUpDictionary(medium_speedup,medium_np_to_time)
 	InitSpeedUpDictionary(large_speedup,large_np_to_time)
+
+	
 
 	print small_speedup
 	print medium_speedup
