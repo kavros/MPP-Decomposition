@@ -16,10 +16,10 @@ void gather(topology topo,double** masterbuf,double** buf,MPI_Comm comm2d,char* 
     
     if(topo.rank==0)
     {
-        for(i=0;i<M;i++)
+        /*for(i=0;i<M;i++)
             for(j=0;j<N;j++)
-                masterbuf[i][j]=0;                  //clean masterbuf for testing
-        
+                masterbuf[i][j]=0;                  //clean masterbuf for testing usefull for testing purposes
+        */
         int coords[2];
         for(i=1;i<worldSize;i++)
         {
@@ -113,8 +113,5 @@ void halloSwapsHorizontal(double** old,topology topo)
     MPI_Wait(&request,&status);
     MPI_Wait(&request2,&status);    
     MPI_Wait(&request3,&status);
-    MPI_Wait(&request4,&status);
-    
-    
-    
+    MPI_Wait(&request4,&status);  
 }
