@@ -4,8 +4,8 @@
 #define GLOBALVARIABLES_H
 #include <mpi.h>
 #define MAXITER   1500
-#define PRINTFREQ  200
-#define DELTAFREQ 50
+#define PRINTFREQ  200                      
+#define DELTAFREQ 50                        //deterimines how ofter our program calculates delta
 
 
 

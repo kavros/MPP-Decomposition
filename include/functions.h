@@ -10,6 +10,12 @@
 #include "globalVariables.h"
 
 
+/*
+ * Each processes has an instance of this struct.
+ * The function initTopology(...) initialize this struct and
+ * each process use this struct for number of reasons such as
+ * to communicate with neighbors. 
+ */
 typedef struct topology
 {
     int Np;
@@ -61,7 +67,7 @@ bool isNumberPrime(int num);
  * @param topo
  * @param dims
  * @param old
- */
+ */// determins how ofter 
 void computeBoundaryConditions(topology topo,int *dims,double **old);
 
 /**
@@ -80,7 +86,7 @@ void printAverages(int iter,int targetIter,int* cnt ,double **old,topology topo 
 /**
  * Exit the loop  across all the processes if the value of delta below 0.1.
  * Delta is calculated every 200 iterations but user also can change it using the
- * appropriate cmd line flags.
+ * appropriate cmd line flags. I used MPI_Allreduce for the calculation of max delta across all processes.
  * @param topo
  * @param maxDelta
  * @param iter
@@ -112,7 +118,7 @@ void deallocations(double **masterbuf,double **buf,double **old,double **new, do
 
 /**
  * The user can optional set any of the following flags:
- * t: total prints-calculations of average pixel value.
+ * t: total prints of average pixel value.
  * i: input image
  * e: output image
  * d: 0 or 1 to enable or disable termination condition delta.
