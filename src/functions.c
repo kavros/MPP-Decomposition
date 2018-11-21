@@ -56,7 +56,7 @@ void parseCmdLine(int argc, char *argv[])
         /* Display the error details contained in the arg_end struct.*/
         arg_print_errors(stdout, end, progname);
         printf("Try '%s --help' for more information.\n", progname);
-
+        exit(-1);
         
     }
     if(inputArg->count > 0 )
