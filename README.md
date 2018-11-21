@@ -40,6 +40,6 @@ python  scripts/generateGraphs.py
 ## Testing
 * For testing I used continuous integration(travis) and scripts.(see Scripts Description)
 
-## Acknowledgement
+## References
 * I used the following tutorial in order to setup [travis-mpi](https://d-meiser.github.io/2016/01/10/mpi-travis.html)
 * I used an external library for command line parsing called [Argtable](https://github.com/argtable/argtable3)
