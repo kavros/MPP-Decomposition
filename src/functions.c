@@ -15,6 +15,7 @@
 #ifdef IGNORE_PRINTF
 #define printf(fmt, ...) 
 #endif
+#define NELEMS(x)  (sizeof(x) / sizeof((x)[0]))
 
 void parseCmdLine(int argc, char *argv[])
 {
@@ -60,13 +61,20 @@ void parseCmdLine(int argc, char *argv[])
     }
     if(inputArg->count > 0 )
     {
-        input = (char*)inputArg->filename[0];
+        
         //printf("input= %s\n",inputArg->filename[0]);
+        int len = strlen(inputArg->filename[0]);
+        input = malloc(sizeof(char)*len );
+        strncpy(input,inputArg->filename[0],len);
+        
     }
     if (outputArg->count > 0 )
     {
-        output =(char*) outputArg->filename[0];
-        //printf("output= %s\n",outputArg->filename[0]);
+        int len = strlen(outputArg->filename[0]);
+        output = malloc(sizeof(char)*len );
+        strncpy(output,outputArg->filename[0],len);
+        
+       //printf("output= %s\n",outputArg->filename[0]);
     }
     if (totalAvgPrintsArg->count > 0 )
     {
@@ -84,7 +92,7 @@ void parseCmdLine(int argc, char *argv[])
         isDeltaActivated = *(deltaArg->ival);
         //printf("delta= %d\n",*(deltaArg->ival));
     }
-    //arg_freetable(argtable, sizeof(argtable) / sizeof(argtable[0]));
+    arg_freetable(argtable, sizeof(argtable) / sizeof(argtable[0]));
 }
 
 
@@ -105,7 +113,8 @@ void deallocations(double **masterbuf,double **buf,double **old,double **new, do
     free(new);
     free(edge);
     free(buf);
-    
+    free(input);
+    free(output);
 }
 
 bool isNumberPrime(int num)

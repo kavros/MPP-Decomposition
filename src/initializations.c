@@ -9,8 +9,17 @@ void initGlobalVariables()
 {
     isDeltaActivated = false;
     totalAveragePrints=1;
-    input = "./data/input/edgenew192x128.pgm";
-    output="./data/output/imagenew192x128.pgm";
+    
+    char* i =  "./data/input/edgenew192x128.pgm";
+    int len = strlen(i);
+    input =malloc(sizeof(char)*len);
+    strncpy(input,i,len);
+    
+    
+    char* o="./data/output/imagenew192x128.pgm";
+    len = strlen(o);
+    output = malloc(sizeof(char)*len);
+    strncpy(output,i,len);
 }
 
 void initAvgPrints(int* printAvgAtIter)
