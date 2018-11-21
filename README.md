@@ -43,3 +43,4 @@ python  scripts/generateGraphs.py
 ## References
 * I used the following tutorial in order to setup [travis-mpi](https://d-meiser.github.io/2016/01/10/mpi-travis.html)
 * I used an external library for command line parsing called [Argtable](https://github.com/argtable/argtable3)
+* I used the [matplotlib](https://matplotlib.org/) which is a python library in order to plot my graphs.
