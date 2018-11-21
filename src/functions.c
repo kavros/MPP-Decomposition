@@ -110,9 +110,10 @@ void deallocations(double **masterbuf,double **buf,double **old,double **new, do
 
 bool isNumberPrime(int num)
 {
-    assert(num > 0);
+    assert(num > 0);       //validates that the program does not give negative number as input.
     int i;
-    if(num == 1)
+    if(num == 1)            //we consider 1 as prime because if the worldsize is 1 then
+                            //the decomposition is 1D.
     {
         return false;
     }
@@ -207,7 +208,7 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
             }
             
 	}
-	//printf("maxDelta = %f\n",maxDelta);
+
         for (i=1;i<Mp+1;i++)
 	{
             for (j=1;j<Np+1;j++)
@@ -257,12 +258,14 @@ void calculateMaxDelta(int i,int j,double** new,double** old,double* maxDelta)
 
 bool isTheLastIteration(topology topo,double maxDelta,int iter)
 {
-    if (isDeltaActivated == false)
+    if (isDeltaActivated == false) //continue iterations if delta is disabled
     {
         return false;
     }
     
-    if(iter%DELTAFREQ != 0 ) return false;
+    if(iter%DELTAFREQ != 0 ) return false;  //continue iterations 
+                                            //if current iteration 
+                                            //is not devisible by DELTAFREQ
     
     //printf("iter = %d\n",iter);
     double globalMaxDelta = -1.0f;
@@ -281,7 +284,8 @@ bool isTheLastIteration(topology topo,double maxDelta,int iter)
 void printAverages(int iter,int targetIter,int* cnt ,double **old,topology topo )
 {
     
-    if( (*cnt) == totalAveragePrints ) return;
+    if( (*cnt) == totalAveragePrints ) return;      //if we have print all the
+                                                    //averages we return.
     
     //printf("targetIter = %d\n",targetIter);
     int i,j;
@@ -319,12 +323,14 @@ void computeBoundaryConditions(topology topo,int *dims,double **old)
         int myXCoord = topo.coords[0];
         int lastXCoord = (dims[0]-1);
         
-        if(myXCoord == 0)
+        if(myXCoord == 0)                           //compute boundary condition
+                                                    //at the most left column
         {
             old[0][j]   = (int)(255.0*(1.0-val));
         }
         
-        if(myXCoord == lastXCoord )
+        if(myXCoord == lastXCoord )                 //compute boundary condition
+                                                    //conditions at the most right column
         {
             old[Mp+1][j] = (int)(255.0*val);
         }

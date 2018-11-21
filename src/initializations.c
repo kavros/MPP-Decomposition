@@ -18,10 +18,12 @@ void initAvgPrints(int* printAvgAtIter)
     int i;
     if(totalAveragePrints <= 0)
     {
-        assert(0);
+        assert(0);                        //validate that totalAveragePrints
+                                           //cannot be negative or zero.
     }
-    //int printAvgAtIter[totalAveragePrints];
     
+    //initialize an array that holds the iterations that we 
+    //will print the average pixel values.
     for(i=0; i<totalAveragePrints; i++)
     {
         if(i==0)
@@ -29,10 +31,8 @@ void initAvgPrints(int* printAvgAtIter)
             printAvgAtIter[i] = 0;
         }
         printAvgAtIter[i] =i*(MAXITER/totalAveragePrints);
-        //printf("%d, ",printAvgAtIter[i]);
         
     }
-    //printf("\n");  
 }
 
 void initTopology(topology* topo,int worldSize,MPI_Comm* comm2d,int* dims)
@@ -46,9 +46,12 @@ void initTopology(topology* topo,int worldSize,MPI_Comm* comm2d,int* dims)
     
     dims[0]=0;
     dims[1]=0;
+    
+    //if the number of processes is prime then the decomposition can only be 1D.
+    //Thus we check if horizontal or vertical decomposition is suitable.
     if(isNumberPrime(worldSize))
     {
-        if(M%worldSize ==0)
+        if(M%worldSize ==0)         //check if columns are divisible with the num of processes.
         {
             dims[1]=1;
         }
@@ -59,7 +62,8 @@ void initTopology(topology* topo,int worldSize,MPI_Comm* comm2d,int* dims)
     }
     
     MPI_Dims_create(worldSize,ndims,dims);
-    //printf("(%d x %d) \n",dims[0],dims[1]);
+
+    //determines if cyclic allowed.This is useful for finding neighboors correct.
     bool isSerialDecomp = (dims[0] == 1) && (dims[1] == 1 );
     bool isVerticalDecomp = (dims[0] > 1) && (dims[1] == 1 );
     bool isHorizontalDecomp = (dims[0] == 1) && (dims[1] > 1 );
@@ -137,10 +141,7 @@ void loadImage(topology topo,double** masterbuf,char* input)
 {
     if(topo.rank == 0)
     {
-        //printf("---master\n");
-        //printf("Processing %d x %d image\n", M, N);
-        //printf("Number of iterations = %d\n", MAXITER);
-        printf("\nReading <%s>\n", input);
+        //printf("\nReading <%s>\n", input);
         pgmread(input, &masterbuf[0][0], M, N);
     }
 }

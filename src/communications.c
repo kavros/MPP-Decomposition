@@ -6,7 +6,8 @@ void gather(topology topo,double** masterbuf,double** buf,MPI_Comm comm2d,char* 
     MPI_Request request;
     MPI_Status status;
     int i,j;
-     if(topo.rank!=0)
+     if(topo.rank!=0)               //all processes are sending their buffer to master
+                                    //except rank 0
     {
         
         MPI_Isend(&buf[0][0],1,vectorMpxNp,0,0,MPI_COMM_WORLD,&request);
@@ -14,7 +15,7 @@ void gather(topology topo,double** masterbuf,double** buf,MPI_Comm comm2d,char* 
     }
     
     
-    if(topo.rank==0)
+    if(topo.rank==0)                //rank 0 receive and save the image.
     {
         /*for(i=0;i<M;i++)
             for(j=0;j<N;j++)
@@ -45,7 +46,7 @@ void scatter(double** masterbuf,double** buf,topology topo,int worldSize,MPI_Com
 {
     MPI_Request request;
     MPI_Status status;
-    if(topo.rank == 0)
+    if(topo.rank == 0)          //rank 0 send the part of the image to other processes
     {
         int coords[2];
         int i,j;
@@ -55,7 +56,6 @@ void scatter(double** masterbuf,double** buf,topology topo,int worldSize,MPI_Com
             MPI_Cart_coords(comm2d, i, 2, coords);
             int startY = coords[1]*topo.Np;
             int startX = coords[0]*topo.Mp;
-            //printf("p %d, startY=%d, startX=%d\n",i,startY,startX);
             
             MPI_Isend(&masterbuf[ startX][startY], 1, vectorMpxNP_N, i, 0, MPI_COMM_WORLD,&request);
             
@@ -67,7 +67,7 @@ void scatter(double** masterbuf,double** buf,topology topo,int worldSize,MPI_Com
     }
     
        
-    if(topo.rank !=0)
+    if(topo.rank !=0)           //all processes except rank 0 get their part of the image.
     {
         MPI_Irecv(&buf[0][0], 1, vectorMpxNp, 0, 0, MPI_COMM_WORLD, &request); 
         MPI_Wait(&request,&status);
