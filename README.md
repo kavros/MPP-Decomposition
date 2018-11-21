@@ -6,14 +6,19 @@
 * Run at the frontend of cirrus using 4 processes and delta enabled: ```make run_delta n=4```
 * Run at the backend of cirrus using 4 processes: ```make qsub n=4```
 
-## Run without Makefile
+## Run Description
 * We can run the project in 2 ways:
-* without command line arguments using :```mpirun -n numberOfprocesses ./build/image ```
-* and wih command line arguments using: ```mpirun -n numberOfprocesses ./build/image -i inputImagePath -e outputImagePath -t totalNumber -d 0or1 ``` 
-  * inputImagePath: is the edge image path. 
-  * outputImagePath: is the output image after the calculations
-  * totalNumber: is the total number that we are going to print average value of the pixels
-  * 0or1: we can use 0 or 1 to disable or enable delta correspondingly.By default is disabled.
+  * without command line arguments using :```mpirun -n numberOfprocesses ./build/image ```
+  * and wih command line arguments using: ```mpirun -n numberOfprocesses ./build/image -i inputImagePath -e outputImagePath -t totalNumber -d 0or1 ``` 
+* Using the following command line arguments we can change the input and the output. Also, we can enable/disable termination condition and determine the total prints of the average value of pixels.
+
+Argument | Description
+---      | ---
+-i | determines the input image path and name. 
+-e | determines the output image path and name. 
+-t | determines the total number that we are going to print average value of the pixels.
+-d | we can use 0 or 1 to disable or enable delta correspondingly.By default is disabled.
+-h | provide a help message.
 
 ## Scripts Description
 * The following scripts are inside the scripts directory:
