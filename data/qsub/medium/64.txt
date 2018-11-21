@@ -1,2 +1,98 @@
 /lustre/home/d167/s1891388/MPI/coursework
-Error: for 64 processes you must select at least 2 nodes
+--------------------------------------------------------------------------------
+Running image on 64 processes over 2 node(s)
+Issuing command: mpiexec_mpt -n 64 -ppn 32 ./image
+Started at Tue Nov 20 23:48:32 GMT 2018
+--------------------------------------------------------------------------------
+
+Reading <./data/input/edgenew512x384.pgm>
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
+total time is 0.065382 (sec), woldSize is 64 
+
+real	0m1.987s
+user	0m0.007s
+sys	0m0.031s
+
+Reading <./data/input/edgenew512x384.pgm>
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
+total time is 0.066489 (sec), woldSize is 64 
+
+real	0m1.887s
+user	0m0.008s
+sys	0m0.029s
+
+Reading <./data/input/edgenew512x384.pgm>
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
+total time is 0.066615 (sec), woldSize is 64 
+
+real	0m1.892s
+user	0m0.009s
+sys	0m0.028s
+
+Reading <./data/input/edgenew512x384.pgm>
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
+total time is 0.066086 (sec), woldSize is 64 
+
+real	0m1.890s
+user	0m0.009s
+sys	0m0.030s
+
+Reading <./data/input/edgenew512x384.pgm>
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
+total time is 0.064118 (sec), woldSize is 64 
+
+real	0m1.885s
+user	0m0.009s
+sys	0m0.028s
+
+Reading <./data/input/edgenew512x384.pgm>
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
+total time is 0.063749 (sec), woldSize is 64 
+
+real	0m1.899s
+user	0m0.008s
+sys	0m0.031s
+
+Reading <./data/input/edgenew512x384.pgm>
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
+total time is 0.065494 (sec), woldSize is 64 
+
+real	0m1.905s
+user	0m0.009s
+sys	0m0.031s
+
+Reading <./data/input/edgenew512x384.pgm>
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
+total time is 0.065001 (sec), woldSize is 64 
+
+real	0m1.935s
+user	0m0.010s
+sys	0m0.026s
+
+Reading <./data/input/edgenew512x384.pgm>
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
+total time is 0.065085 (sec), woldSize is 64 
+
+real	0m1.891s
+user	0m0.006s
+sys	0m0.031s
+
+Reading <./data/input/edgenew512x384.pgm>
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
+total time is 0.065190 (sec), woldSize is 64 
+
+real	0m1.909s
+user	0m0.011s
+sys	0m0.027s
+--------------------------------------------------------------------------------
+Finished at Tue Nov 20 23:48:51 GMT 2018
