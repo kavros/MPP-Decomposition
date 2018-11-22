@@ -85,7 +85,7 @@ void parseCmdLine(int argc, char *argv[])
             printf("Negative or zero values are not accepted for the total prints of averages.\n");
             printf("total prints of averages is now 1\n");
         }
-        //printf("totalAvgPrintsArg= %d\n",*(targetIterArg->ival));
+        //printf("totalAvgPrintsArg= %d\n",totalAveragePrints);
     }
     if(deltaArg->count > 0 )
     {
@@ -302,7 +302,7 @@ void printAverages(int iter,int targetIter,int* cnt ,double **old,topology topo 
     {
         *cnt=*cnt+1;
         double sum = 0;
-        double totalSum;
+        double totalSum=0;
         for (i=1;i<topo.Mp+1;i++)
         {
             for (j=1;j<topo.Np+1;j++)
