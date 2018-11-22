@@ -44,7 +44,7 @@ def GenerateLineChart(dict1,dict2,dict3,imageName1,imageName2,imageName3,xAxisLa
 	ax.set(xlabel=xAxisLabel, ylabel=yAxisLabel)	
 	ax.grid()
 	if("speedup" in fileName):	
-		plt.legend([imageName1, imageName2,imageName3,"expected"], loc=2)
+		plt.legend([imageName1, imageName2,imageName3,"ideal"], loc=2)
 	else:	
 		plt.legend([imageName1, imageName2,imageName3], loc=2)
 
