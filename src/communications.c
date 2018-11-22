@@ -17,10 +17,7 @@ void gather(topology topo,double** masterbuf,double** buf,MPI_Comm comm2d,char* 
     
     if(topo.rank==0)                //rank 0 receive and save the image.
     {
-        /*for(i=0;i<M;i++)
-            for(j=0;j<N;j++)
-                masterbuf[i][j]=0;                  //clean masterbuf for testing usefull for testing purposes
-        */
+        
         int coords[2];
         for(i=1;i<worldSize;i++)
         {
@@ -36,7 +33,6 @@ void gather(topology topo,double** masterbuf,double** buf,MPI_Comm comm2d,char* 
         for(i=0;i<topo.Mp;i++)
             for(j=0;j<topo.Np;j++)
                 masterbuf[i][j] = buf[i][j];
-        
         pgmwrite(output, &masterbuf[0][0], M, N);
     }
 }
