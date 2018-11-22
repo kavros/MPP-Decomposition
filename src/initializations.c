@@ -19,7 +19,7 @@ void initGlobalVariables()
     char* o="./data/output/imagenew192x128.pgm";
     len = strlen(o);
     output = malloc(sizeof(char)*len);
-    strncpy(output,i,len);
+    strncpy(output,o,len);
 }
 
 void initAvgPrints(int* printAvgAtIter)
