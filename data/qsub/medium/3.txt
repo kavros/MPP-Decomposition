@@ -1,2 +1,78 @@
 /lustre/home/d167/s1891388/MPI/coursework
-Error: NPROC=3 must be a multiple of number of nodes=2
+--------------------------------------------------------------------------------
+Running image on 3 processes over 3 node(s)
+Issuing command: mpiexec_mpt -n 3 -ppn 1 ./image
+Started at Fri Nov 23 22:01:29 GMT 2018
+--------------------------------------------------------------------------------
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_3.pgm
+total time is 0.323674 (sec), woldSize is 3 
+
+real	0m0.525s
+user	0m0.010s
+sys	0m0.035s
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_3.pgm
+total time is 0.320542 (sec), woldSize is 3 
+
+real	0m0.522s
+user	0m0.019s
+sys	0m0.035s
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_3.pgm
+total time is 0.324525 (sec), woldSize is 3 
+
+real	0m0.543s
+user	0m0.022s
+sys	0m0.037s
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_3.pgm
+total time is 0.320959 (sec), woldSize is 3 
+
+real	0m0.521s
+user	0m0.014s
+sys	0m0.041s
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_3.pgm
+total time is 0.320328 (sec), woldSize is 3 
+
+real	0m0.526s
+user	0m0.021s
+sys	0m0.037s
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_3.pgm
+total time is 0.319744 (sec), woldSize is 3 
+
+real	0m0.522s
+user	0m0.021s
+sys	0m0.035s
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_3.pgm
+total time is 0.322121 (sec), woldSize is 3 
+
+real	0m0.528s
+user	0m0.014s
+sys	0m0.046s
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_3.pgm
+total time is 0.321879 (sec), woldSize is 3 
+
+real	0m0.527s
+user	0m0.027s
+sys	0m0.032s
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_3.pgm
+total time is 0.318389 (sec), woldSize is 3 
+
+real	0m0.525s
+user	0m0.019s
+sys	0m0.039s
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_3.pgm
+total time is 0.316617 (sec), woldSize is 3 
+
+real	0m0.515s
+user	0m0.015s
+sys	0m0.039s
+--------------------------------------------------------------------------------
+Finished at Fri Nov 23 22:01:34 GMT 2018

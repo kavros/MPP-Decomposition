@@ -2,77 +2,77 @@
 --------------------------------------------------------------------------------
 Running image on 64 processes over 4 node(s)
 Issuing command: mpiexec_mpt -n 64 -ppn 16 ./image
-Started at Fri Nov 23 19:09:23 GMT 2018
+Started at Fri Nov 23 22:03:52 GMT 2018
 --------------------------------------------------------------------------------
 avg number of pixels=254.944355, iteration=0 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_64.pgm
-total time is 0.132981 (sec), woldSize is 64 
-
-real	0m1.230s
-user	0m0.006s
-sys	0m0.038s
-avg number of pixels=254.944355, iteration=0 
-Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_64.pgm
-total time is 0.130674 (sec), woldSize is 64 
-
-real	0m1.231s
-user	0m0.025s
-sys	0m0.035s
-avg number of pixels=254.944355, iteration=0 
-Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_64.pgm
-total time is 0.130099 (sec), woldSize is 64 
-
-real	0m1.224s
-user	0m0.021s
-sys	0m0.045s
-avg number of pixels=254.944355, iteration=0 
-Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_64.pgm
-total time is 0.130175 (sec), woldSize is 64 
-
-real	0m1.214s
-user	0m0.022s
-sys	0m0.038s
-avg number of pixels=254.944355, iteration=0 
-Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_64.pgm
-total time is 0.133686 (sec), woldSize is 64 
-
-real	0m1.235s
-user	0m0.013s
-sys	0m0.045s
-avg number of pixels=254.944355, iteration=0 
-Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_64.pgm
-total time is 0.131104 (sec), woldSize is 64 
-
-real	0m1.228s
-user	0m0.016s
-sys	0m0.042s
-avg number of pixels=254.944355, iteration=0 
-Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_64.pgm
-total time is 0.132275 (sec), woldSize is 64 
+total time is 0.131896 (sec), woldSize is 64 
 
 real	0m1.226s
-user	0m0.025s
-sys	0m0.035s
+user	0m0.014s
+sys	0m0.038s
 avg number of pixels=254.944355, iteration=0 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_64.pgm
-total time is 0.132266 (sec), woldSize is 64 
+total time is 0.130209 (sec), woldSize is 64 
 
-real	0m1.221s
-user	0m0.019s
+real	0m1.240s
+user	0m0.016s
 sys	0m0.041s
 avg number of pixels=254.944355, iteration=0 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_64.pgm
-total time is 0.132970 (sec), woldSize is 64 
+total time is 0.131984 (sec), woldSize is 64 
 
-real	0m1.229s
-user	0m0.016s
+real	0m1.223s
+user	0m0.012s
+sys	0m0.044s
+avg number of pixels=254.944355, iteration=0 
+Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_64.pgm
+total time is 0.131380 (sec), woldSize is 64 
+
+real	0m1.278s
+user	0m0.012s
+sys	0m0.046s
+avg number of pixels=254.944355, iteration=0 
+Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_64.pgm
+total time is 0.131914 (sec), woldSize is 64 
+
+real	0m1.233s
+user	0m0.015s
+sys	0m0.045s
+avg number of pixels=254.944355, iteration=0 
+Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_64.pgm
+total time is 0.130993 (sec), woldSize is 64 
+
+real	0m1.252s
+user	0m0.020s
+sys	0m0.049s
+avg number of pixels=254.944355, iteration=0 
+Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_64.pgm
+total time is 0.133064 (sec), woldSize is 64 
+
+real	0m1.227s
+user	0m0.015s
+sys	0m0.044s
+avg number of pixels=254.944355, iteration=0 
+Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_64.pgm
+total time is 0.129485 (sec), woldSize is 64 
+
+real	0m1.249s
+user	0m0.024s
 sys	0m0.038s
 avg number of pixels=254.944355, iteration=0 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_64.pgm
-total time is 0.132739 (sec), woldSize is 64 
+total time is 0.129635 (sec), woldSize is 64 
 
-real	0m1.218s
+real	0m1.231s
 user	0m0.017s
-sys	0m0.042s
+sys	0m0.046s
+avg number of pixels=254.944355, iteration=0 
+Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_64.pgm
+total time is 0.129762 (sec), woldSize is 64 
+
+real	0m1.290s
+user	0m0.017s
+sys	0m0.043s
 --------------------------------------------------------------------------------
-Finished at Fri Nov 23 19:09:35 GMT 2018
+Finished at Fri Nov 23 22:04:05 GMT 2018

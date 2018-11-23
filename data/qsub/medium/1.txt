@@ -2,77 +2,77 @@
 --------------------------------------------------------------------------------
 Running image on 1 processes over 1 node(s)
 Issuing command: mpiexec_mpt -n 1 -ppn 1 ./image
-Started at Fri Nov 23 18:54:52 GMT 2018
+Started at Fri Nov 23 22:00:52 GMT 2018
 --------------------------------------------------------------------------------
 avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
-total time is 0.708804 (sec), woldSize is 1 
+total time is 0.709620 (sec), woldSize is 1 
 
-real	0m0.810s
-user	0m0.011s
+real	0m0.817s
+user	0m0.012s
 sys	0m0.031s
 avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
-total time is 0.706276 (sec), woldSize is 1 
+total time is 0.717360 (sec), woldSize is 1 
 
-real	0m0.808s
-user	0m0.010s
-sys	0m0.036s
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
-total time is 0.723554 (sec), woldSize is 1 
-
-real	0m0.840s
-user	0m0.011s
-sys	0m0.034s
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
-total time is 0.717713 (sec), woldSize is 1 
-
-real	0m0.842s
-user	0m0.014s
-sys	0m0.031s
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
-total time is 0.706206 (sec), woldSize is 1 
-
-real	0m0.808s
-user	0m0.007s
-sys	0m0.039s
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
-total time is 0.707024 (sec), woldSize is 1 
-
-real	0m0.803s
-user	0m0.010s
-sys	0m0.036s
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
-total time is 0.705147 (sec), woldSize is 1 
-
-real	0m0.809s
-user	0m0.011s
-sys	0m0.034s
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
-total time is 0.707257 (sec), woldSize is 1 
-
-real	0m0.810s
-user	0m0.008s
+real	0m0.836s
+user	0m0.009s
 sys	0m0.037s
 avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
-total time is 0.715184 (sec), woldSize is 1 
+total time is 0.706556 (sec), woldSize is 1 
 
-real	0m0.835s
+real	0m0.806s
+user	0m0.010s
+sys	0m0.037s
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
+total time is 0.706413 (sec), woldSize is 1 
+
+real	0m0.807s
 user	0m0.012s
+sys	0m0.034s
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
+total time is 0.706177 (sec), woldSize is 1 
+
+real	0m0.806s
+user	0m0.010s
 sys	0m0.035s
 avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
-total time is 0.716121 (sec), woldSize is 1 
+total time is 0.705665 (sec), woldSize is 1 
 
-real	0m0.836s
-user	0m0.014s
+real	0m0.799s
+user	0m0.012s
+sys	0m0.034s
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
+total time is 0.706190 (sec), woldSize is 1 
+
+real	0m0.808s
+user	0m0.010s
+sys	0m0.035s
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
+total time is 0.717606 (sec), woldSize is 1 
+
+real	0m0.839s
+user	0m0.010s
+sys	0m0.036s
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
+total time is 0.706587 (sec), woldSize is 1 
+
+real	0m0.807s
+user	0m0.016s
+sys	0m0.030s
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_1.pgm
+total time is 0.708217 (sec), woldSize is 1 
+
+real	0m0.809s
+user	0m0.013s
 sys	0m0.032s
 --------------------------------------------------------------------------------
-Finished at Fri Nov 23 18:55:00 GMT 2018
+Finished at Fri Nov 23 22:01:00 GMT 2018
