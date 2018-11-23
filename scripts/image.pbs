@@ -30,7 +30,7 @@
 # A node has 36 physical cores but we set ncpus=72 due to hyperthreads #
 #----------------------------------------------------------------------#
 
-NPROC=4
+#NPROC=4
 
 #------------------------------------------------------------------------#
 # You should not have to edit below here for simple MPI jobs             #
@@ -43,7 +43,7 @@ module load intel-compilers-17
 cd $PBS_O_WORKDIR
 
 MPIPROG=`basename $PBS_JOBNAME .pbs`
-#MPISIZE=$NPROC
+MPISIZE=$NPROC
 pwd
 
 # Spread the processes as evenly as possible across the nodes
