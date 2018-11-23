@@ -75,7 +75,11 @@ def initDictionary(dictionary, path):
 	#print dictionary
 	# update hash table value for each key with median time instead of list of times
 	for key in dictionary.keys():
-		medianTime = (dictionary[key])[len(dictionary[key])/2]
+		pos1 = len(dictionary[key])/2
+		pos2 = (len(dictionary[key])/2)-1
+		val1 =  (dictionary[key])[pos1]
+		val2 =  (dictionary[key])[pos2]
+		medianTime = (val1+val2)/2
 		dictionary[key] =  medianTime
 
 def InitSpeedUpDictionary(target,src):
