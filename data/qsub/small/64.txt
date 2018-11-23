@@ -1,2 +1,78 @@
 /lustre/home/d167/s1891388/MPI/coursework
-Error: for 64 processes you must select at least 2 nodes
+--------------------------------------------------------------------------------
+Running image on 64 processes over 4 node(s)
+Issuing command: mpiexec_mpt -n 64 -ppn 16 ./image
+Started at Fri Nov 23 19:08:56 GMT 2018
+--------------------------------------------------------------------------------
+avg number of pixels=254.601329, iteration=0 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_64.pgm
+total time is 0.028265 (sec), woldSize is 64 
+
+real	0m1.019s
+user	0m0.007s
+sys	0m0.036s
+avg number of pixels=254.601329, iteration=0 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_64.pgm
+total time is 0.026302 (sec), woldSize is 64 
+
+real	0m1.017s
+user	0m0.015s
+sys	0m0.045s
+avg number of pixels=254.601329, iteration=0 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_64.pgm
+total time is 0.026892 (sec), woldSize is 64 
+
+real	0m1.054s
+user	0m0.014s
+sys	0m0.045s
+avg number of pixels=254.601329, iteration=0 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_64.pgm
+total time is 0.026854 (sec), woldSize is 64 
+
+real	0m1.001s
+user	0m0.021s
+sys	0m0.038s
+avg number of pixels=254.601329, iteration=0 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_64.pgm
+total time is 0.026580 (sec), woldSize is 64 
+
+real	0m1.022s
+user	0m0.022s
+sys	0m0.037s
+avg number of pixels=254.601329, iteration=0 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_64.pgm
+total time is 0.032296 (sec), woldSize is 64 
+
+real	0m1.066s
+user	0m0.018s
+sys	0m0.041s
+avg number of pixels=254.601329, iteration=0 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_64.pgm
+total time is 0.026623 (sec), woldSize is 64 
+
+real	0m1.008s
+user	0m0.022s
+sys	0m0.039s
+avg number of pixels=254.601329, iteration=0 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_64.pgm
+total time is 0.026417 (sec), woldSize is 64 
+
+real	0m1.008s
+user	0m0.021s
+sys	0m0.038s
+avg number of pixels=254.601329, iteration=0 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_64.pgm
+total time is 0.026501 (sec), woldSize is 64 
+
+real	0m1.022s
+user	0m0.021s
+sys	0m0.039s
+avg number of pixels=254.601329, iteration=0 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_64.pgm
+total time is 0.033433 (sec), woldSize is 64 
+
+real	0m1.024s
+user	0m0.015s
+sys	0m0.044s
+--------------------------------------------------------------------------------
+Finished at Fri Nov 23 19:09:06 GMT 2018

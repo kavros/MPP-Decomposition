@@ -1,0 +1,2 @@
+/lustre/home/d167/s1891388/MPI/coursework
+Error: for 256 processes you must select at least 8 nodes

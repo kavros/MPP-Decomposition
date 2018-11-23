@@ -1,98 +1,78 @@
 /lustre/home/d167/s1891388/MPI/coursework
 --------------------------------------------------------------------------------
-Running image on 4 processes over 1 node(s)
-Issuing command: mpiexec_mpt -n 4 -ppn 4 ./image
-Started at Wed Nov 21 00:04:55 GMT 2018
+Running image on 4 processes over 4 node(s)
+Issuing command: mpiexec_mpt -n 4 -ppn 1 ./image
+Started at Fri Nov 23 19:07:27 GMT 2018
 --------------------------------------------------------------------------------
-
-Reading <./data/input/edgenew512x384.pgm>
 avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_4.pgm
-total time is 0.269320 (sec), woldSize is 4 
+total time is 0.248841 (sec), woldSize is 4 
 
-real	0m0.367s
-user	0m0.013s
-sys	0m0.029s
-
-Reading <./data/input/edgenew512x384.pgm>
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_4.pgm
-total time is 0.253222 (sec), woldSize is 4 
-
-real	0m0.346s
+real	0m0.455s
 user	0m0.012s
-sys	0m0.028s
-
-Reading <./data/input/edgenew512x384.pgm>
+sys	0m0.035s
 avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_4.pgm
-total time is 0.253680 (sec), woldSize is 4 
+total time is 0.245044 (sec), woldSize is 4 
 
-real	0m0.346s
-user	0m0.013s
-sys	0m0.025s
-
-Reading <./data/input/edgenew512x384.pgm>
+real	0m0.442s
+user	0m0.020s
+sys	0m0.038s
 avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_4.pgm
-total time is 0.253599 (sec), woldSize is 4 
+total time is 0.249706 (sec), woldSize is 4 
 
-real	0m0.346s
-user	0m0.012s
-sys	0m0.029s
-
-Reading <./data/input/edgenew512x384.pgm>
+real	0m0.445s
+user	0m0.015s
+sys	0m0.040s
 avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_4.pgm
-total time is 0.251208 (sec), woldSize is 4 
+total time is 0.252666 (sec), woldSize is 4 
 
-real	0m0.343s
-user	0m0.007s
+real	0m0.446s
+user	0m0.015s
+sys	0m0.040s
+avg number of pixels=254.986071, iteration=0 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_4.pgm
+total time is 0.247798 (sec), woldSize is 4 
+
+real	0m0.455s
+user	0m0.023s
 sys	0m0.034s
-
-Reading <./data/input/edgenew512x384.pgm>
 avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_4.pgm
-total time is 0.251450 (sec), woldSize is 4 
+total time is 0.245341 (sec), woldSize is 4 
 
-real	0m0.345s
-user	0m0.009s
-sys	0m0.031s
-
-Reading <./data/input/edgenew512x384.pgm>
+real	0m0.453s
+user	0m0.022s
+sys	0m0.032s
 avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_4.pgm
-total time is 0.251466 (sec), woldSize is 4 
+total time is 0.245949 (sec), woldSize is 4 
 
-real	0m0.346s
-user	0m0.012s
-sys	0m0.028s
-
-Reading <./data/input/edgenew512x384.pgm>
+real	0m0.454s
+user	0m0.024s
+sys	0m0.033s
 avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_4.pgm
-total time is 0.252214 (sec), woldSize is 4 
+total time is 0.242255 (sec), woldSize is 4 
 
-real	0m0.349s
-user	0m0.010s
-sys	0m0.029s
-
-Reading <./data/input/edgenew512x384.pgm>
+real	0m0.445s
+user	0m0.017s
+sys	0m0.040s
 avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_4.pgm
-total time is 0.255140 (sec), woldSize is 4 
+total time is 0.241805 (sec), woldSize is 4 
 
-real	0m0.348s
-user	0m0.010s
-sys	0m0.029s
-
-Reading <./data/input/edgenew512x384.pgm>
+real	0m0.449s
+user	0m0.022s
+sys	0m0.035s
 avg number of pixels=254.986071, iteration=0 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_4.pgm
-total time is 0.249313 (sec), woldSize is 4 
+total time is 0.243461 (sec), woldSize is 4 
 
-real	0m0.341s
-user	0m0.009s
-sys	0m0.030s
+real	0m0.448s
+user	0m0.023s
+sys	0m0.032s
 --------------------------------------------------------------------------------
-Finished at Wed Nov 21 00:04:58 GMT 2018
+Finished at Fri Nov 23 19:07:32 GMT 2018
