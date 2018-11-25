@@ -2,77 +2,77 @@
 --------------------------------------------------------------------------------
 Running image on 8 processes over 4 node(s)
 Issuing command: mpiexec_mpt -n 8 -ppn 2 ./image
-Started at Fri Nov 23 22:02:16 GMT 2018
+Started at Sun Nov 25 17:36:26 GMT 2018
 --------------------------------------------------------------------------------
 avg number of pixels=254.601329, iteration=0 
+total time is 0.032139 (sec), woldSize is 8 
 Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_8.pgm
-total time is 0.038746 (sec), woldSize is 8 
 
-real	0m0.233s
-user	0m0.012s
-sys	0m0.032s
+real	0m0.232s
+user	0m0.016s
+sys	0m0.031s
 avg number of pixels=254.601329, iteration=0 
+total time is 0.031931 (sec), woldSize is 8 
 Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_8.pgm
-total time is 0.038460 (sec), woldSize is 8 
-
-real	0m0.238s
-user	0m0.019s
-sys	0m0.035s
-avg number of pixels=254.601329, iteration=0 
-Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_8.pgm
-total time is 0.038647 (sec), woldSize is 8 
-
-real	0m0.227s
-user	0m0.019s
-sys	0m0.034s
-avg number of pixels=254.601329, iteration=0 
-Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_8.pgm
-total time is 0.038771 (sec), woldSize is 8 
-
-real	0m0.226s
-user	0m0.011s
-sys	0m0.042s
-avg number of pixels=254.601329, iteration=0 
-Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_8.pgm
-total time is 0.038736 (sec), woldSize is 8 
-
-real	0m0.233s
-user	0m0.012s
-sys	0m0.043s
-avg number of pixels=254.601329, iteration=0 
-Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_8.pgm
-total time is 0.039573 (sec), woldSize is 8 
-
-real	0m0.234s
-user	0m0.014s
-sys	0m0.038s
-avg number of pixels=254.601329, iteration=0 
-Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_8.pgm
-total time is 0.039915 (sec), woldSize is 8 
-
-real	0m0.233s
-user	0m0.013s
-sys	0m0.038s
-avg number of pixels=254.601329, iteration=0 
-Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_8.pgm
-total time is 0.038697 (sec), woldSize is 8 
 
 real	0m0.231s
+user	0m0.015s
+sys	0m0.041s
+avg number of pixels=254.601329, iteration=0 
+total time is 0.033519 (sec), woldSize is 8 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_8.pgm
+
+real	0m0.229s
+user	0m0.024s
+sys	0m0.029s
+avg number of pixels=254.601329, iteration=0 
+total time is 0.031274 (sec), woldSize is 8 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_8.pgm
+
+real	0m0.229s
+user	0m0.022s
+sys	0m0.032s
+avg number of pixels=254.601329, iteration=0 
+total time is 0.031929 (sec), woldSize is 8 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_8.pgm
+
+real	0m0.227s
 user	0m0.018s
-sys	0m0.032s
+sys	0m0.036s
 avg number of pixels=254.601329, iteration=0 
+total time is 0.032679 (sec), woldSize is 8 
 Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_8.pgm
-total time is 0.040147 (sec), woldSize is 8 
 
-real	0m0.233s
-user	0m0.021s
-sys	0m0.032s
+real	0m0.231s
+user	0m0.014s
+sys	0m0.041s
 avg number of pixels=254.601329, iteration=0 
+total time is 0.032417 (sec), woldSize is 8 
 Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_8.pgm
-total time is 0.038322 (sec), woldSize is 8 
 
-real	0m0.236s
+real	0m0.227s
 user	0m0.016s
-sys	0m0.040s
+sys	0m0.038s
+avg number of pixels=254.601329, iteration=0 
+total time is 0.031080 (sec), woldSize is 8 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_8.pgm
+
+real	0m0.231s
+user	0m0.020s
+sys	0m0.034s
+avg number of pixels=254.601329, iteration=0 
+total time is 0.032954 (sec), woldSize is 8 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_8.pgm
+
+real	0m0.227s
+user	0m0.014s
+sys	0m0.039s
+avg number of pixels=254.601329, iteration=0 
+total time is 0.031824 (sec), woldSize is 8 
+Writing 192 x 128 picture into file: ./data/qsub/small/imagenew192x128_8.pgm
+
+real	0m0.231s
+user	0m0.015s
+sys	0m0.038s
 --------------------------------------------------------------------------------
-Finished at Fri Nov 23 22:02:19 GMT 2018
+Finished at Sun Nov 25 17:36:29 GMT 2018

@@ -2,77 +2,77 @@
 --------------------------------------------------------------------------------
 Running image on 64 processes over 4 node(s)
 Issuing command: mpiexec_mpt -n 64 -ppn 16 ./image
-Started at Fri Nov 23 22:03:38 GMT 2018
+Started at Sun Nov 25 17:37:48 GMT 2018
 --------------------------------------------------------------------------------
 avg number of pixels=254.986071, iteration=0 
+total time is 0.035840 (sec), woldSize is 64 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
-total time is 0.069144 (sec), woldSize is 64 
-
-real	0m1.134s
-user	0m0.010s
-sys	0m0.037s
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
-total time is 0.069679 (sec), woldSize is 64 
-
-real	0m1.094s
-user	0m0.021s
-sys	0m0.040s
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
-total time is 0.071014 (sec), woldSize is 64 
-
-real	0m1.099s
-user	0m0.024s
-sys	0m0.035s
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
-total time is 0.072274 (sec), woldSize is 64 
-
-real	0m1.114s
-user	0m0.020s
-sys	0m0.040s
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
-total time is 0.070418 (sec), woldSize is 64 
-
-real	0m1.100s
-user	0m0.017s
-sys	0m0.041s
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
-total time is 0.069541 (sec), woldSize is 64 
-
-real	0m1.138s
-user	0m0.012s
-sys	0m0.037s
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
-total time is 0.066919 (sec), woldSize is 64 
 
 real	0m1.092s
-user	0m0.019s
-sys	0m0.040s
+user	0m0.012s
+sys	0m0.032s
 avg number of pixels=254.986071, iteration=0 
+total time is 0.036308 (sec), woldSize is 64 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
-total time is 0.069367 (sec), woldSize is 64 
+
+real	0m1.110s
+user	0m0.024s
+sys	0m0.036s
+avg number of pixels=254.986071, iteration=0 
+total time is 0.036384 (sec), woldSize is 64 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
+
+real	0m1.096s
+user	0m0.021s
+sys	0m0.041s
+avg number of pixels=254.986071, iteration=0 
+total time is 0.036664 (sec), woldSize is 64 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
 
 real	0m1.101s
-user	0m0.015s
-sys	0m0.044s
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
-total time is 0.066958 (sec), woldSize is 64 
-
-real	0m1.149s
-user	0m0.024s
-sys	0m0.035s
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
-total time is 0.070270 (sec), woldSize is 64 
-
-real	0m1.119s
 user	0m0.018s
 sys	0m0.041s
+avg number of pixels=254.986071, iteration=0 
+total time is 0.036516 (sec), woldSize is 64 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
+
+real	0m1.093s
+user	0m0.018s
+sys	0m0.038s
+avg number of pixels=254.986071, iteration=0 
+total time is 0.036652 (sec), woldSize is 64 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
+
+real	0m1.099s
+user	0m0.016s
+sys	0m0.043s
+avg number of pixels=254.986071, iteration=0 
+total time is 0.036515 (sec), woldSize is 64 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
+
+real	0m1.100s
+user	0m0.016s
+sys	0m0.043s
+avg number of pixels=254.986071, iteration=0 
+total time is 0.036820 (sec), woldSize is 64 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
+
+real	0m1.108s
+user	0m0.019s
+sys	0m0.039s
+avg number of pixels=254.986071, iteration=0 
+total time is 0.037473 (sec), woldSize is 64 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
+
+real	0m1.103s
+user	0m0.012s
+sys	0m0.047s
+avg number of pixels=254.986071, iteration=0 
+total time is 0.036719 (sec), woldSize is 64 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_64.pgm
+
+real	0m1.114s
+user	0m0.015s
+sys	0m0.040s
 --------------------------------------------------------------------------------
-Finished at Fri Nov 23 22:03:49 GMT 2018
+Finished at Sun Nov 25 17:37:59 GMT 2018

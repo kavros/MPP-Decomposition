@@ -2,77 +2,77 @@
 --------------------------------------------------------------------------------
 Running image on 1 processes over 1 node(s)
 Issuing command: mpiexec_mpt -n 1 -ppn 1 ./image
-Started at Fri Nov 23 22:00:52 GMT 2018
+Started at Sun Nov 25 17:35:05 GMT 2018
 --------------------------------------------------------------------------------
 avg number of pixels=254.944355, iteration=0 
+total time is 2.115324 (sec), woldSize is 1 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_1.pgm
-total time is 2.194813 (sec), woldSize is 1 
 
-real	0m2.348s
-user	0m0.010s
-sys	0m0.035s
-avg number of pixels=254.944355, iteration=0 
-Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_1.pgm
-total time is 2.189363 (sec), woldSize is 1 
-
-real	0m2.340s
-user	0m0.012s
-sys	0m0.034s
-avg number of pixels=254.944355, iteration=0 
-Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_1.pgm
-total time is 2.189759 (sec), woldSize is 1 
-
-real	0m2.367s
-user	0m0.014s
-sys	0m0.034s
-avg number of pixels=254.944355, iteration=0 
-Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_1.pgm
-total time is 2.189871 (sec), woldSize is 1 
-
-real	0m2.338s
-user	0m0.010s
+real	0m2.376s
+user	0m0.007s
 sys	0m0.036s
 avg number of pixels=254.944355, iteration=0 
+total time is 2.117339 (sec), woldSize is 1 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_1.pgm
-total time is 2.187932 (sec), woldSize is 1 
 
-real	0m2.367s
-user	0m0.012s
-sys	0m0.035s
+real	0m2.373s
+user	0m0.014s
+sys	0m0.032s
 avg number of pixels=254.944355, iteration=0 
+total time is 2.116139 (sec), woldSize is 1 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_1.pgm
-total time is 2.190345 (sec), woldSize is 1 
 
-real	0m2.344s
-user	0m0.016s
-sys	0m0.033s
+real	0m2.380s
+user	0m0.011s
+sys	0m0.061s
 avg number of pixels=254.944355, iteration=0 
+total time is 2.115213 (sec), woldSize is 1 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_1.pgm
-total time is 2.192082 (sec), woldSize is 1 
 
-real	0m2.344s
+real	0m2.341s
 user	0m0.011s
 sys	0m0.035s
 avg number of pixels=254.944355, iteration=0 
+total time is 2.116216 (sec), woldSize is 1 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_1.pgm
-total time is 2.189652 (sec), woldSize is 1 
 
-real	0m2.374s
-user	0m0.006s
-sys	0m0.041s
+real	0m2.387s
+user	0m0.009s
+sys	0m0.037s
 avg number of pixels=254.944355, iteration=0 
+total time is 2.117441 (sec), woldSize is 1 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_1.pgm
-total time is 2.191754 (sec), woldSize is 1 
 
-real	0m2.343s
-user	0m0.013s
+real	0m2.376s
+user	0m0.012s
 sys	0m0.034s
 avg number of pixels=254.944355, iteration=0 
+total time is 2.114079 (sec), woldSize is 1 
 Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_1.pgm
-total time is 2.189082 (sec), woldSize is 1 
 
-real	0m2.340s
+real	0m2.370s
+user	0m0.012s
+sys	0m0.034s
+avg number of pixels=254.944355, iteration=0 
+total time is 2.115645 (sec), woldSize is 1 
+Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_1.pgm
+
+real	0m2.375s
+user	0m0.009s
+sys	0m0.038s
+avg number of pixels=254.944355, iteration=0 
+total time is 2.115837 (sec), woldSize is 1 
+Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_1.pgm
+
+real	0m2.379s
+user	0m0.016s
+sys	0m0.031s
+avg number of pixels=254.944355, iteration=0 
+total time is 2.114701 (sec), woldSize is 1 
+Writing 768 x 768 picture into file: ./data/qsub/large/imagenew768x768_1.pgm
+
+real	0m2.373s
 user	0m0.013s
 sys	0m0.034s
 --------------------------------------------------------------------------------
-Finished at Fri Nov 23 22:01:15 GMT 2018
+Finished at Sun Nov 25 17:35:29 GMT 2018

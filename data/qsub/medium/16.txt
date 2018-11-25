@@ -2,77 +2,77 @@
 --------------------------------------------------------------------------------
 Running image on 16 processes over 4 node(s)
 Issuing command: mpiexec_mpt -n 16 -ppn 4 ./image
-Started at Fri Nov 23 22:02:44 GMT 2018
+Started at Sun Nov 25 17:36:54 GMT 2018
 --------------------------------------------------------------------------------
 avg number of pixels=254.986071, iteration=0 
+total time is 0.084775 (sec), woldSize is 16 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_16.pgm
-total time is 0.116956 (sec), woldSize is 16 
 
-real	0m0.391s
-user	0m0.010s
-sys	0m0.034s
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_16.pgm
-total time is 0.113134 (sec), woldSize is 16 
-
-real	0m0.395s
-user	0m0.019s
-sys	0m0.037s
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_16.pgm
-total time is 0.110417 (sec), woldSize is 16 
-
-real	0m0.401s
+real	0m0.394s
 user	0m0.009s
-sys	0m0.041s
+sys	0m0.036s
 avg number of pixels=254.986071, iteration=0 
+total time is 0.086614 (sec), woldSize is 16 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_16.pgm
-total time is 0.113272 (sec), woldSize is 16 
+
+real	0m0.382s
+user	0m0.015s
+sys	0m0.038s
+avg number of pixels=254.986071, iteration=0 
+total time is 0.089516 (sec), woldSize is 16 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_16.pgm
 
 real	0m0.387s
-user	0m0.019s
-sys	0m0.034s
+user	0m0.012s
+sys	0m0.043s
 avg number of pixels=254.986071, iteration=0 
+total time is 0.083971 (sec), woldSize is 16 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_16.pgm
-total time is 0.110797 (sec), woldSize is 16 
 
-real	0m0.401s
-user	0m0.016s
-sys	0m0.039s
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_16.pgm
-total time is 0.112342 (sec), woldSize is 16 
-
-real	0m0.388s
-user	0m0.013s
-sys	0m0.045s
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_16.pgm
-total time is 0.110767 (sec), woldSize is 16 
-
-real	0m0.391s
-user	0m0.014s
-sys	0m0.041s
-avg number of pixels=254.986071, iteration=0 
-Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_16.pgm
-total time is 0.113362 (sec), woldSize is 16 
-
-real	0m0.379s
+real	0m0.374s
 user	0m0.017s
+sys	0m0.037s
+avg number of pixels=254.986071, iteration=0 
+total time is 0.085577 (sec), woldSize is 16 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_16.pgm
+
+real	0m0.386s
+user	0m0.016s
 sys	0m0.040s
 avg number of pixels=254.986071, iteration=0 
+total time is 0.084990 (sec), woldSize is 16 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_16.pgm
-total time is 0.112286 (sec), woldSize is 16 
 
-real	0m0.388s
-user	0m0.015s
-sys	0m0.042s
+real	0m0.378s
+user	0m0.017s
+sys	0m0.036s
 avg number of pixels=254.986071, iteration=0 
+total time is 0.088222 (sec), woldSize is 16 
 Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_16.pgm
-total time is 0.112665 (sec), woldSize is 16 
 
 real	0m0.393s
+user	0m0.015s
+sys	0m0.038s
+avg number of pixels=254.986071, iteration=0 
+total time is 0.074772 (sec), woldSize is 16 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_16.pgm
+
+real	0m0.378s
+user	0m0.016s
+sys	0m0.042s
+avg number of pixels=254.986071, iteration=0 
+total time is 0.084416 (sec), woldSize is 16 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_16.pgm
+
+real	0m0.380s
 user	0m0.020s
-sys	0m0.040s
+sys	0m0.033s
+avg number of pixels=254.986071, iteration=0 
+total time is 0.089394 (sec), woldSize is 16 
+Writing 512 x 384 picture into file: ./data/qsub/medium/imagenew512x384_16.pgm
+
+real	0m0.387s
+user	0m0.022s
+sys	0m0.032s
 --------------------------------------------------------------------------------
-Finished at Fri Nov 23 22:02:48 GMT 2018
+Finished at Sun Nov 25 17:36:58 GMT 2018
