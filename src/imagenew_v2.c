@@ -15,8 +15,10 @@ int main (int argc, char *argv[])
     int dims[2];
     double start=0,end=0;
     
-    initGlobalVariables();   
-    parseCmdLine(argc,argv);
+    initGlobalVariables();                      //initialize global variables 
+                                                //with default values
+    
+    parseCmdLine(argc,argv);                    //parsing command line values
     
     MPI_Init(NULL,NULL);        
     MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
@@ -24,31 +26,42 @@ int main (int argc, char *argv[])
     pgmsize(input,&M,&N);
     
     dims[0]=0;dims[1]=0;    
-    initTopology(&topo,worldSize,&comm2d,dims);
+    initTopology(&topo,worldSize,&comm2d,dims);     //initialization of virtual topology 
+                                                    
 
-    allocations( topo,&masterbuf,&buf,&old,&new,&edge);
+    allocations( topo,&masterbuf,&buf,&old,&new,&edge); //allocation of buffers
     
-    initDataTypes(topo);
+    initDataTypes(topo);                        //initialization of derived data types.
     
-    loadImage(topo,masterbuf,input);
+    loadImage(topo,masterbuf,input);            //process zero load image from file
     
     if(topo.rank == 0)
-        start = MPI_Wtime();
+        start = MPI_Wtime();                    //starts timer
     
-    scatter( masterbuf, buf, topo, worldSize, comm2d);
+    scatter( masterbuf, buf, topo, worldSize, comm2d);  //process 0 sends 
+                                                        // part of the image to 
+                                                        //to other process
+                                                        // and the others are        
+                                                        //receive their parts.
     
-    imageRecontruction( topo, edge, buf, old, new,dims);
+    imageRecontruction( topo, edge, buf, old, new,dims);    //every process run 
+                                                            //the reconstruction
+                                                            //algorithm
     
-    gather( topo, masterbuf,buf,comm2d,output,worldSize);
-    
+    gather( topo, masterbuf,buf,comm2d,output,worldSize);   //process 0
+                                                            //receive parts of the
+                                                            //reconstructed image
+                                                            //and compose it.
     
     if(topo.rank == 0)
     {
-        end = MPI_Wtime();
+        end = MPI_Wtime();                                  //stops timer.
         fprintf(stdout,"total time is %f (sec), woldSize is %d \n",end-start,worldSize);
     }
-    saveImage(topo,masterbuf);
-    deallocations(masterbuf,old,new,edge,buf);
+    saveImage(topo,masterbuf);                          //save recontructed image 
+                                                        // to the file.
+    
+    deallocations(masterbuf,old,new,edge,buf);          //dealocation of buffers
     
     MPI_Finalize();
     
