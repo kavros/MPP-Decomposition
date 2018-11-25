@@ -17,7 +17,7 @@ void scatter(double** masterbuf,double** buf,topology topo,int worldSize,MPI_Com
 
 /**
  * All processes are sending their part of the image after they finish with the calculations to rank 0.
- * Rank 0 compose all the parts and write the final image to the file.
+ * Rank 0 compose all the parts in to masterbuf array.
  * @param topo
  * @param masterbuf
  * @param buf
@@ -40,6 +40,14 @@ void halloSwapsHorizontal(double** old,topology topo);
  * @param topo
  */
 void halloSwapsVertical(double** old,topology topo);
+
+/**
+ * Rank 0 writes image to the file.
+ * The user of the api must first call gather function.
+ * @param topo
+ * @param masterbuf
+ */
+void saveImage(topology topo, double** masterbuf);
 
 
 

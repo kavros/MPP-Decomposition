@@ -47,7 +47,7 @@ int main (int argc, char *argv[])
         end = MPI_Wtime();
         fprintf(stdout,"total time is %f (sec), woldSize is %d \n",end-start,worldSize);
     }
-    
+    saveImage(topo,masterbuf);
     deallocations(masterbuf,old,new,edge,buf);
     
     MPI_Finalize();
