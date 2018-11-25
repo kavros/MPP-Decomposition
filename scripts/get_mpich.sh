@@ -1,3 +1,4 @@
+# a script that install mpi on the server that we use for continuous integration testing.
 if [ -f mpich/lib/libmpich.so ]; then
   echo "libmpich.so found -- nothing to build."
 else

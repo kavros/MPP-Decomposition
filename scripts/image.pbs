@@ -77,7 +77,7 @@ echo 'Running' $MPIPROG 'on' $MPISIZE 'processes over' $NNODE 'node(s)'
 echo 'Issuing command: mpiexec_mpt -n' $MPISIZE '-ppn' $PPN ./$MPIPROG
 echo 'Started at' `date`
 echo '--------------------------------------------------------------------------------'
-for i in {1..10}
+for i in {1..10}		#run applicatio for 10 times
 do
 	(time mpiexec_mpt -n $MPISIZE -ppn $PPN ./build/$MPIPROG -i $INPUT_IMG -e $OUTPUT_IMG ) 2>&1
 done
