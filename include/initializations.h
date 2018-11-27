@@ -1,4 +1,4 @@
-
+//B145772
 #ifndef INITIALIZATIONS_H
 #define INITIALIZATIONS_H
 #include "../include/functions.h"

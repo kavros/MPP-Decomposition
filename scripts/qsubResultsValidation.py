@@ -1,6 +1,6 @@
 import os
 import filecmp
-
+#B145772
 #compares all images with the expected image
 processNumber = [1,2,3,4,8,16,32]
 expectedImage="./data/output/imagenew192x128_expectedOutput.pgm"

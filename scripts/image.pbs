@@ -1,5 +1,5 @@
 # This is a simple template script to run batch jobs on Cirrus at EPCC
-#
+#B145772
 # You only have to change two things to run an MPI program with it:
 #
 # 1) Make a copy of the script with the same name as your MPI executable,

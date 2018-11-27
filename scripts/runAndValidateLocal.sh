@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#B145772
 # run the application using various number of processes
 # and compare the output images with the image from the serial execution with delta  disabled and enabled
 for i in {1,2,3,4,8,16,24,32,64}

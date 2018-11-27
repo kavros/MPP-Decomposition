@@ -1,5 +1,6 @@
-#!/bin/bash 
 
+#!/bin/bash 
+#B145772
 # run our application on qsub using 3 image, using a list of proceeses {1,2,3,4,8,16,32,64}
 # and with diffrent number of nodes. In addition, we save results (images and logs) in order 
 # to validate corectness using the script qsubResultsValidation.py
