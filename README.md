@@ -1,4 +1,4 @@
-## Build & Run
+## Build & Run [![Build Status](https://travis-ci.com/kavros/MPP-Decomposition.svg?token=FpiEbZxSSgCpKyAubrTW&branch=master)](https://travis-ci.com/kavros/MPP-Decomposition)
 * Before running any script or the project make sure that your directory is MPP-Decomposition.
 * Build project using: ```make```
 * Run at the frontend of cirrus using 4 processes and delta disabled: ```make run n=4```
