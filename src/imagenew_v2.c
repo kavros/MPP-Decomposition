@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "../include/functions.h"
 #include "../include/pgmio.h"
+#include "../include/ioutils.h"
 #include "../include/initializations.h"
 #include "../include/communications.h"
 
@@ -24,7 +25,7 @@ int main (int argc, char *argv[])
     MPI_Init(NULL,NULL);        
     MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
     
-    pgmsize(input,&M,&N);
+    iosize(input,&M,&N);
     
     dims[0]=0;dims[1]=0;    
     initTopology(&topo,worldSize,&comm2d,dims);     //initialization of virtual topology 
