@@ -12,7 +12,7 @@ void initGlobalVariables()
     totalAveragePrints=1;
     
     output = "./data/output/imagenew192x128.pgm";
-    input = "./data/input/edgenew192x128.pgm";
+    input = "./data/input/cedgefiles/cedgenew0192x0128.dat";
 }
 
 void initAvgPrints(int* printAvgAtIter)

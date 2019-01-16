@@ -37,7 +37,8 @@ OBJ=\
 	build/argtable3.o\
 	build/functions.o\
 	build/initializations.o\
-	build/communications.o
+	build/communications.o\
+	build/ioutils.o
 
 nThreads=1
 #
