@@ -26,6 +26,7 @@ int main (int argc, char *argv[])
     MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
     
     iosize(input,&M,&N);
+    //printf("M=%d,N=%d\n",M,N);
     
     dims[0]=0;dims[1]=0;    
     initTopology(&topo,worldSize,&comm2d,dims);     //initialization of virtual topology 
@@ -40,7 +41,7 @@ int main (int argc, char *argv[])
     if(topo.rank == 0)
         start = MPI_Wtime();                    //starts timer
     
-    scatter( masterbuf, buf, topo, worldSize, comm2d);  //process 0 sends 
+    scatterUsingSubArray( masterbuf, buf, topo, worldSize, comm2d);  //process 0 sends 
                                                         // part of the image to 
                                                         //to other process
                                                         // and the others are        
@@ -50,7 +51,8 @@ int main (int argc, char *argv[])
                                                             //the reconstruction
                                                             //algorithm
     
-    gather( topo, masterbuf,buf,comm2d,output,worldSize);   //process 0
+    
+    gatherUsingSubArray(masterbuf,buf,topo,worldSize,comm2d);//process 0
                                                             //receive parts of the
                                                             //reconstructed image
                                                             //and compose it.
@@ -60,8 +62,9 @@ int main (int argc, char *argv[])
         end = MPI_Wtime();                                  //stops timer.
         fprintf(stdout,"total time is %f (sec), woldSize is %d \n",end-start,worldSize);
     }
+
     saveImage(topo,masterbuf);                          //save recontructed image 
-                                                        // to the file.
+                                                    // to the file.
     
     deallocations(masterbuf,old,new,edge,buf);          //dealocation of buffers
     

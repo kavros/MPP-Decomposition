@@ -49,6 +49,8 @@ void halloSwapsVertical(double** old,topology topo);
  */
 void saveImage(topology topo, double** masterbuf);
 
+void scatterUsingSubArray(double** masterbuf,double** buf,topology topo,int worldSize,MPI_Comm comm2d);
+void gatherUsingSubArray(double** masterbuf,double** buf,topology topo,int worldSize,MPI_Comm comm2d);
 
 
 #endif /* COMMUNICATIONS_H */

@@ -13,6 +13,7 @@ void gather(topology topo,double** masterbuf,double** buf,MPI_Comm comm2d,char* 
         
         MPI_Isend(&buf[0][0],1,vectorMpxNp,0,0,MPI_COMM_WORLD,&request);
         MPI_Wait(&request,&status);
+        
     }
     
     
@@ -41,9 +42,10 @@ void gather(topology topo,double** masterbuf,double** buf,MPI_Comm comm2d,char* 
 
 void saveImage(topology topo, double** masterbuf)
 {
-    if(topo.rank==0)                //rank 0 save the image to file
+    if(topo.rank==0){                //rank 0 save the image to file
         //pgmwrite(output, &masterbuf[0][0], M, N);
         iowrite(output, &masterbuf[0][0], M*N);
+    }
 
 }
 
@@ -81,7 +83,109 @@ void scatter(double** masterbuf,double** buf,topology topo,int worldSize,MPI_Com
     
 }
 
+void scatterUsingSubArray(double** masterbuf,double** buf,topology topo,int worldSize,MPI_Comm comm2d)
+{
+    MPI_Request request;
+    MPI_Status status;
+    
+    
+    
+    MPI_Datatype subarray;
+    int sizes[2]    = {M,N};  
+    int subsizes[2] = {topo.Mp,topo.Np};
 
+    if(topo.rank == 0)          //rank 0 send the part of the image to other processes
+    {
+        int i,j;
+        
+        for(i=1; i < worldSize; i++)
+        {       
+            
+           
+            
+            int my_coords[2];
+            MPI_Cart_coords(comm2d, i, 2,my_coords );
+            int startY = my_coords[1]*topo.Np;
+            int startX = my_coords[0]*topo.Mp;
+            int starts[2]   = {startX,startY};
+           
+
+            MPI_Type_create_subarray(2, sizes, subsizes, starts, MPI_ORDER_C, MPI_DOUBLE, &subarray);
+            MPI_Type_commit(&subarray);
+            
+            MPI_Isend(&masterbuf[0][0], 1, subarray, i, 0, MPI_COMM_WORLD,&request);            
+            MPI_Wait(&request,&status);
+            
+        }
+        
+        for(i=0;i<topo.Mp;i++)
+            for(j=0;j<topo.Np;j++)
+                buf[i][j] = masterbuf[i][j];
+    }
+    else
+    {
+        
+        
+        int startY = topo.coords[1]*topo.Np;
+        int startX = topo.coords[0]*topo.Mp;
+        int starts[2]   = {startX,startY};
+           
+        MPI_Type_create_subarray(2, sizes, subsizes, starts, MPI_ORDER_C, MPI_DOUBLE, &subarray);
+        MPI_Type_commit(&subarray);
+        
+        MPI_Irecv(&buf[0][0], topo.Mp*topo.Np, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, &request); 
+        MPI_Wait(&request,&status);
+        
+        
+    }
+    
+}
+
+void gatherUsingSubArray(double** masterbuf,double** buf,topology topo,int worldSize,MPI_Comm comm2d)
+{
+    MPI_Datatype subarray;
+    int sizes[2]    = {M,N};  
+    int subsizes[2] = {topo.Mp,topo.Np};
+    MPI_Request request;
+    MPI_Status status;
+    int i,j;
+    if(topo.rank!=0)               //all processes are sending their buffer to master
+                                    //except rank 0
+    {
+        
+        MPI_Isend(&buf[0][0],topo.Mp*topo.Np,MPI_DOUBLE,0,0,MPI_COMM_WORLD,&request);
+        MPI_Wait(&request,&status);
+        
+    }
+    
+    
+    if(topo.rank==0)                //rank 0 receive .
+    {
+        
+        int coords[2];
+        for(i=1;i<worldSize;i++)
+        {
+            MPI_Cart_coords(comm2d, i, 2, coords);
+            int startY = coords[1]*topo.Np;
+            int startX = coords[0]*topo.Mp;
+            int starts[2]   = {startX,startY};
+            //printf("p %d, coords[0]=%d,coords[1]=%d ,startY=%d, startX=%d\n",i,coords[0],coords[1],startY,startX);                             
+               
+            MPI_Type_create_subarray(2, sizes, subsizes, starts, MPI_ORDER_C, MPI_DOUBLE, &subarray);
+            MPI_Type_commit(&subarray);
+            
+            MPI_Irecv(&masterbuf[0][0],1,subarray,i,0,MPI_COMM_WORLD,&request);
+            MPI_Wait(&request,&status);
+        }
+        
+        for(i=0;i<topo.Mp;i++)
+            for(j=0;j<topo.Np;j++)
+                masterbuf[i][j] = buf[i][j];
+        
+        
+    }
+    
+}
 
 
 void halloSwapsVertical(double** old,topology topo)
