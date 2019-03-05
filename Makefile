@@ -1,7 +1,7 @@
 MF=	Makefile
 
 CC=	mpicc
-CFLAGS= -O3 -g -Wall
+CFLAGS= -O3 -g -Wall -fopenmp 
 
 LFLAGS=	-lm 
 

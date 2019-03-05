@@ -87,8 +87,13 @@ int main (int argc, char *argv[])
     int dims[2];
     double start=0,end=0;
     
-    
-    MPI_Init(NULL,NULL);        
+    int provided =0;
+    MPI_Init_thread(NULL,NULL,MPI_THREAD_SINGLE ,&provided);
+    if(provide != 2)
+    {
+        printf("Please provide a different number for required");
+        MPI_Finalize();
+    }
     MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
     
     pgmsize(input,&M,&N);
