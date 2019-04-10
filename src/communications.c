@@ -44,8 +44,11 @@ void saveImage(topology topo, double** masterbuf)
 {
     if(topo.rank==0){                //rank 0 save the image to file
         //pgmwrite(output, &masterbuf[0][0], M, N);
+        //createfilename(output, "coutput", M, N, topo.rank);
+        //printf("Mp = %d, Np = %d\n",topo.Mp,topo.Np );
         iowrite(output, &masterbuf[0][0], M*N);
     }
+    //iowrite(output, &masterbuf[0][0],M*N);
 
 }
 

@@ -40,5 +40,6 @@ void initDataTypes(topology topo);
  */
 void loadImage(topology topo,double** masterbuf,char* input);
 
+void loadImageInParallel(topology topo,double** buf,char* input,MPI_Comm comm2d);
 #endif /* INITIALIZATIONS_H */
 

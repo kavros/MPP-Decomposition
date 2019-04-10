@@ -11,7 +11,8 @@ void initGlobalVariables()
     isDeltaActivated = false;
     totalAveragePrints=1;
     
-    output = "./data/output/imagenew192x128.pgm";
+//    output = "./data/output/imagenew192x128.pgm";
+    output = "./data/output/imagenew0192x0128.dat";
     input = "./data/input/cedgefiles/cedgenew0192x0128.dat";
 }
 
@@ -145,6 +146,54 @@ void loadImage(topology topo,double** masterbuf,char* input)
     {
         //printf("\nReading <%s>\n", input);
         //pgmread(input, &masterbuf[0][0], M, N);
-         ioread(input, &masterbuf[0][0], M*N);
+        ioread(input, &masterbuf[0][0], M*N);
     }
+}
+
+void loadImageInParallel(topology topo,double** buf,char* input,MPI_Comm comm2d)
+{
+    MPI_File fh;
+    MPI_Status status;
+    MPI_Datatype subarray;
+    int sizes[2]    = {M,N};  
+    int subsizes[2] = {topo.Mp,topo.Np};
+    int my_coords[2];
+    MPI_Cart_coords(comm2d, topo.rank, 2,my_coords );
+    int startY = my_coords[1]*topo.Np;
+    int startX = my_coords[0]*topo.Mp;
+    int starts[2]   = {startX,startY};
+    printf("startX = %d , startY = %d, subsizesX = %d,subsizesY=%d input = %s\n",
+            starts[0],
+            starts[1],
+            subsizes[0],
+            subsizes[1],
+            input);
+
+    MPI_Type_create_subarray(2, sizes, subsizes, starts, MPI_ORDER_C, MPI_DOUBLE, &subarray);
+    MPI_Type_commit(&subarray);
+            
+    //createfilename(input, "cinput", M, N, -1);
+    if(MPI_File_open(comm2d,input,MPI_MODE_RDONLY,MPI_INFO_NULL,&fh) != MPI_SUCCESS)
+    {
+        printf("Open error on rank %d\n", topo.rank);
+        return;
+    }
+    
+    if(MPI_File_set_view(fh,0,MPI_DOUBLE,subarray,"native",MPI_INFO_NULL) != MPI_SUCCESS)
+    {
+      printf("View error on rank %d\n", topo.rank);
+      return;
+    }
+    
+    if(MPI_File_read_all(fh, &buf[0][0],topo.Mp*topo.Np,MPI_DOUBLE,&status) != MPI_SUCCESS)
+    {
+      printf("Read error on rank %d\n", topo.rank);
+      return;
+    }
+    //printf("%f %f %f\n",buf[0][0],buf[0][1],buf[0][2]);
+    if (MPI_File_close(&fh) != MPI_SUCCESS)
+    {
+      printf("Close error on rank %d\n", topo.rank);
+    }
+
 }

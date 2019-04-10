@@ -36,17 +36,18 @@ int main (int argc, char *argv[])
     
     initDataTypes(topo);                        //initialization of derived data types.
     
-    loadImage(topo,masterbuf,input);            //process zero load image from file
+    //loadImage(topo,masterbuf,input);            //process zero load image from file
+    loadImageInParallel( topo,buf,input,comm2d);
     
     if(topo.rank == 0)
         start = MPI_Wtime();                    //starts timer
     
-    scatterUsingSubArray( masterbuf, buf, topo, worldSize, comm2d);  //process 0 sends 
+    //scatterUsingSubArray( masterbuf, buf, topo, worldSize, comm2d);  //process 0 sends 
                                                         // part of the image to 
                                                         //to other process
                                                         // and the others are        
                                                         //receive their parts.
-    
+  
     imageRecontruction( topo, edge, buf, old, new,dims);    //every process run 
                                                             //the reconstruction
                                                             //algorithm
@@ -66,7 +67,7 @@ int main (int argc, char *argv[])
     saveImage(topo,masterbuf);                          //save recontructed image 
                                                     // to the file.
     
-    deallocations(masterbuf,old,new,edge,buf);          //dealocation of buffers
+    //deallocations(masterbuf,old,new,edge,buf);          //dealocation of buffers
     
     MPI_Finalize();
     
