@@ -179,21 +179,23 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
     /* Set fixed boundary conditions on the left and right sides */
     computeBoundaryConditions(topo,dims,old);
     
-    
+#pragma omp parallel default(none) shared(new,old,maxDelta,Mp,Np,edge,topo,isVerticalDecomposition,isSerialExecution) private(i,j,iter)
+{
     for (iter=1;iter<=MAXITER; iter++)
     {
        if(iter%PRINTFREQ==0)
 	   {
             //printf("Iteration %d\n", iter);
 	   }
-        
+#pragma omp master
+{
         /* Implement periodic boundary conditions on bottom and top sides */
         //vertical
         halloSwapsVertical(old,topo);
         
         //horizontal
         halloSwapsHorizontal(old,topo);
-        
+
         
         if(isSerialExecution || isVerticalDecomposition)
         {
@@ -203,8 +205,9 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
                 old[i][Np+1] = old[i][1];
             }
         }
-
-        #pragma omp parallel for default(none) schedule(dynamic) shared(new,old,maxDelta,Mp,Np,edge) private(i,j)
+}
+#pragma omp barrier //all threads need to wait for master before start image calculations
+        #pragma omp for 
         for (i=1;i<Mp+1;i++)
         {
             for (j=1;j<Np+1;j++)
@@ -216,7 +219,7 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
         }
     
         
-        #pragma omp parallel for  default(none) schedule(dynamic) shared(new,old,Mp,Np) private(i,j)
+        #pragma omp for  
         for (i=1;i<Mp+1;i++)
 	    {
             for (j=1;j<Np+1;j++)
@@ -224,7 +227,9 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
                 old[i][j]=new[i][j];
             }
 	    }
-        
+/*
+#pragma omp master
+{        
         //print averages at specified iteration number
         printAverages((iter-1),printAvgAtIter[cntAvgPrints],&cntAvgPrints,old,topo);
         
@@ -232,11 +237,11 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
         if( isTheLastIteration(topo,maxDelta,iter) ) 
         {
             break;
-        }
-            
+        }            
         maxDelta = -1; //set maxDelta to -1 in order to take the value of delta at the first iteration 
+}*/
     }
-    
+}
     //printf("\nFinished %d iterations\n", iter-1);
     
     for (i=1;i<Mp+1;i++)
