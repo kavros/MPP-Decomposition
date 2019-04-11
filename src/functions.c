@@ -179,7 +179,7 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
     /* Set fixed boundary conditions on the left and right sides */
     computeBoundaryConditions(topo,dims,old);
     
-#pragma omp parallel default(none) shared(new,old,maxDelta,Mp,Np,edge,topo,isVerticalDecomposition,isSerialExecution) private(i,j,iter)
+#pragma omp parallel default(none) shared(new,old,maxDelta,Mp,Np,edge,topo,isVerticalDecomposition,isSerialExecution,printAvgAtIter,cntAvgPrints) private(i,j,iter)
 {
     for (iter=1;iter<=MAXITER; iter++)
     {
@@ -227,19 +227,21 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
                 old[i][j]=new[i][j];
             }
 	    }
-/*
+
 #pragma omp master
 {        
         //print averages at specified iteration number
         printAverages((iter-1),printAvgAtIter[cntAvgPrints],&cntAvgPrints,old,topo);
         
         //terminate based on delta
-        if( isTheLastIteration(topo,maxDelta,iter) ) 
+        /*if( isTheLastIteration(topo,maxDelta,iter) ) 
         {
             break;
-        }            
+        } */           
         maxDelta = -1; //set maxDelta to -1 in order to take the value of delta at the first iteration 
-}*/
+}
+
+
     }
 }
     //printf("\nFinished %d iterations\n", iter-1);
