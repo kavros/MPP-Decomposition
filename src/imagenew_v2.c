@@ -8,6 +8,7 @@
 
 int main (int argc, char *argv[])
 {
+
     MPI_Comm comm2d;
     int worldSize;
     topology topo;
@@ -22,6 +23,15 @@ int main (int argc, char *argv[])
     parseCmdLine(argc,argv);                    //parsing command line values
     
     MPI_Init(NULL,NULL);        
+    
+    int provided = MPI_THREAD_MULTIPLE;
+    if( MPI_Query_thread(&provided) != MPI_SUCCESS)
+    {
+        printf("ERROR provided OpenMP level is not supported\n");
+        return -1;
+    }
+
+
     MPI_Comm_size(MPI_COMM_WORLD,&worldSize);
     
     pgmsize(input,&M,&N);

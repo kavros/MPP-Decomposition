@@ -182,10 +182,10 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
     
     for (iter=1;iter<=MAXITER; iter++)
     {
-        if(iter%PRINTFREQ==0)
-	{
+       if(iter%PRINTFREQ==0)
+	   {
             //printf("Iteration %d\n", iter);
-	}
+	   }
         
         /* Implement periodic boundary conditions on bottom and top sides */
         //vertical
@@ -204,7 +204,7 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
             }
         }
 
-        #pragma omp parallel for default(none) shared(new,old,maxDelta,Mp,Np,edge) private(i,j)
+        #pragma omp parallel for default(none) schedule(dynamic) shared(new,old,maxDelta,Mp,Np,edge) private(i,j)
         for (i=1;i<Mp+1;i++)
         {
             for (j=1;j<Np+1;j++)
@@ -216,7 +216,7 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
         }
     
         
-        #pragma omp for schedule(static)
+        #pragma omp parallel for  default(none) schedule(dynamic) shared(new,old,Mp,Np) private(i,j)
         for (i=1;i<Mp+1;i++)
 	    {
             for (j=1;j<Np+1;j++)
