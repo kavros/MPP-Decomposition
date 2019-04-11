@@ -14,8 +14,7 @@ SRC= \
 	src/argtable3.c\
 	src/functions.c\
 	src/initializations.c\
-	src/communications.c\
-	src/ioutils.c
+	src/communications.c
 
 INC=\
 	include/pgmio.h\
@@ -24,8 +23,7 @@ INC=\
 	include/functions.h\
 	include/initialization.h\
 	include/globalVariables.h\
-	include/communications.h\
-	include/ioutils.h
+	include/communications.h
 	
 OBJ=\
 	build/imagenew_v2.o\
@@ -34,8 +32,7 @@ OBJ=\
 	build/argtable3.o\
 	build/functions.o\
 	build/initializations.o\
-	build/communications.o\
-	build/ioutils.o
+	build/communications.o
 
 n=1
 #

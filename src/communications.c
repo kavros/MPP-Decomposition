@@ -1,6 +1,6 @@
 //B145772
 #include "../include/communications.h"
-#include "../include/ioutils.h"
+
 
 void gather(topology topo,double** masterbuf,double** buf,MPI_Comm comm2d,char* output,int worldSize)
 {
@@ -42,9 +42,7 @@ void gather(topology topo,double** masterbuf,double** buf,MPI_Comm comm2d,char* 
 void saveImage(topology topo, double** masterbuf)
 {
     if(topo.rank==0)                //rank 0 save the image to file
-        //pgmwrite(output, &masterbuf[0][0], M, N);
-        iowrite(output, &masterbuf[0][0], M*N);
-
+        pgmwrite(output, &masterbuf[0][0], M, N);
 }
 
 void scatter(double** masterbuf,double** buf,topology topo,int worldSize,MPI_Comm comm2d)

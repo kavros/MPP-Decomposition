@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include "../include/initializations.h"
 #include "../include/globalVariables.h"
-#include "../include/ioutils.h"
+#include "../include/pgmio.h"
 #include <assert.h>
 #include <mpi.h>
 
@@ -144,7 +144,6 @@ void loadImage(topology topo,double** masterbuf,char* input)
     if(topo.rank == 0)
     {
         //printf("\nReading <%s>\n", input);
-        //pgmread(input, &masterbuf[0][0], M, N);
-         ioread(input, &masterbuf[0][0], M*N);
+        pgmread(input, &masterbuf[0][0], M, N);
     }
 }
