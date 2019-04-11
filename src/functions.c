@@ -203,27 +203,27 @@ void imageRecontruction(topology topo,double** edge,double** buf,double** old,do
                 old[i][Np+1] = old[i][1];
             }
         }
+
         #pragma omp parallel for default(none) shared(new,old,maxDelta,Mp,Np,edge) private(i,j)
         for (i=1;i<Mp+1;i++)
-	{
+        {
             for (j=1;j<Np+1;j++)
-	    {
+            {
                 new[i][j]=0.25*(old[i-1][j]+old[i+1][j]+old[i][j-1]+old[i][j+1]
                         - edge[i][j]);
                 calculateMaxDelta(i,j,new,old,&maxDelta);
             }
-            
         }
     
         
         #pragma omp for schedule(static)
         for (i=1;i<Mp+1;i++)
-	{
-            for (j=1;j<Np+1;j++)
 	    {
+            for (j=1;j<Np+1;j++)
+            {
                 old[i][j]=new[i][j];
+            }
 	    }
-	}
         
         //print averages at specified iteration number
         printAverages((iter-1),printAvgAtIter[cntAvgPrints],&cntAvgPrints,old,topo);
